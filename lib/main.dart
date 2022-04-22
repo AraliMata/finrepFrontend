@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import './screens/home.dart';
+import './screens/uploadingscreen.dart';
+import './screens/card_textfield.dart';
 
 void main() {
   runApp(const MyApp());
