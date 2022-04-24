@@ -7,7 +7,7 @@ import 'dart:developer' as developer;
 import '../env.sample.dart';
 import '../models/employee.dart';
 import '../models/cuentas.dart';
-
+import 'package:http_parser/http_parser.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -298,9 +298,13 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     final stream = http.ByteStream(fileReadStream);
     developer.log(stream.toString(), name: 'stream2');
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(http.MultipartFile('file', stream, file.files.first.size,
-        // 'picture', file.files.first.b,
-        filename: file.files.first.name.split("/").last));
+    request.files.add(http.MultipartFile(
+      'file',
+      stream,
+      file.files.first.size,
+      filename: file.files.first.name.split("/").last,
+      contentType: MediaType('xlsx', 'xls'),
+    ));
     var res = await request.send();
     developer.log(res.reasonPhrase! + "es el res", name: 'my.app.category');
 
