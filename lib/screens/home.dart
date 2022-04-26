@@ -338,6 +338,21 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     if (fileExtension == 'xlsx') {
       subirArchivo(file!, "${Env.URL_PREFIX}/xlsx");
     } else {
+      developer.log("Estoy aquí bum", name: 'extension incorrecta');
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Extensión incorrecta'),
+          content: const Text('Solo se permiten subir archivos con extensión xlsx (Excel)'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('Aceptar'),
+            ),
+          ],
+        ),
+      );
+
       //Tas tonto. Pantallita que te lo diga o notifiqueishon
     }
 
@@ -549,3 +564,5 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 }
+
+
