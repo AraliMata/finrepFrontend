@@ -321,7 +321,7 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
   selectFile() async {
     final file = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['xlsx', 'jpg', 'jpeg'],
+      allowedExtensions: ['xlsx'],
       withReadStream: true,
     );
 
@@ -330,10 +330,20 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     //   throw Exception('Cannot read file from null stream');
     // }
     // final stream = http.ByteStream(fileReadStream);
-    // developer.log(stream.toString(), name: 'stream2');
-    subirArchivo(file!, "${Env.URL_PREFIX}/xlsx");
+    // developer.log(stream.toString(), name: 'stream2');\
+
+    // si no es xlsx pues no lo subes je y pantallita de que no se arma
+    String? fileExtension = file?.files.first.extension;
+
+    if (fileExtension == 'xlsx') {
+      subirArchivo(file!, "${Env.URL_PREFIX}/xlsx");
+    } else {
+      //Tas tonto. Pantallita que te lo diga o notifiqueishon
+    }
+
     if (file != null) {
       print("holis");
+      developer.log(fileExtension!, name: 'extension');
       developer.log('log me', name: 'my.app.category');
       developer.log(file.files[0].name, name: 'my.app.category');
       developer.log(file.files.first.bytes.toString(), name: 'bites');
