@@ -1,6 +1,6 @@
-# flutter_frontend_test
+# FinRep
 
-A new Flutter project.
+Aplicación móvil y web para subir y consultar reportes financieros, desarrollada por estudiantes de 6to semestre de Ingeniería en Tecnologías Computacionales en el Tecnológico de Monterrey campus Chihuahua.
 
 ## Getting Started
 
