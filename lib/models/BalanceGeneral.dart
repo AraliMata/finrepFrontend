@@ -1,6 +1,8 @@
+import 'package:flutter_frontend_test/models/ActivoPasivo.dart';
+
 class BalanceGeneral {
-  final List<List<String>> activo;
-  final List<List<String>> pasivo;
+  final List<ActivoPasivo> activo;
+  final List<ActivoPasivo> pasivo;
   final List<List<String>> capital;
 
   BalanceGeneral(
