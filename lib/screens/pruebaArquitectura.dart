@@ -235,9 +235,6 @@ class MostrarDatosCuentaState extends State<MostrarDatosCuenta> {
   }
 }
 
-
-
-
 Future<Employee> registerEmployee(String name, String email) async {
   final response = await http.post(
     Uri.parse("${Env.URL_PREFIX}/employeedetails"),
