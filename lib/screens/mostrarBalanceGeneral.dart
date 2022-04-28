@@ -14,6 +14,14 @@ class MBalanceGeneral extends StatefulWidget {
 }
 
 class BalanceGeneralState extends State<MBalanceGeneral> {
+  late Future<BalanceGeneral> balance;
+
+  @override
+  void initState() {
+    super.initState();
+    balance = getBalanceGeneral();
+  }
+
   Future<BalanceGeneral> getBalanceGeneral() async {
     final response =
         await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
@@ -30,24 +38,40 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return balance;
   }
 
-  /*Future<List<Employee>> getEmployeeList() async {
-    final response =
-        await http.get(Uri.parse("${Env.URL_PREFIX}/employeedetails"));
-    final items = json.decode(response.body).cast<Map<String, dynamic>>();
-    List<Employee> employees = items.map<Employee>((json) {
-      return Employee.fromJson(json);
-    }).toList();
+  DataRow createRow(datos) {
+    List<DataCell> celdas = [];
 
-    return employees;
-  }*/
-  late Future<BalanceGeneral> balance = getBalanceGeneral();
+    celdas.add(DataCell(Text(datos[0])));
+    celdas.add(DataCell(Text(datos[1])));
 
-//late Future<List<Employee>> employees = getEmployeeList();
+    DataRow renglon = DataRow(cells: celdas);
 
-//Tomar lista ACTIVO
-  //late Future<ActivoPasivo> activo = getActivo();
-//Tomar lista PASIVO
-//Tomar lista CAPITAL
+    return renglon;
+  }
+
+  List<DataRow> createRows(datos) {
+    List<DataRow> renglones = [];
+
+    renglones.add(createRow(['CIRCULANTE', ' ']));
+    for (int i = 0; i < datos.circulante.lenght; i++) {
+      DataRow curRow = createRow(datos.circulante[i]);
+      renglones.add(curRow);
+    }
+
+    renglones.add(createRow(['FIJO', ' ']));
+    for (int i = 0; i < datos.fijo.lenght; i++) {
+      DataRow curRow = createRow(datos.fijo[i]);
+      renglones.add(curRow);
+    }
+
+    renglones.add(createRow(['DIFERIDO', ' ']));
+    for (int i = 0; i < datos.diferido.lenght; i++) {
+      DataRow curRow = createRow(datos.diferido[i]);
+      renglones.add(curRow);
+    }
+
+    return renglones;
+  }
 
   static const title = "Hola";
   static const renglon = DataRow(cells: <DataCell>[
@@ -60,72 +84,59 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return MaterialApp(
       title: title,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text(title),
-        ),
-        body: GridView.count(
-            // Create a grid with 2 columns. If you change the scrollDirection to
-            // horizontal, this produces 2 rows.
-            crossAxisCount: 2,
-            // Generate 100 widgets that display their index in the List.
-            children: [
-              DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(
-                    label: Text(
-                      'ACTIVO',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      '',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ],
-                rows: const <DataRow>[
-                  renglon,
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text('Janine')),
-                      DataCell(Text('43')),
-                    ],
-                  ),
-                ],
-              ),
-              DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(
-                    label: Text(
-                      'PASIVO',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      '',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ],
-                rows: const <DataRow>[
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text('Sarah')),
-                      DataCell(Text('19')),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text('Janine')),
-                      DataCell(Text('43')),
-                    ],
-                  ),
-                ],
-              ),
-            ]),
-      ),
+          appBar: AppBar(
+            title: const Text(title),
+          ),
+          body: FutureBuilder<BalanceGeneral>(
+              future: balance,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  developer.log('Uno', name: 'TieneData');
+                  return GridView.count(
+                      // Create a grid with 2 columns. If you change the scrollDirection to
+                      // horizontal, this produces 2 rows.
+                      crossAxisCount: 2,
+                      children: [
+                        DataTable(
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                'ACTIVO',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          ],
+                          rows: createRows(snapshot.data!.activo),
+                        ),
+                        DataTable(
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                'PASIVO',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          ],
+                          rows: createRows(snapshot.data!.pasivo),
+                        ),
+                      ]);
+                } else {
+                  developer.log('Uno', name: 'NoTieneData');
+                  return Text('${snapshot.error}');
+                }
+              })),
     );
   }
 }
