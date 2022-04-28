@@ -53,19 +53,19 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     List<DataRow> renglones = [];
 
     renglones.add(createRow(['CIRCULANTE', ' ']));
-    for (int i = 0; i < datos.circulante.lenght; i++) {
+    for (int i = 0; i < datos.circulante.length; i++) {
       DataRow curRow = createRow(datos.circulante[i]);
       renglones.add(curRow);
     }
 
     renglones.add(createRow(['FIJO', ' ']));
-    for (int i = 0; i < datos.fijo.lenght; i++) {
+    for (int i = 0; i < datos.fijo.length; i++) {
       DataRow curRow = createRow(datos.fijo[i]);
       renglones.add(curRow);
     }
 
     renglones.add(createRow(['DIFERIDO', ' ']));
-    for (int i = 0; i < datos.diferido.lenght; i++) {
+    for (int i = 0; i < datos.diferido.length; i++) {
       DataRow curRow = createRow(datos.diferido[i]);
       renglones.add(curRow);
     }
