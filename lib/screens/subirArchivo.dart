@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_frontend_test/models/cuentas.dart';
+import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -81,7 +82,7 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
             TextButton(
               onPressed: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => const CrearEmpleado()));
+                      context, MaterialPageRoute(builder: (context) => const Home()));
                   },
               child: const Text('Aceptar'),
             ),
