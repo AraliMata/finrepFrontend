@@ -96,17 +96,29 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
-                  return GridView.count(
+                  return Column(
+                    children:[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Column(children: [Text('FinRep', style: TextStyle(color:  Color.fromARGB(255, 33, 212, 243), fontSize: 16))]),
+                                Column(children: [Text('Empresa 1 S.C')]),
+                                Column(children: [Text('Fecha: 29/Abr/2022')])],
+                    ),
+                    Expanded(
+                      child: GridView.count(
                       // Create a grid with 2 columns. If you change the scrollDirection to
                       // horizontal, this produces 2 rows.
                       crossAxisCount: 2,
+                      shrinkWrap: true,
                       children: [
                         DataTable(
                           columns: const <DataColumn>[
                             DataColumn(
                               label: Text(
                                 'ACTIVO',
-                                style: TextStyle(fontStyle: FontStyle.normal),
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             DataColumn(
@@ -123,7 +135,9 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                             DataColumn(
                               label: Text(
                                 'PASIVO',
-                                style: TextStyle(fontStyle: FontStyle.normal),
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             DataColumn(
@@ -135,12 +149,19 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                           ],
                           rows: createRows(snapshot.data!.pasivo),
                         ),
+                        DataTable(columns: const <DataColumn>[
+                          DataColumn(label: Text(' '))
+                        ], rows: const <DataRow>[
+                          DataRow(cells: <DataCell>[DataCell(Text(' '))])
+                        ]),
                         DataTable(
                           columns: const <DataColumn>[
                             DataColumn(
                               label: Text(
                                 'CAPITAL',
-                                style: TextStyle(fontStyle: FontStyle.normal),
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             DataColumn(
@@ -152,7 +173,9 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                           ],
                           rows: createRowsCapital(snapshot.data!.capital),
                         ),
-                      ]);
+                      ])
+                    )
+                    ]);
                 } else {
                   developer.log('Uno', name: 'NoTieneData');
                   return Text('${snapshot.error}');
