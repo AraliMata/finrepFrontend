@@ -24,12 +24,6 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     final response =
         await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
-    /*final balanceGeneral =
-        json.decode(response.body).cast<Map<String, dynamic>>();*/
-
-    // BalanceGeneral balance = balanceGeneral.map<BalanceGeneral>((json) {
-    //   return BalanceGeneral.fromJson(json);
-    // });
     final balance = BalanceGeneral.fromJson(jsonDecode(response.body));
 
     developer.log(balance.toString(), name: 'balanceGeneraltqm');
@@ -84,19 +78,16 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return renglones;
   }
 
-  static const title = "Hola";
-  static const renglon = DataRow(cells: <DataCell>[
-    DataCell(Text('Sarah')),
-    DataCell(Text('19')),
-  ]);
+
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: title,
+      title: 'FinRep',
       home: Scaffold(
           appBar: AppBar(
-            title: const Text(title),
+            title: const Text('Balance general'),
           ),
           body: FutureBuilder<BalanceGeneral>(
               future: balance,
@@ -140,7 +131,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                               ),
                             ),
                           ],
-                          rows: createRowsCapital(snapshot.data!.capital),
+                          rows: createRows(snapshot.data!.pasivo),
                         ),
                         DataTable(
                           columns: const <DataColumn>[
@@ -157,7 +148,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                               ),
                             ),
                           ],
-                          rows: createRows(snapshot.data!.pasivo),
+                          rows: createRowsCapital(snapshot.data!.capital),
                         ),
                       ]);
                 } else {
