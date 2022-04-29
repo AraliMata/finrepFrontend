@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/models/BalanceGeneral.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'dart:developer' as developer;
@@ -25,14 +24,15 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     final response =
         await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
-    final balanceGeneral =
-        json.decode(response.body).cast<Map<String, dynamic>>();
+    /*final balanceGeneral =
+        json.decode(response.body).cast<Map<String, dynamic>>();*/
 
-    BalanceGeneral balance = balanceGeneral.map<BalanceGeneral>((json) {
-      return BalanceGeneral.fromJson(json);
-    });
+    // BalanceGeneral balance = balanceGeneral.map<BalanceGeneral>((json) {
+    //   return BalanceGeneral.fromJson(json);
+    // });
+    final balance = BalanceGeneral.fromJson(jsonDecode(response.body));
 
-    developer.log(balanceGeneral, name: 'balanceGeneraltqm');
+    developer.log(balance.toString(), name: 'balanceGeneraltqm');
 
     return balance;
   }
