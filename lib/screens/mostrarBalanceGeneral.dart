@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/models/ActivoPasivo.dart';
 import 'package:flutter_frontend_test/models/BalanceGeneral.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -73,6 +72,18 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return renglones;
   }
 
+  List<DataRow> createRowsCapital(datos) {
+    List<DataRow> renglones = [];
+
+    renglones.add(createRow(['CAPITAL', ' ']));
+    for (int i = 0; i < datos.capital.length; i++) {
+      DataRow curRow = createRow(datos.capital[i]);
+      renglones.add(curRow);
+    }
+
+    return renglones;
+  }
+
   static const title = "Hola";
   static const renglon = DataRow(cells: <DataCell>[
     DataCell(Text('Sarah')),
@@ -102,7 +113,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                             DataColumn(
                               label: Text(
                                 'ACTIVO',
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                                style: TextStyle(fontStyle: FontStyle.normal),
                               ),
                             ),
                             DataColumn(
@@ -119,7 +130,24 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                             DataColumn(
                               label: Text(
                                 'PASIVO',
+                                style: TextStyle(fontStyle: FontStyle.normal),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '',
                                 style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          ],
+                          rows: createRowsCapital(snapshot.data!.capital),
+                        ),
+                        DataTable(
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                'CAPITAL',
+                                style: TextStyle(fontStyle: FontStyle.normal),
                               ),
                             ),
                             DataColumn(
