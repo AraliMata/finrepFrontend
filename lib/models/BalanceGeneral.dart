@@ -10,7 +10,7 @@ class BalanceGeneral {
 
   factory BalanceGeneral.fromJson(Map<String, dynamic> json) {
     return BalanceGeneral(
-      activo: json['activo'],
+      activo: json['activo'], //Convertir a ActivoPasivo
       pasivo: json['pasivo'],
       capital: json['capital'],
     );
