@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/models/ActivoPasivo.dart';
 import 'package:flutter_frontend_test/models/BalanceGeneral.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
@@ -25,12 +24,6 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     final response =
         await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
-    /*final balanceGeneral =
-        json.decode(response.body).cast<Map<String, dynamic>>();*/
-
-    // BalanceGeneral balance = balanceGeneral.map<BalanceGeneral>((json) {
-    //   return BalanceGeneral.fromJson(json);
-    // });
     final balance = BalanceGeneral.fromJson(jsonDecode(response.body));
 
     developer.log(balance.toString(), name: 'balanceGeneraltqm');
@@ -73,19 +66,28 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return renglones;
   }
 
-  static const title = "Hola";
-  static const renglon = DataRow(cells: <DataCell>[
-    DataCell(Text('Sarah')),
-    DataCell(Text('19')),
-  ]);
+  List<DataRow> createRowsCapital(datos) {
+    List<DataRow> renglones = [];
+
+    renglones.add(createRow(['CAPITAL', ' ']));
+    for (int i = 0; i < datos.capital.length; i++) {
+      DataRow curRow = createRow(datos.capital[i]);
+      renglones.add(curRow);
+    }
+
+    return renglones;
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: title,
+      title: 'FinRep',
       home: Scaffold(
           appBar: AppBar(
-            title: const Text(title),
+            title: const Text('Balance general'),
           ),
           body: FutureBuilder<BalanceGeneral>(
               future: balance,
@@ -102,7 +104,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                             DataColumn(
                               label: Text(
                                 'ACTIVO',
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                                style: TextStyle(fontStyle: FontStyle.normal),
                               ),
                             ),
                             DataColumn(
@@ -119,7 +121,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                             DataColumn(
                               label: Text(
                                 'PASIVO',
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                                style: TextStyle(fontStyle: FontStyle.normal),
                               ),
                             ),
                             DataColumn(
@@ -130,6 +132,23 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                             ),
                           ],
                           rows: createRows(snapshot.data!.pasivo),
+                        ),
+                        DataTable(
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                'CAPITAL',
+                                style: TextStyle(fontStyle: FontStyle.normal),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          ],
+                          rows: createRowsCapital(snapshot.data!.capital),
                         ),
                       ]);
                 } else {
