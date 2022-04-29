@@ -24,7 +24,12 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     final response =
         await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
-    final balance = BalanceGeneral.fromJson(jsonDecode(response.body));
+    developer.log(jsonDecode(response.body).toString(), name: 'response');
+    developer.log(jsonDecode(jsonDecode(response.body)).runtimeType.toString(),
+        name: 'response type');
+
+    final balance =
+        BalanceGeneral.fromJson(jsonDecode(jsonDecode(response.body)));
 
     developer.log(balance.toString(), name: 'balanceGeneraltqm');
 
@@ -77,9 +82,6 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
 
     return renglones;
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
