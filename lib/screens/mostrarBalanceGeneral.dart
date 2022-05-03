@@ -32,6 +32,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
         BalanceGeneral.fromJson(jsonDecode(jsonDecode(response.body)));
 
     developer.log(balance.toString(), name: 'balanceGeneraltqm');
+    print(balance.activo.toJson());
 
     return balance;
   }
@@ -83,6 +84,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return renglones;
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -96,86 +99,22 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
-                  return Column(
-                    children:[
+                  return Column(children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Column(children: [Text('FinRep', style: TextStyle(color:  Color.fromARGB(255, 33, 212, 243), fontSize: 16))]),
-                                Column(children: [Text('Empresa 1 S.C')]),
-                                Column(children: [Text('Fecha: 29/Abr/2022')])],
-                    ),
-                    Expanded(
-                      child: GridView.count(
-                      // Create a grid with 2 columns. If you change the scrollDirection to
-                      // horizontal, this produces 2 rows.
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
                       children: [
-                        DataTable(
-                          columns: const <DataColumn>[
-                            DataColumn(
-                              label: Text(
-                                'ACTIVO',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                '',
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ],
-                          rows: createRows(snapshot.data!.activo),
-                        ),
-                        DataTable(
-                          columns: const <DataColumn>[
-                            DataColumn(
-                              label: Text(
-                                'PASIVO',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                '',
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ],
-                          rows: createRows(snapshot.data!.pasivo),
-                        ),
-                        DataTable(columns: const <DataColumn>[
-                          DataColumn(label: Text(' '))
-                        ], rows: const <DataRow>[
-                          DataRow(cells: <DataCell>[DataCell(Text(' '))])
+                        Column(children: [
+                          Text('FinRep',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 33, 212, 243),
+                                  fontSize: 16))
                         ]),
-                        DataTable(
-                          columns: const <DataColumn>[
-                            DataColumn(
-                              label: Text(
-                                'CAPITAL',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                '',
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ],
-                          rows: createRowsCapital(snapshot.data!.capital),
-                        ),
-                      ])
-                    )
-                    ]);
+                        Column(children: [Text('Empresa 1 S.C')]),
+                        Column(children: [Text('Fecha: 29/Abr/2022')])
+                      ],
+                    ),
+                    Expanded(child: _contentGridView(snapshot.data))
+                  ]);
                 } else {
                   developer.log('Uno', name: 'NoTieneData');
                   return Text('${snapshot.error}');
@@ -183,4 +122,63 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
               })),
     );
   }
+
+  Widget _contentGridView(data) {
+    return GridView.count(
+      crossAxisCount: 2,
+      crossAxisSpacing: 4,
+      mainAxisSpacing: 5,
+      children: <Widget>[
+        _contentDataTable(data.activo, 'ACTIVO'),
+        _contentDataTable(data.pasivo, 'PASIVO'),
+        const Text(' '),
+        _contentDataTable(data.activo, 'CAPITAL'),
+      ],
+    );
+  
+
+    /*return GridView.extent(
+      primary: false,
+      padding: const EdgeInsets.all(16),
+      scrollDirection: Axis.vertical,
+      maxCrossAxisExtent: 600,
+      crossAxisSpacing: 4,
+      mainAxisSpacing: 10,
+      children: <Widget>[
+        _contentDataTable(data.activo, 'ACTIVO'),
+        _contentDataTable(data.pasivo, 'PASIVO'),
+        const Text(' '),
+        _contentDataTable(data.activo, 'CAPITAL'),
+      ],
+    );*/
+
+    /*return GridView.builder(
+        itemCount: 2,
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (context, index) =>
+            GridTile(child: _contentDataTable(data, index)));*/
+  }
+
+  Widget _contentDataTable(data, type) {
+    return DataTable(
+      columns: <DataColumn>[
+        DataColumn(
+          label: Text(
+            type,
+            style: const TextStyle(
+                fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const DataColumn(
+          label: Text(
+            '',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+      ],
+      rows: createRows(data),
+    );
+  }
+
 }
