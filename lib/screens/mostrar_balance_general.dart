@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/models/BalanceGeneral.dart';
+import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
+import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'dart:developer' as developer;
@@ -13,6 +14,7 @@ class MBalanceGeneral extends StatefulWidget {
 
 class BalanceGeneralState extends State<MBalanceGeneral> {
   late Future<BalanceGeneral> balance;
+  ConveridorDataTable convertidor = ConveridorDataTable();
 
   @override
   void initState() {
@@ -31,60 +33,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     final balance =
         BalanceGeneral.fromJson(jsonDecode(jsonDecode(response.body)));
 
-    developer.log(balance.toString(), name: 'balanceGeneraltqm');
-    print(balance.activo.toJson());
-
     return balance;
   }
-
-  DataRow createRow(datos) {
-    List<DataCell> celdas = [];
-
-    celdas.add(DataCell(Text(datos[0])));
-    celdas.add(DataCell(Text(datos[1])));
-
-    DataRow renglon = DataRow(cells: celdas);
-
-    return renglon;
-  }
-
-  List<DataRow> createRows(datos) {
-    List<DataRow> renglones = [];
-
-    renglones.add(createRow(['CIRCULANTE', ' ']));
-    for (int i = 0; i < datos.circulante.length; i++) {
-      DataRow curRow = createRow(datos.circulante[i]);
-      renglones.add(curRow);
-    }
-
-    renglones.add(createRow(['FIJO', ' ']));
-    for (int i = 0; i < datos.fijo.length; i++) {
-      DataRow curRow = createRow(datos.fijo[i]);
-      renglones.add(curRow);
-    }
-
-    renglones.add(createRow(['DIFERIDO', ' ']));
-    for (int i = 0; i < datos.diferido.length; i++) {
-      DataRow curRow = createRow(datos.diferido[i]);
-      renglones.add(curRow);
-    }
-
-    return renglones;
-  }
-
-  List<DataRow> createRowsCapital(datos) {
-    List<DataRow> renglones = [];
-
-    renglones.add(createRow(['CAPITAL', ' ']));
-    for (int i = 0; i < datos.capital.length; i++) {
-      DataRow curRow = createRow(datos.capital[i]);
-      renglones.add(curRow);
-    }
-
-    return renglones;
-  }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -103,21 +53,21 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(children: [
+                        Column(children: const [
                           Text('FinRep',
                               style: TextStyle(
                                   color: Color.fromARGB(255, 33, 212, 243),
                                   fontSize: 16))
                         ]),
-                        Column(children: [Text('Empresa 1 S.C')]),
-                        Column(children: [Text('Fecha: 29/Abr/2022')])
+                        Column(children: const [Text('Empresa 1 S.C')]),
+                        Column(children: const [Text('Fecha: 29/Abr/2022')])
                       ],
                     ),
                     Expanded(child: _contentGridView(snapshot.data))
                   ]);
                 } else {
-                  developer.log('Uno', name: 'NoTieneData');
-                  return Text('${snapshot.error}');
+                  developer.log('${snapshot.error}', name: 'NoTieneData');
+                  return CircularProgressIndicator();
                 }
               })),
     );
@@ -132,10 +82,9 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
         _contentDataTable(data.activo, 'ACTIVO'),
         _contentDataTable(data.pasivo, 'PASIVO'),
         const Text(' '),
-        _contentDataTable(data.activo, 'CAPITAL'),
+        _contentDataTable(data.capital, 'CAPITAL'),
       ],
     );
-  
 
     /*return GridView.extent(
       primary: false,
@@ -161,6 +110,15 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
   }
 
   Widget _contentDataTable(data, type) {
+
+    List<DataRow> renglones;
+
+    if (type == 'CAPITAL') {
+      renglones = convertidor.createRowsBalanceGeneralCapital(data);
+    } else {
+      renglones = convertidor.createRowsBalanceGeneral(data);
+    }
+
     return DataTable(
       columns: <DataColumn>[
         DataColumn(
@@ -177,8 +135,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
           ),
         ),
       ],
-      rows: createRows(data),
+      rows: renglones,
     );
   }
-
 }

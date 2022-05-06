@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/screens/mostrarBalanceGeneral.dart';
+import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'subirArchivo.dart';
-import 'mostrarBalanceGeneral.dart';
+import 'mostrar_balance_general.dart';
 
 
 class Home extends StatefulWidget {
