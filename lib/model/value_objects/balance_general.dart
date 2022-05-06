@@ -1,5 +1,6 @@
-import 'package:flutter_frontend_test/models/ActivoPasivo.dart';
-import 'package:flutter_frontend_test/models/Capital.dart';
+import 'package:flutter_frontend_test/model/value_objects/activo_pasivo.dart';
+import 'package:flutter_frontend_test/model/value_objects/capital.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'dart:developer' as developer;
 
 class BalanceGeneral {
@@ -11,23 +12,13 @@ class BalanceGeneral {
       {required this.activo, required this.pasivo, required this.capital});
 
   factory BalanceGeneral.fromJson(Map<String, dynamic> json) {
-    developer.log(json['activo']['circulante'].runtimeType.toString(),
-        name: 'balanceGeneraltqm Tipo ');
-
-    //List<String> hi = json['circulante'].cast(List<String>);
-    developer.log(json['activo']['circulante'][0].runtimeType.toString(), name: 'listahIihihi');
-    List<dynamic> lista = json['activo']['circulante'][0];
-    List<String> strs = lista.map((e) => e.toString()).toList();
-
-
-    developer.log(strs.runtimeType.toString(), name: 'listahI');
-
+    
     ActivoPasivo activoJson = ActivoPasivo.fromJson(json['activo']);
     ActivoPasivo pasivoJson = ActivoPasivo.fromJson(json['pasivo']);
     Capital capitalJson = Capital.fromJson(json['capital']);
 
     return BalanceGeneral(
-      activo: activoJson, //Convertir a ActivoPasivo
+      activo: activoJson, 
       pasivo: pasivoJson,
       capital: capitalJson,
     );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter_frontend_test/models/cuentas.dart';
+import 'package:flutter_frontend_test/model/value_objects/cuentas.dart';
 import '../env.sample.dart';
-import '../models/employee.dart';
-import '../models/cuentas.dart';
+import '../model/value_objects/employee.dart';
+import '../model/value_objects/cuentas.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -122,14 +122,14 @@ class MostrarEmpleadosState extends State<MostrarEmpleados> {
     return Scaffold(
       key: employeeListKey,
       appBar: AppBar(
-        title: Text('Employee List'),
+        title: const Text('Employee List'),
       ),
       body: Center(
         child: FutureBuilder<List<Employee>>(
           future: employees,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             // By default, show a loading spinner.
-            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (!snapshot.hasData) return const CircularProgressIndicator();
             // Render employee lists
             return ListView.builder(
               itemCount: snapshot.data.length,
@@ -137,10 +137,10 @@ class MostrarEmpleadosState extends State<MostrarEmpleados> {
                 var data = snapshot.data[index];
                 return Card(
                   child: ListTile(
-                    leading: Icon(Icons.person),
+                    leading: const Icon(Icons.person),
                     title: Text(
                       data.ename,
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ),
                 );
