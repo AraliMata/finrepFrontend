@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
+import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'dart:developer' as developer;
@@ -14,7 +15,7 @@ class MBalanceGeneral extends StatefulWidget {
 
 class BalanceGeneralState extends State<MBalanceGeneral> {
   late Future<BalanceGeneral> balance;
-  ConveridorDataTable convertidor = ConveridorDataTable();
+  ConvertidorDataTable convertidor = ConvertidorDataTable();
 
   @override
   void initState() {
@@ -67,7 +68,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                   ]);
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');
-                  return CircularProgressIndicator();
+                  return ProgressBar();
                 }
               })),
     );
@@ -110,7 +111,6 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
   }
 
   Widget _contentDataTable(data, type) {
-
     List<DataRow> renglones;
 
     if (type == 'CAPITAL') {

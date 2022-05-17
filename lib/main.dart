@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import './screens/home.dart';
 
 void main() {
@@ -11,13 +12,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Home(),
-      },
+      home: ResponsiveSizer(builder: (context, orientation, screenType) {
+        return const Home();
+      }),
     );
   }
 }

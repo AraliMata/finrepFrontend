@@ -14,7 +14,7 @@ class MEstadoResultados extends StatefulWidget {
 
 class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
-  late ConveridorDataTable convertidor;
+  late ConvertidorDataTable convertidor;
 
   @override
   void initState() {
@@ -69,7 +69,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
         Column(children: [Text('Empresa 1 S.C')]),
         Column(children: [Text('Fecha: 29/Abr/2022')])
       ],
-    );
+    ); 
   }
 
   Widget _contentDataTable(data) {
