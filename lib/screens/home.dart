@@ -3,7 +3,8 @@ import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'subirArchivo.dart';
 import 'mostrar_balance_general.dart';
-
+import 'HomePage.dart';
+import 'login.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -63,6 +64,19 @@ class HomeState extends State<Home> {
               ),
              
             ],
+                MaterialPageRoute(
+                    builder: (context) => const MBalanceGeneral()),
+              );
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Login'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
           ),
           
         ],
