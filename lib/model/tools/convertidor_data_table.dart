@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 
-class ConveridorDataTable {
-  /*DataRow createRowBalanceGeneral(datos) {
-    List<DataCell> celdas = [];
-
-    celdas.add(DataCell(Text(datos[0])));
-    celdas.add(DataCell(Text(datos[1])));
-
-    DataRow renglon = DataRow(cells: celdas);
-
-    return renglon;
-  }*/
-
+class ConvertidorDataTable {
   DataRow createRow(datos) {
     List<DataCell> celdas = [];
 
@@ -56,7 +45,7 @@ class ConveridorDataTable {
 
     renglones.add(createRow(['CAPITAL', ' ']));
     renglones + createRowsGroup(datos.capital);
-    
+
     return renglones;
   }
 
@@ -69,9 +58,11 @@ class ConveridorDataTable {
     renglones.add(createRow(['Egresos', ' ']));
     renglones + createRowsGroup(datos.egresos);
 
-    renglones.add(createRow(['Utilidad (o Pérdida)', ' ']));
-    renglones + createRowsGroup(datos.utilidad);
+    //renglones.add(createRow(['Utilidad (o Pérdida)', ' ']));
+    //renglones + createRowsGroup(datos.utilidad);
 
     return renglones;
   }
+
+ 
 }
