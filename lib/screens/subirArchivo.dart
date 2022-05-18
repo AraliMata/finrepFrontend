@@ -16,34 +16,48 @@ import 'package:file_picker/file_picker.dart';
 import 'package:iconsax/iconsax.dart';
 import 'prueba_arquitectura.dart';
 
-
 class SubirArchivo extends StatefulWidget {
-  const SubirArchivo ({Key? key}) : super(key: key);
+  const SubirArchivo({Key? key}) : super(key: key);
 
   @override
   State<SubirArchivo> createState() => SubirArchivoState();
 }
 
-class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderStateMixin {
-  Future<String> subirArchivo(FilePickerResult file, String url) async {
+class SubirArchivoState extends State<SubirArchivo>
+    with SingleTickerProviderStateMixin {
+  var request =
+      http.MultipartRequest('POST', Uri.parse("${Env.URL_PREFIX}/xlsx"));
+
+  Future<String> subirArchivo() async {
+    //var request = http.MultipartRequest('POST', Uri.parse(url));
+    developer.log('HOLA MAMAAA', name: 'Entre SubirArchivo');
+    developer.log(request.files.first.filename!, name: 'request1');
+    developer.log(request.files.last.filename!, name: 'request2');
+
+    var res = await request.send();
+    developer.log(res.reasonPhrase! + "es el res", name: 'my.app.category');
+
+    return res.reasonPhrase!;
+  }
+
+  void addFileToRequest(file, key) async {
     final fileReadStream = file.files.first.readStream;
     if (fileReadStream == null) {
       throw Exception('Cannot read file from null stream');
     }
     final stream = http.ByteStream(fileReadStream);
     developer.log(stream.toString(), name: 'stream2');
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+
     request.files.add(http.MultipartFile(
-      'file',
+      key,
       stream,
       file.files.first.size,
       filename: file.files.first.name.split("/").last,
       contentType: MediaType('xlsx', 'xls'),
     ));
-    var res = await request.send();
-    developer.log(res.reasonPhrase! + "es el res", name: 'my.app.category');
 
-    return res.reasonPhrase!;
+    developer.log('Tu mamá', name: 'request chequeo 1');
+    developer.log(request.files.first.filename!, name: 'request chequeo');
   }
 
   String _image =
@@ -53,45 +67,24 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
   File? _file;
   PlatformFile? _platformFile;
 
-  selectFile() async {
-    final file = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['xlsx'],
-      withReadStream: true,
-    );
-
-    // final fileReadStream = file?.files.first.readStream;
-    // if (fileReadStream == null) {
-    //   throw Exception('Cannot read file from null stream');
-    // }
-    // final stream = http.ByteStream(fileReadStream);
-    // developer.log(stream.toString(), name: 'stream2');\
-
-    String? fileExtension = file?.files.first.extension;
-
+  bool validFile(fileExtension,String filename, String tipo) {
     if (fileExtension == 'xlsx') {
-      subirArchivo(file!, "${Env.URL_PREFIX}/xlsx");
-
       showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text('Archivo subido'),
-          content: const Text(
-              'EL archivo fue subido correctamente'),
+          title: Text(tipo),
+          content: Text('El archivo con el nombre: ' + filename + 'fue selccionado'),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => const Home()));
-                  },
-              child: const Text('Aceptar'),
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: Text('Aceptar'),
             ),
           ],
         ),
       );
 
+      return true;
     } else {
-  
       showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -101,17 +94,41 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('Aceptar'),
+              child: Text('Aceptar'),
             ),
           ],
         ),
       );
+      return false;
+    }
 
+    
+  }
 
+  selectFile(key) async {
+    final file = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+      withReadStream: true,
+    );
+
+    String? fileExtension = file?.files.first.extension;
+
+    if (file != null && validFile(fileExtension, file.files[0].name, key)) {
+      //subirArchivo();
+      addFileToRequest(file, key);
+
+      setState(() {
+        _file = File(file.files.single.path!);
+        _platformFile = file.files.first;
+      });
+
+      loadingController.forward();
     }
 
     if (file != null) {
       print("holis");
+
       developer.log(fileExtension!, name: 'extension');
       developer.log('log me', name: 'my.app.category');
       developer.log(file.files[0].name, name: 'my.app.category');
@@ -119,12 +136,7 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
       developer.log(file.files.first.readStream.toString(), name: 'stream');
       developer.log(file.toString(), name: 'my.app.category');
       print(file.files.single.path!);
-      setState(() {
-        _file = File(file.files.single.path!);
-        _platformFile = file.files.first;
-      });
     }
-    loadingController.forward();
   }
 
   @override
@@ -144,6 +156,46 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
   ///
   /// https://afgprogrammer.com
   //////////////////////////////////
+  ///
+  Widget _getGestureDetector(String key) {
+    return GestureDetector(
+      onTap: () => selectFile(key),
+      child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+          child: DottedBorder(
+            borderType: BorderType.RRect,
+            radius: Radius.circular(10),
+            dashPattern: [10, 4],
+            strokeCap: StrokeCap.round,
+            color: Colors.blue.shade400,
+            child: Container(
+              width: double.infinity,
+              height: 150,
+              decoration: BoxDecoration(
+                  color: Colors.blue.shade50.withOpacity(.3),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Iconsax.folder_open,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Select your file',
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,7 +213,7 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
               height: 50,
             ),
             Text(
-              'Sube tu archivo',
+              'Upload your file',
               style: TextStyle(
                   fontSize: 25,
                   color: Colors.grey.shade800,
@@ -171,50 +223,14 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
               height: 10,
             ),
             Text(
-              'La extensión del archivo debe ser xlsx',
+              'File should be xlsx, png',
               style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
             ),
             SizedBox(
               height: 20,
             ),
-            GestureDetector(
-              onTap: selectFile,
-              child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-                  child: DottedBorder(
-                    borderType: BorderType.RRect,
-                    radius: Radius.circular(10),
-                    dashPattern: [10, 4],
-                    strokeCap: StrokeCap.round,
-                    color: Colors.blue.shade400,
-                    child: Container(
-                      width: double.infinity,
-                      height: 150,
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade50.withOpacity(.3),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Iconsax.folder_open,
-                            color: Colors.blue,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            'Select your file',
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey.shade400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )),
-            ),
+            _getGestureDetector('movimientos'),
+            _getGestureDetector('catalogo'),
             _platformFile != null
                 ? Container(
                     padding: EdgeInsets.all(20),
@@ -299,18 +315,16 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
                         SizedBox(
                           height: 20,
                         ),
-                        // MaterialButton(
-                        //   minWidth: double.infinity,
-                        //   height: 45,
-                        //   onPressed: () {},
-                        //   color: Colors.black,
-                        //   child: Text('Upload', style: TextStyle(color: Colors.white),),
-                        // )
                       ],
                     ))
                 : Container(),
             SizedBox(
               height: 150,
+            ),
+            SimpleElevatedButton(
+              child: const Text("Ver balance general"),
+              color: Colors.blue,
+              onPressed: subirArchivo,
             ),
           ],
         ),
