@@ -43,6 +43,7 @@ dependencies:
   liquid_progress_indicator: ^0.4.0
   responsive_sizer: ^3.0.5+1
   test: ^1.19.5
+  dropdown_button2: ^1.4.0
 
 dev_dependencies:
   flutter_test:

@@ -161,7 +161,7 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
               height: 50,
             ),
             Text(
-              'Upload your file',
+              'Sube tu archivo',
               style: TextStyle(
                   fontSize: 25,
                   color: Colors.grey.shade800,
@@ -171,7 +171,7 @@ class SubirArchivoState extends State<SubirArchivo> with SingleTickerProviderSta
               height: 10,
             ),
             Text(
-              'File should be xlsx, png',
+              'La extensión del archivo debe ser xlsx',
               style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
             ),
             SizedBox(
