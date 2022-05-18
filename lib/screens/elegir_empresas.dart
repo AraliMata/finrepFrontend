@@ -69,15 +69,14 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(height: screenHeight * .01),
-            Text(
-              "Elige la empresa de la cual vas a ver reportes o subir archivos",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey.shade500,
-                fontWeight: FontWeight.w100,
-                decoration: TextDecoration.none
+              Text(
+                "Elige la empresa de la cual vas a ver reportes o subir archivos",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey.shade500,
+                    fontWeight: FontWeight.w100,
+                    decoration: TextDecoration.none),
               ),
-            ),
               SizedBox(height: screenHeight * 0.12),
               DropdownButtonFormField2(
                 decoration: InputDecoration(
@@ -119,7 +118,12 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                     .toList(),
                 validator: (value) {
                   if (value == null) {
-                    return 'Por favor seecciona la empresa.';
+                    return 'Por favor selecciona la empresa.';
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Home()),
+                    );
                   }
                 },
                 onChanged: (value) {
@@ -134,11 +138,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                  }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                );
+                  } 
                 },
                 color: Colors.blue,
                 child: const Text('Confirmar selección'),
