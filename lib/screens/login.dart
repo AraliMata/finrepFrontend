@@ -79,7 +79,7 @@ class _LogInState extends State<LogIn> {
                       SizedBox(
                         height: 32,
                       ),
-                      TextField(
+                      const TextField(
                         decoration: InputDecoration(
                           hintText: 'Contraseña',
                           labelText: 'Contraseña',
@@ -87,6 +87,9 @@ class _LogInState extends State<LogIn> {
                             Icons.lock_outline,
                           ),
                         ),
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                       ),
                       SizedBox(
                         height: 64,

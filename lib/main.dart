@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, //hola
       initialRoute: '/',
       routes: {
-        '/': (context) => Home(),
+        '/': (context) => HomePage(),
       },
     );
   }

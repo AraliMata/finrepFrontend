@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: EdgeInsets.all(32),
                 child: Text(
-                  "Bienvenido",
+                  "Bienvenido a FinRep",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,

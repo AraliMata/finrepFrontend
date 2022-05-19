@@ -99,6 +99,9 @@ class _SignUpState extends State<SignUp> {
                             Icons.lock_outline,
                           ),
                         ),
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                       ),
                       SizedBox(
                         height: 64,
