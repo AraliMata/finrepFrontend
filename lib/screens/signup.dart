@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'action_button.dart';
+import 'package:http/http.dart' as http;
+import '../env.sample.dart';
 
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
@@ -12,6 +14,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  var request =
+      http.MultipartRequest('POST', Uri.parse("${Env.URL_PREFIX}/register"));
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

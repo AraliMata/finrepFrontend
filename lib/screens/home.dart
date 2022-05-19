@@ -23,22 +23,23 @@ class HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: screenHeight * .01),
-          Text("Elegir acción", style: TextStyle(
+          Text(
+            "Elegir acción",
+            style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade800,
-                decoration: TextDecoration.none
-              ),),
+                decoration: TextDecoration.none),
+          ),
           SizedBox(height: screenHeight * .01),
-            Text(
-              "Elige la acción deseada",
-              style: TextStyle(
+          Text(
+            "Elige la acción deseada",
+            style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w100,
-                decoration: TextDecoration.none
-              ),
-            ),
+                decoration: TextDecoration.none),
+          ),
           SizedBox(height: screenHeight * .12),
           Column(
             children: [
@@ -47,27 +48,26 @@ class HomeState extends State<Home> {
                 color: Colors.blue,
                 onPressed: () {
                   Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SubirArchivo()),
-              );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SubirArchivo()),
+                  );
                 },
               ),
               SizedBox(height: screenHeight * .025),
               SimpleElevatedButton(
                 child: const Text("Ver balance general"),
                 color: Colors.blue,
-                onPressed: () {Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MBalanceGeneral()),
-                //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
-              );},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MBalanceGeneral()),
+                    //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
+                  );
+                },
               ),
-             
             ],
-                MaterialPageRoute(
-                    builder: (context) => const MBalanceGeneral()),
-              );
-            },
           ),
           ElevatedButton(
             child: const Text('Login'),
@@ -78,15 +78,11 @@ class HomeState extends State<Home> {
               );
             },
           ),
-          
         ],
       ),
     );
-
-  
   }
 }
-
 
 class SimpleElevatedButton extends StatelessWidget {
   const SimpleElevatedButton(
