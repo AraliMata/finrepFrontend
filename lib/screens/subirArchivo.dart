@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_frontend_test/model/value_objects/cuentas.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:developer' as developer;
 import '../env.sample.dart';
-import '../model/value_objects/employee.dart';
-import '../model/value_objects/cuentas.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:flutter_frontend_test/model/value_objects/cuentas.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import '../model/value_objects/employee.dart';
+import '../model/value_objects/cuentas.dart';
+import 'package:dio/dio.dart';
 import 'prueba_arquitectura.dart';
 
 class SubirArchivo extends StatefulWidget {
@@ -67,13 +67,14 @@ class SubirArchivoState extends State<SubirArchivo>
   File? _file;
   PlatformFile? _platformFile;
 
-  bool validFile(fileExtension,String filename, String tipo) {
+  bool validFile(fileExtension, String filename, String tipo) {
     if (fileExtension == 'xlsx') {
       showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text(tipo),
-          content: Text('El archivo con el nombre: ' + filename + 'fue selccionado'),
+          content:
+              Text('El archivo con el nombre: ' + filename + 'fue selccionado'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -101,8 +102,6 @@ class SubirArchivoState extends State<SubirArchivo>
       );
       return false;
     }
-
-    
   }
 
   selectFile(key) async {
