@@ -1,3 +1,4 @@
+import 'testop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_frontend_test/model/value_objects/cuentas.dart';
@@ -67,13 +68,14 @@ class SubirArchivoState extends State<SubirArchivo>
   File? _file;
   PlatformFile? _platformFile;
 
-  bool validFile(fileExtension,String filename, String tipo) {
+  bool validFile(fileExtension, String filename, String tipo) {
     if (fileExtension == 'xlsx') {
       showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text(tipo),
-          content: Text('El archivo con el nombre: ' + filename + 'fue selccionado'),
+          content:
+              Text('El archivo con el nombre: ' + filename + 'fue selccionado'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -101,8 +103,6 @@ class SubirArchivoState extends State<SubirArchivo>
       );
       return false;
     }
-
-    
   }
 
   selectFile(key) async {
