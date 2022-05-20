@@ -1,15 +1,14 @@
 import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'constants.dart';
-import 'action_button.dart';
 import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
 import '/screens/home.dart';
+import 'package:get/get.dart';
 
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
@@ -113,14 +112,11 @@ class LogInState extends State<LogIn> {
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            registerUser(_controller.text, _controller2.text,
-                                _controller3.text);
+
+                            _futureUser = loginUser(_controller.text,
+                                _controller2.text, _controller3.text);
+
                           });
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ElegirEmpresa()),
-                          );
                         },
                         child: const Text('Iniciar Sesión'),
                       ),
@@ -193,6 +189,7 @@ class LogInState extends State<LogIn> {
     );
   }
 
+
   Future<int> getIdUsuario() async {
     final prefs = await SharedPreferences.getInstance();
     developer.log('entro a getIdUsuario', name: 'entro');
@@ -237,5 +234,33 @@ class LogInState extends State<LogIn> {
       // then throw an exception.
       throw Exception('Failed to register employee.');
     }
+
+Future<User> loginUser(String username, String email, String password) async {
+  final response = await http.post(
+    Uri.parse("${Env.URL_PREFIX}/login"),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'email': email,
+      'password': password
+    }),
+  );
+  if (response.statusCode == 202) {
+    developer.log("se armo");
+    Get.to(const ElegirEmpresa());
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    Get.defaultDialog(
+      title: "Alerta",
+      content: Text(
+        "Credenciales incorrectas",
+      ),
+    );
+    throw Exception('Failed to register employee.');
+
   }
 }
