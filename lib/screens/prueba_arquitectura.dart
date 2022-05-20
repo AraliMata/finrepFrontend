@@ -6,9 +6,8 @@ import '../model/value_objects/employee.dart';
 import '../model/value_objects/cuentas.dart';
 import 'package:http/http.dart' as http;
 
-
 class CrearEmpleado extends StatefulWidget {
-  const CrearEmpleado ({Key? key}) : super(key: key);
+  const CrearEmpleado({Key? key}) : super(key: key);
 
   @override
   State<CrearEmpleado> createState() => CrearEmpleadoState();
@@ -38,12 +37,14 @@ class CrearEmpleadoState extends State<CrearEmpleado> {
               (_futureEmployee == null) ? buildColumn() : buildFutureBuilder(),
         ),
         floatingActionButton: FloatingActionButton(
-        onPressed: (){
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const MostrarEmpleados()));
-        },
-        child: const Icon(Icons.add),
-      ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MostrarEmpleados()));
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -94,7 +95,7 @@ class CrearEmpleadoState extends State<CrearEmpleado> {
 }
 
 class MostrarEmpleados extends StatefulWidget {
-  const MostrarEmpleados ({Key? key}) : super(key: key);
+  const MostrarEmpleados({Key? key}) : super(key: key);
 
   @override
   State<MostrarEmpleados> createState() => MostrarEmpleadosState();
@@ -104,7 +105,6 @@ class MostrarEmpleados extends StatefulWidget {
 class MostrarEmpleadosState extends State<MostrarEmpleados> {
   late Future<List<Employee>> employees = getEmployeeList();
   final employeeListKey = GlobalKey<MostrarEmpleadosState>();
-
 
   Future<List<Employee>> getEmployeeList() async {
     final response =
@@ -149,9 +149,7 @@ class MostrarEmpleadosState extends State<MostrarEmpleados> {
           },
         ),
       ),
-      
     );
-    
   }
 }
 
@@ -162,6 +160,7 @@ class MostrarDatosCuenta extends StatefulWidget {
   @override
   State<MostrarDatosCuenta> createState() => MostrarDatosCuentaState();
 }
+
 class MostrarDatosCuentaState extends State<MostrarDatosCuenta> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();

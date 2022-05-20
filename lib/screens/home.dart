@@ -3,7 +3,8 @@ import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'subirArchivo.dart';
 import 'mostrar_balance_general.dart';
-
+import 'login_signin/BackgroundPage.dart';
+import 'login_signin/login.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,22 +23,23 @@ class HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: screenHeight * .01),
-          Text("Elegir acción", style: TextStyle(
+          Text(
+            "Elegir acción",
+            style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade800,
-                decoration: TextDecoration.none
-              ),),
+                decoration: TextDecoration.none),
+          ),
           SizedBox(height: screenHeight * .01),
-            Text(
-              "Elige la acción deseada",
-              style: TextStyle(
+          Text(
+            "Elige la acción deseada",
+            style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w100,
-                decoration: TextDecoration.none
-              ),
-            ),
+                decoration: TextDecoration.none),
+          ),
           SizedBox(height: screenHeight * .12),
           Column(
             children: [
@@ -46,33 +48,41 @@ class HomeState extends State<Home> {
                 color: Colors.blue,
                 onPressed: () {
                   Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SubirArchivo()),
-              );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SubirArchivo()),
+                  );
                 },
               ),
               SizedBox(height: screenHeight * .025),
               SimpleElevatedButton(
                 child: const Text("Ver balance general"),
                 color: Colors.blue,
-                onPressed: () {Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MBalanceGeneral()),
-                //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
-              );},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MBalanceGeneral()),
+                    //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
+                  );
+                },
               ),
-             
             ],
           ),
-          
+          ElevatedButton(
+            child: const Text('Login'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BackgroundPage()),
+              );
+            },
+          ),
         ],
       ),
     );
-
-  
   }
 }
-
 
 class SimpleElevatedButton extends StatelessWidget {
   const SimpleElevatedButton(
