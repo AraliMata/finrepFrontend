@@ -1,4 +1,5 @@
-import 'testop.dart';
+// import 'testop.dart';
+import 'elegir_empresas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:http/http.dart' as http;
@@ -141,6 +142,8 @@ class SubirArchivoState extends State<SubirArchivo>
 
   @override
   void initState() {
+    // ElegirEmpresaState hola = ElegirEmpresaState();
+    // developer.log(hola.getIdEmpresa().toString(), name: 'getIdEmpresaArchivo');
     loadingController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 10),

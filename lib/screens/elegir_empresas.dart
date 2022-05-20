@@ -6,12 +6,15 @@ import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
+import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 // import 'package:flutter_session/flutter_session.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'login_signin/login.dart';
 import '../env.sample.dart';
 import 'dart:developer' as developer;
+import 'package:universal_html/html.dart';
 
 class ElegirEmpresa extends StatefulWidget {
   const ElegirEmpresa({Key? key}) : super(key: key);
@@ -20,20 +23,26 @@ class ElegirEmpresa extends StatefulWidget {
 }
 
 class ElegirEmpresaState extends State<ElegirEmpresa> {
+  final Storage localStorage = window.localStorage;
+
   // late Future<List<dynamic>> empresas;
-  late Future<List<String>> empresas = getEmpresas();
+  late Future<List<String>> empresas;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
   late List<Empresa> empresasTodo;
+  LogInState loginData = LogInState();
 
   @override
   void initState() {
     super.initState();
-    // empresas = getEmpresas();
+    empresas = getEmpresas();
   }
 
   int idEmpresaGlobal = 0;
 
   Future<List<String>> getEmpresas() async {
+    var idUsuario = await loginData.getIdUsuario();
+    // developer.log(idUsuario.toString(), name: 'idUsuarioPruebaSuprema');
+
     final response = await http
         .get(Uri.parse("${Env.URL_PREFIX}/contabilidad/usuarios/1/empresas"));
 
@@ -53,27 +62,16 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
     for (int i = 0; i < empresas.length; i++) {
       nombresEmpresas.add(empresas[i].empresa);
     }
-    //empresas.map((empresa) => {nombresEmpresas.add(empresa.empresa)});
-    //BalanceGeneral.fromJson(jsonDecode(jsonDecode(response.body)));
-    //developer.log(hola.toString(), name: 'empresas');
     developer.log(nombresEmpresas.toString(), name: 'empresas');
-    //BalanceGeneral.fromJson(jsonDecode(jsonDecode(response.body)));
 
     return nombresEmpresas;
   }
 
   Future<int> getIdEmpresa() async {
     final prefs = await SharedPreferences.getInstance();
-    developer.log('entro', name: 'entro');
-    developer.log(prefs.getInt('idEmpresa').toString(), name: 'entro');
-    // setState(() {
-    // idEmpresaGlobal = (prefs.getInt('idEmpresa') ?? 1);
-    // });
-
-    // idEmpresaGlobal = (prefs.getInt('idEmpresa') ?? 1);
+    // developer.log('entro', name: 'entro');
+    // developer.log(prefs.getInt('idEmpresa').toString(), name: 'getIdEmpresa');
     return prefs.getInt('idEmpresa') ?? 1;
-    // idEmpresaGlobal = (prefs.getInt('idEmpresa') ?? 0);
-    // return prefs.getInt('idEmpresa') ?? 1;
   }
 
   //Incrementing counter after click
@@ -83,8 +81,10 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
       for (int i = 0; i < empresasTodo.length; i++) {
         if (empresasTodo[i].empresa == nombreEmpresa) {
           prefs.setInt('idEmpresa', empresasTodo[i].id);
-          developer.log(empresasTodo[i].id.toString(), name: 'idEmpresa');
-          developer.log('guardo', name: 'idEmpresa');
+          // developer.log(empresasTodo[i].id.toString(), name: 'saveIdEmpresa');
+          // developer.log(prefs.getInt('idEmpresa').toString(),
+          // name: 'saveIdEmpresaPrefs');
+          // developer.log('guardo', name: 'saveIdEmpresa');
           break;
         }
       }
@@ -134,7 +134,6 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                   // By default, show a loading spinner.
                   developer.log(snapshot.data.toString(),
                       name: "Snapshot data");
-                  developer.log(genderItems.toString(), name: "string");
                   List<String> empresaMostrar = snapshot.data ?? [''];
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();
@@ -184,8 +183,8 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                           return 'Por favor selecciona la empresa.';
                         } else {
                           // obtain shared preferences
-                          developer.log(idEmpresaGlobal.toString(),
-                              name: 'pruebIdEmpresa');
+                          // developer.log(idEmpresaGlobal.toString(),
+                          // name: 'pruebaIdEmpresa');
                           // developer.log('antes de');
                           // developer.log('despues de');
                           // developer.log(value.toString(),
