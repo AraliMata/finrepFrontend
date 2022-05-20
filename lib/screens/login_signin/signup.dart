@@ -202,7 +202,7 @@ class _SignUpState extends State<SignUp> {
 Future<User> registerUser(
     String username, String email, String password) async {
   final response = await http.post(
-    Uri.parse("${Env.URL_PREFIX}register"),
+    Uri.parse("${Env.URL_PREFIX}/register"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -212,7 +212,7 @@ Future<User> registerUser(
       'password': password
     }),
   );
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     developer.log("se armo");
     // If the server did return a 201 CREATED response,
     // then parse the JSON.

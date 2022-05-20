@@ -112,7 +112,7 @@ class _LogInState extends State<LogIn> {
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            _futureUser = registerUser(_controller.text,
+                            _futureUser = loginUser(_controller.text,
                                 _controller2.text, _controller3.text);
                           });
                           Navigator.push(
@@ -193,10 +193,9 @@ class _LogInState extends State<LogIn> {
   }
 }
 
-Future<User> registerUser(
-    String username, String email, String password) async {
+Future<User> loginUser(String username, String email, String password) async {
   final response = await http.post(
-    Uri.parse("${Env.URL_PREFIX}login"),
+    Uri.parse("${Env.URL_PREFIX}/login"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -206,7 +205,7 @@ Future<User> registerUser(
       'password': password
     }),
   );
-  if (response.statusCode == 200) {
+  if (response.statusCode == 202) {
     developer.log("se armo");
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
