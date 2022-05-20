@@ -1,14 +1,13 @@
 import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'dart:convert';
 import 'constants.dart';
-import 'action_button.dart';
 import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
 import '/screens/home.dart';
+import 'package:get/get.dart';
 
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
@@ -115,11 +114,6 @@ class _LogInState extends State<LogIn> {
                             _futureUser = loginUser(_controller.text,
                                 _controller2.text, _controller3.text);
                           });
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ElegirEmpresa()),
-                          );
                         },
                         child: const Text('Iniciar Sesión'),
                       ),
@@ -207,12 +201,17 @@ Future<User> loginUser(String username, String email, String password) async {
   );
   if (response.statusCode == 202) {
     developer.log("se armo");
+    Get.to(const ElegirEmpresa());
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
     return User.fromJson(jsonDecode(response.body));
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
+    Get.defaultDialog(
+      title: "Alerta",
+      content: Text(
+        "Credenciales incorrectas",
+      ),
+    );
     throw Exception('Failed to register employee.');
   }
 }

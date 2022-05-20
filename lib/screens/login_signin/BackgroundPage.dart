@@ -69,30 +69,30 @@ class _BackgroundPageState extends State<BackgroundPage> {
                 padding: EdgeInsets.all(32),
                 child: Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.keyboard_arrow_left,
-                      ),
-                      //Icons.keyboard_arrow_left,
-                      color: Colors.white,
-                      iconSize: 28,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      "Volver",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
+                    // IconButton(
+                    //   icon: Icon(
+                    //     Icons.keyboard_arrow_left,
+                    //   ),
+                    //   //Icons.keyboard_arrow_left,
+                    //   color: Colors.white,
+                    //   iconSize: 28,
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(builder: (context) => const Home()),
+                    //     );
+                    //   },
+                    // ),
+                    // SizedBox(
+                    //   width: 8,
+                    // ),
+                    // Text(
+                    //   "Volver",
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //     fontSize: 16,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

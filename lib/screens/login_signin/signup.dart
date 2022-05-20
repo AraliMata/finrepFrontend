@@ -1,12 +1,12 @@
 import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'constants.dart';
-import 'action_button.dart';
 import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
+import 'package:get/get.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
@@ -214,6 +214,7 @@ Future<User> registerUser(
   );
   if (response.statusCode == 201) {
     developer.log("se armo");
+    Get.to(const ElegirEmpresa());
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
     return User.fromJson(jsonDecode(response.body));
