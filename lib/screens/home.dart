@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
+import 'package:flutter_frontend_test/screens/mostrar_estado_resultados.dart';
 import 'subirArchivo.dart';
 import 'mostrar_balance_general.dart';
 
@@ -58,6 +59,16 @@ class HomeState extends State<Home> {
                 onPressed: () {Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MBalanceGeneral()),
+                //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
+              );},
+              ),
+              SizedBox(height: screenHeight * .025),
+              SimpleElevatedButton(
+                child: const Text("Ver estado de resultados"),
+                color: Colors.blue,
+                onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MEstadoResultados()),
                 //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
               );},
               ),

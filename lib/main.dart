@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import './screens/home.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: ResponsiveSizer(builder: (context, orientation, screenType) {
-        return const ElegirEmpresa();
+        return const Home();
       }),
     );
   }

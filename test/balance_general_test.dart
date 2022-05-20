@@ -8,7 +8,7 @@ void main() {
   ConvertidorDataTable convertidor = ConvertidorDataTable();
   
   const stringBalanceGeneral =
-      '{ "activo": { "circulante": [["Bancos", 6181.41],["Clientes", 2]], "fijo": [["Uno", 1], ["dos", 2]], "diferido": [["jojo", 4],["jeje", 5]]}, "pasivo":{"circulante": [["Bancos", 6181.41],["Clientes", 2]],"fijo": [["Uno", 1], ["dos", 2]], "diferido": [["jojo", 4],["jeje", 5]]}, "capital": {"capital": [["jujuju", 18]]}}';
+      '{"activo": {"circulante": [["", 0], ["Bancos", 6181.41], ["Clientes", 176780.11], ["Deudores Diversos", 95334.37], ["IVA Acreditable", 42540.61], ["Total CIRCULANTE", 320836.5]], "fijo": [["", 0], ["Depreciaci�n Acumulada de Mob y Eq. oficina", -2025.0], ["Mobiliario y Equipo de oficina", 14212.06], ["Total FIJO", 12187.06]], "diferido": [["", 0], ["Impuestos Anticipados", 14434.0], ["Total DIFERIDO", 14434.0], [["SUMA DEL ACTIVO"], 347457.56]]}, "pasivo": {"circulante": [["", 0], ["ACREEDORES DIVERSOS", -343.21], ["DOCUMENTOS POR PAGAR", 95162.67], ["IMPUESTOS POR PAGAR", 78376.81], ["Total CIRCULANTE", 173196.27]], "fijo": [["", 0], ["Total FIJO", 0]], "diferido": [["", 0], ["Total DIFERIDO", 0], [["SUMA DEL PASIVO"], 173196.27]]}, "capital": {"capital": [["", 0], ["Capital Social", 100000.0], ["Resultado Ejercicios Anteriores", -41370.48], ["Total CAPITAL", 58629.52], ["SUMA DEL CAPITAL", 117259.04], ["SUMA DEL PASIVO Y CAPITAL", 231825.79]]}}';
   
   final balanceGeneralJson = jsonDecode(stringBalanceGeneral);
 
@@ -20,7 +20,7 @@ void main() {
       var input2 = 'circulante';
       List<List<String>> expectedValue =  [
         ["Bancos", "6181.41"],
-        ["Clientes", "2"]
+        ["Clientes", "176780.11"]
       ];
       //When
       var result = ConvertidorJson.jsonToList(input, input2);
