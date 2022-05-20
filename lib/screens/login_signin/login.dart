@@ -112,10 +112,8 @@ class LogInState extends State<LogIn> {
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-
                             _futureUser = loginUser(_controller.text,
                                 _controller2.text, _controller3.text);
-
                           });
                         },
                         child: const Text('Iniciar Sesión'),
@@ -189,7 +187,6 @@ class LogInState extends State<LogIn> {
     );
   }
 
-
   Future<int> getIdUsuario() async {
     final prefs = await SharedPreferences.getInstance();
     developer.log('entro a getIdUsuario', name: 'entro');
@@ -234,33 +231,34 @@ class LogInState extends State<LogIn> {
       // then throw an exception.
       throw Exception('Failed to register employee.');
     }
+  }
 
-Future<User> loginUser(String username, String email, String password) async {
-  final response = await http.post(
-    Uri.parse("${Env.URL_PREFIX}/login"),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'username': username,
-      'email': email,
-      'password': password
-    }),
-  );
-  if (response.statusCode == 202) {
-    developer.log("se armo");
-    Get.to(const ElegirEmpresa());
-    // If the server did return a 201 CREATED response,
-    // then parse the JSON.
-    return User.fromJson(jsonDecode(response.body));
-  } else {
-    Get.defaultDialog(
-      title: "Alerta",
-      content: Text(
-        "Credenciales incorrectas",
-      ),
+  Future<User> loginUser(String username, String email, String password) async {
+    final response = await http.post(
+      Uri.parse("${Env.URL_PREFIX}/login"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email,
+        'password': password
+      }),
     );
-    throw Exception('Failed to register employee.');
-
+    if (response.statusCode == 202) {
+      developer.log("se armo");
+      Get.to(const ElegirEmpresa());
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      Get.defaultDialog(
+        title: "Alerta",
+        content: Text(
+          "Credenciales incorrectas",
+        ),
+      );
+      throw Exception('Failed to register employee.');
+    }
   }
 }
