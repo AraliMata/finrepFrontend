@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'package:flutter_frontend_test/model/tools/convertidor_json_to.dart';
 
 class ActivoPasivo {
   final List<List<String>> circulante;
@@ -8,59 +9,22 @@ class ActivoPasivo {
   ActivoPasivo(
       {required this.circulante, required this.fijo, required this.diferido});
 
+
   factory ActivoPasivo.fromJson(Map<String, dynamic> json) {
     developer.log(json['fijo'].runtimeType.toString(),
         name: 'ActivoPasivojuju');
 
-    List<List<String>> circulanteJson = [];
-    List<List<String>> fijoJson = [];
-    List<List<String>> diferidoJson = [];
+    List<List<String>> circulanteJson = ConvertidorJson.jsonToList(json, 'circulante');
+    List<List<String>> fijoJson = ConvertidorJson.jsonToList(json, 'fijo');
+    List<List<String>> diferidoJson = ConvertidorJson.jsonToList(json, 'diferido');
 
-    developer.log(json['circulante'][0][0].toString(), name: 'Sí es string o ');
-    for (int i = 0; i < json['circulante'].length; i++) {
-      List<String> curList = [];
-      curList.add(json['circulante'][i][0].toString());
-      curList.add(json['circulante'][i][1].toString());
-      circulanteJson.add(curList);
-    }
-
-    for (int i = 0; i < json['fijo'].length; i++) {
-      //fijoJson.add(json['fijo'][i].map((e) => e.toString()).toList());
-      List<String> curList = [];
-      curList.add(json['fijo'][i][0].toString());
-      curList.add(json['fijo'][i][1].toString());
-      fijoJson.add(curList);
-    }
-
-    for (int i = 0; i < json['diferido'].length; i++) {
-      //diferidoJson.add(json['diferido'][i].map((e) => e.toString()).toList());
-      List<String> curList = [];
-      curList.add(json['diferido'][i][0].toString());
-      curList.add(json['diferido'][i][1].toString());
-      diferidoJson.add(curList);
-    }
-
-    developer.log(diferidoJson.runtimeType.toString(),
-        name: "ActivoPasivo ListString");
+      developer.log(circulanteJson.runtimeType.toString(),
+        name: 'Tipo dato ActivoPasivo');    
 
     return ActivoPasivo(
       circulante: circulanteJson,
       fijo: fijoJson,
       diferido: diferidoJson,
-    );
-
-    List<List<String>> hola = [
-      ["HI"]
-    ];
-    return ActivoPasivo(
-      circulante: hola,
-      fijo: hola,
-      diferido: hola,
-    );
-    return ActivoPasivo(
-      circulante: json['circulante'],
-      fijo: json['fijo'],
-      diferido: json['diferido'],
     );
   }
 
