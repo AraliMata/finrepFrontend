@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import './screens/constants.dart';
+import 'screens/login_signin/constants.dart';
 import './screens/home.dart';
-import './screens/HomePage.dart';
+import 'screens/login_signin/BackgroundPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, //hola
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => BackgroundPage(),
       },
     );
   }

@@ -1,8 +1,12 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'constants.dart';
 import 'action_button.dart';
+import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
-import '../env.sample.dart';
+import '../../env.sample.dart';
 
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
@@ -14,8 +18,10 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  var request =
-      http.MultipartRequest('POST', Uri.parse("${Env.URL_PREFIX}/register"));
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller2 = TextEditingController();
+  final TextEditingController _controller3 = TextEditingController();
+  Future<User>? _futureUser;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +79,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       TextField(
+                        controller: _controller,
                         decoration: InputDecoration(
                           hintText: 'Nombre',
                           labelText: 'Nombre',
@@ -85,6 +92,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       TextField(
+                        controller: _controller2,
                         decoration: InputDecoration(
                           hintText: 'Correo',
                           labelText: 'Correo',
@@ -97,6 +105,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       TextField(
+                        controller: _controller3,
                         decoration: InputDecoration(
                           hintText: 'Contraseña',
                           labelText: 'Contraseña',
@@ -111,7 +120,16 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         height: 64,
                       ),
-                      actionButton("Crear cuenta"),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _futureUser = registerUser(_controller.text,
+                                _controller2.text, _controller3.text);
+                          });
+                        },
+                        child: const Text('Registrarse'),
+                      ),
+                      //actionButton("Crear cuenta"),
                       SizedBox(
                         height: 32,
                       ),
@@ -163,5 +181,45 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  FutureBuilder<User> buildFutureBuilder() {
+    return FutureBuilder<User>(
+      future: _futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data!.username);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+Future<User> registerUser(
+    String username, String email, String password) async {
+  final response = await http.post(
+    Uri.parse("${Env.URL_PREFIX}register"),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'email': email,
+      'password': password
+    }),
+  );
+  if (response.statusCode == 200) {
+    developer.log("se armo");
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to register employee.');
   }
 }

@@ -3,14 +3,14 @@ import 'package:flutter_frontend_test/screens/home.dart';
 import 'constants.dart';
 import 'login.dart';
 import 'signup.dart';
-import 'home.dart';
+import '../home.dart';
 
-class HomePage extends StatefulWidget {
+class BackgroundPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _BackgroundPageState createState() => _BackgroundPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BackgroundPageState extends State<BackgroundPage> {
   Option selectedOption = Option.LogIn;
 
   @override

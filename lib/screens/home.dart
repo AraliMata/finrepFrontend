@@ -3,8 +3,8 @@ import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'subirArchivo.dart';
 import 'mostrar_balance_general.dart';
-import 'HomePage.dart';
-import 'login.dart';
+import 'login_signin/BackgroundPage.dart';
+import 'login_signin/login.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -74,7 +74,7 @@ class HomeState extends State<Home> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => BackgroundPage()),
               );
             },
           ),

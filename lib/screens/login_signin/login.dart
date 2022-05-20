@@ -1,8 +1,13 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'constants.dart';
 import 'action_button.dart';
+import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
-import '../env.sample.dart';
+import '../../env.sample.dart';
+import '/screens/home.dart';
 
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
@@ -14,8 +19,10 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  var request =
-      http.MultipartRequest('GET', Uri.parse("${Env.URL_PREFIX}/login"));
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller2 = TextEditingController();
+  final TextEditingController _controller3 = TextEditingController();
+  Future<User>? _futureUser;
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +80,10 @@ class _LogInState extends State<LogIn> {
                         height: 32,
                       ),
                       TextField(
+                        controller: _controller,
                         decoration: InputDecoration(
-                          hintText: 'Correo',
-                          labelText: 'Correo',
+                          hintText: 'Username',
+                          labelText: 'Username',
                           suffixIcon: Icon(
                             Icons.mail_outline,
                           ),
@@ -84,7 +92,8 @@ class _LogInState extends State<LogIn> {
                       SizedBox(
                         height: 32,
                       ),
-                      const TextField(
+                      TextField(
+                        controller: _controller3,
                         decoration: InputDecoration(
                           hintText: 'Contraseña',
                           labelText: 'Contraseña',
@@ -99,7 +108,21 @@ class _LogInState extends State<LogIn> {
                       SizedBox(
                         height: 64,
                       ),
-                      actionButton("Iniciar Sesión"),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _futureUser = registerUser(_controller.text,
+                                _controller2.text, _controller3.text);
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Home()),
+                          );
+                        },
+                        child: const Text('Iniciar Sesión'),
+                      ),
+                      //actionButton("Iniciar Sesión"),
                       SizedBox(
                         height: 32,
                       ),
@@ -151,5 +174,45 @@ class _LogInState extends State<LogIn> {
         ),
       ),
     );
+  }
+
+  FutureBuilder<User> buildFutureBuilder() {
+    return FutureBuilder<User>(
+      future: _futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data!.username);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+Future<User> registerUser(
+    String username, String email, String password) async {
+  final response = await http.post(
+    Uri.parse("${Env.URL_PREFIX}login"),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'email': email,
+      'password': password
+    }),
+  );
+  if (response.statusCode == 200) {
+    developer.log("se armo");
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to register employee.');
   }
 }

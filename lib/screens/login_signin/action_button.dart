@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'package:http/http.dart' as http;
-import '../env.sample.dart';
+import '../../env.sample.dart';
 
 var request =
     http.MultipartRequest('POST', Uri.parse("${Env.URL_PREFIX}/register"));
