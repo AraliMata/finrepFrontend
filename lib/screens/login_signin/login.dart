@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'constants.dart';
 import '/model/value_objects/user.dart';
@@ -15,10 +16,10 @@ class LogIn extends StatefulWidget {
   LogIn({required this.onSignUpSelected});
 
   @override
-  _LogInState createState() => _LogInState();
+  LogInState createState() => LogInState();
 }
 
-class _LogInState extends State<LogIn> {
+class LogInState extends State<LogIn> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
   final TextEditingController _controller3 = TextEditingController();
@@ -111,8 +112,10 @@ class _LogInState extends State<LogIn> {
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
+
                             _futureUser = loginUser(_controller.text,
                                 _controller2.text, _controller3.text);
+
                           });
                         },
                         child: const Text('Iniciar Sesión'),
@@ -185,7 +188,52 @@ class _LogInState extends State<LogIn> {
       },
     );
   }
-}
+
+
+  Future<int> getIdUsuario() async {
+    final prefs = await SharedPreferences.getInstance();
+    developer.log('entro a getIdUsuario', name: 'entro');
+    developer.log(prefs.getInt('idUsuario').toString(), name: 'getIdUsuario');
+    return prefs.getInt('idUsuario') ?? 1;
+  }
+
+  //Incrementing counter after click
+  Future<void> saveIdUsuario(idUsuario) async {
+    final prefs = await SharedPreferences.getInstance();
+    developer.log('si entre paps', name: 'entre paps');
+    setState(() {
+      prefs.setInt('idUsuario', idUsuario);
+      developer.log(prefs.getInt('idUsuario').toString(),
+          name: 'idUsuario en set');
+    });
+  }
+
+  Future<void> registerUser(
+      String username, String email, String password) async {
+    final response = await http.post(
+      Uri.parse("${Env.URL_PREFIX}/login"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email,
+        'password': password
+      }),
+    );
+    if (response.statusCode == 200) {
+      developer.log("se armo");
+      developer.log(response.body.toString(), name: 'response de Id');
+      saveIdUsuario(int.parse(response.body));
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+      // return User.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to register employee.');
+    }
 
 Future<User> loginUser(String username, String email, String password) async {
   final response = await http.post(
@@ -213,5 +261,6 @@ Future<User> loginUser(String username, String email, String password) async {
       ),
     );
     throw Exception('Failed to register employee.');
+
   }
 }
