@@ -1,3 +1,4 @@
+import 'testop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:http/http.dart' as http;
@@ -68,13 +69,19 @@ class SubirArchivoState extends State<SubirArchivo>
   PlatformFile? _platformFile;
 
   bool validFile(fileExtension, String filename, String tipo) {
+    if (tipo == "catalogo") {
+      tipo = "Catálogo";
+    } else {
+      tipo = "Movimientos";
+    }
+
     if (fileExtension == 'xlsx') {
       showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text(tipo),
-          content:
-              Text('El archivo con el nombre: ' + filename + 'fue selccionado'),
+          title: Text(tipo[0].toUpperCase() + tipo.substring(1)),
+          content: Text(
+              'El archivo con el nombre "' + filename + '" fue selccionado'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -157,6 +164,12 @@ class SubirArchivoState extends State<SubirArchivo>
   //////////////////////////////////
   ///
   Widget _getGestureDetector(String key) {
+    if (key == "catalogo") {
+      key = "catálogo";
+    } else {
+      key = "movimientos";
+    }
+
     return GestureDetector(
       onTap: () => selectFile(key),
       child: Padding(
@@ -185,7 +198,7 @@ class SubirArchivoState extends State<SubirArchivo>
                     height: 15,
                   ),
                   Text(
-                    'Select your file',
+                    'Seleccionar archivo ' + key,
                     style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
                   ),
                 ],
@@ -212,7 +225,7 @@ class SubirArchivoState extends State<SubirArchivo>
               height: 50,
             ),
             Text(
-              'Upload your file',
+              'Selecciona los archivos a subir',
               style: TextStyle(
                   fontSize: 25,
                   color: Colors.grey.shade800,
@@ -222,7 +235,7 @@ class SubirArchivoState extends State<SubirArchivo>
               height: 10,
             ),
             Text(
-              'File should be xlsx, png',
+              'La extensión de los archivos debe ser xlsx',
               style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
             ),
             SizedBox(
@@ -318,13 +331,14 @@ class SubirArchivoState extends State<SubirArchivo>
                     ))
                 : Container(),
             SizedBox(
-              height: 150,
+              height: 30,
             ),
             SimpleElevatedButton(
-              child: const Text("Ver balance general"),
+              child: const Text("Subir archivos"),
               color: Colors.blue,
               onPressed: subirArchivo,
             ),
+            SizedBox(height: 50)
           ],
         ),
       ),

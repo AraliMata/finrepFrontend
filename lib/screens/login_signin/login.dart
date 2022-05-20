@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'dart:convert';
 import 'constants.dart';
 import 'action_button.dart';
@@ -117,7 +118,7 @@ class _LogInState extends State<LogIn> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Home()),
+                                builder: (context) => const ElegirEmpresa()),
                           );
                         },
                         child: const Text('Iniciar Sesión'),

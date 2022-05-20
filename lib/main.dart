@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_signin/constants.dart';
@@ -18,16 +19,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      home: ResponsiveSizer(builder: (context, orientation, screenType) {
+        return  BackgroundPage();
+      }),
       theme: ThemeData(
         primaryColor: kPrimaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: GoogleFonts.secularOneTextTheme(),
       ),
       debugShowCheckedModeBanner: false, //hola
-      initialRoute: '/',
+      /*initialRoute: '/',
       routes: {
         '/': (context) => BackgroundPage(),
-      },
+      },*/
     );
   }
 }
