@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
+import 'package:flutter_frontend_test/screens/mostrar_estado_resultados.dart';
 import 'subirArchivo.dart';
 import 'mostrar_balance_general.dart';
 import 'login_signin/BackgroundPage.dart';
@@ -67,9 +68,20 @@ class HomeState extends State<Home> {
                   );
                 },
               ),
+              SizedBox(height: screenHeight * .025),
+              SimpleElevatedButton(
+                child: const Text("Ver estado de resultados"),
+                color: Colors.blue,
+                onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MEstadoResultados()),
+                //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
+              );},
+              ),
+             
             ],
           ),
-          ElevatedButton(
+          /*ElevatedButton(
             child: const Text('Login'),
             onPressed: () {
               Navigator.push(
@@ -77,7 +89,7 @@ class HomeState extends State<Home> {
                 MaterialPageRoute(builder: (context) => BackgroundPage()),
               );
             },
-          ),
+          ),*/
         ],
       ),
     );

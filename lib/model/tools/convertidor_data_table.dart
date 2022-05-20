@@ -6,6 +6,7 @@ class ConvertidorDataTable {
     List<DataCell> celdas = [];
 
     for (int i = 0; i < datos.length; i++) {
+      //developer.log(datos[i], name:"celda");
       celdas.add(DataCell(Text(datos[i])));
     }
 
@@ -19,6 +20,7 @@ class ConvertidorDataTable {
 
     for (int i = 0; i < data.length; i++) {
       DataRow curRow = createRow(data[i]);
+      //developer.log(data[i][0], name:"renglon");
       grupoRenglones.add(curRow);
     }
 
@@ -37,6 +39,8 @@ class ConvertidorDataTable {
     renglones.add(createRow(['DIFERIDO', ' ']));
     renglones + createRowsGroup(datos.diferido);
 
+
+    developer.log(renglones.runtimeType.toString(), name:"renglon");
     return renglones;
   }
 
@@ -63,6 +67,4 @@ class ConvertidorDataTable {
 
     return renglones;
   }
-
- 
 }

@@ -4,6 +4,7 @@ import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
+import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
 
 class MEstadoResultados extends StatefulWidget {
@@ -15,6 +16,7 @@ class MEstadoResultados extends StatefulWidget {
 class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
   late ConvertidorDataTable convertidor;
+  
 
   @override
   void initState() {
@@ -24,34 +26,162 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
   Future<EstadoResultados> getEstadoResultados() async {
     final response =
-        await http.get(Uri.parse("${Env.URL_PREFIX}/EstadoResultados"));
+        await http.get(Uri.parse("${Env.URL_PREFIX}/estadoResultados"));
+
+    developer.log(jsonDecode(response.body).toString(),
+        name: "EstadoResultados");
 
     final estadoResultados =
-        EstadoResultados.fromJson(jsonDecode(jsonDecode(response.body)));
+        EstadoResultados.fromJson((jsonDecode(response.body)));
+
+    developer.log(estadoResultados.ingresos.toString(),
+        name: "EstadoResultados");
 
     return estadoResultados;
   }
 
+  List<DataCell> _createCells(datos) {
+    List<DataCell> celdas = [];
+    if (datos[1] == 0 && datos[2] == 0 && datos[3] == 0 && datos[4] == 0) {
+      celdas.add(DataCell(Text(datos[0].toString())));
+      for (int i = 1; i < 5; i++) {
+        celdas.add(const DataCell(Text('')));
+      }
+    } else {
+      for (int i = 0; i < 5; i++) {
+        if (datos[i].toString() == "Total Ingresos" ||
+            datos[i].toString() == "Total Egresos" ||
+            datos[i].toString() == "Ingresos" ||
+            datos[i].toString() == "Egresos") {
+          celdas.add(DataCell(Text(datos[i].toString(),
+              style: const TextStyle(
+                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))));
+        } else {
+          celdas.add(DataCell(Text(datos[i].toString())));
+        }
+      }
+    }
+
+    return celdas;
+  }
+
+  List<DataRow> _createRows(ingresos, egresos) {
+    List<DataRow> renglon = [];
+    renglon.add(DataRow(cells: _createCells(["Ingresos", "", "", "", ""])));
+
+    renglon += ingresos.map<DataRow>((ingreso) {
+      return DataRow(cells: _createCells(ingreso));
+    }).toList();
+
+    renglon.add(DataRow(cells: _createCells(["Egresos", "", "", "", ""])));
+
+    renglon += egresos.map<DataRow>((egreso) {
+      return DataRow(cells: _createCells(egreso));
+    }).toList();
+
+    return renglon;
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return MaterialApp(
       title: 'FinRep',
       home: Scaffold(
-          appBar: AppBar(
+          /*appBar: AppBar(
             title: const Text('Balance general'),
-          ),
+          )*/
           body: FutureBuilder<EstadoResultados>(
               future: balance,
               builder: (context, snapshot) {
+                EstadoResultados datos = snapshot.data ??
+                    EstadoResultados(
+                        ingresos: ['', '', '', '', ''],
+                        egresos: ['', '', '', '', '']);
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
-                  return Column(children: [
-                    _contentFirstRow(snapshot.data),
-                    Expanded(child: _contentDataTable(snapshot.data))
+                  developer.log(datos.ingresos[0].toString(),
+                      name: 'TieneData ingresos');
+                  return ListView(children: [
+                    SizedBox(height: screenHeight * .05),
+          Center( child: Text("Estado de resultados", style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade800,
+                decoration: TextDecoration.none
+              ),)),
+          SizedBox(height: screenHeight * .05),
+            
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(children: [ Text('FinRep', style: TextStyle( color: Colors.blue, fontSize: 16)) ]),
+                        Column(children: [Text('Empresa 1 S.C')]),
+                        Column(children: [Text('Fecha: 29/Abr/2022')])
+                      ],
+                    ),
+                    SizedBox(height: screenHeight * .12),
+                    Expanded(
+                      child: DataTable(columns: const <DataColumn>[
+                        /*DataColumn(
+                          label: Text(
+                            'Ingresos',
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),*/
+                        DataColumn(
+                          label: Text(
+                            '',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Periodo',
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            '%',
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Acumulado',
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            '%',
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ], rows: _createRows(datos.ingresos, datos.egresos)
+                          //rows: createRows(snapshot.data?.ingresos),
+                          ),
+                    )
                   ]);
+                  /*return Column(children: [
+                    _contentFirstRow(snapshot.data),
+                    Expanded(child: _contentDataTable(datos))
+                  ]);*/
                 } else {
-                  developer.log('Uno', name: 'NoTieneData');
-                  return Text('${snapshot.error}');
+                  developer.log('${snapshot.error}', name: 'NoTieneData');
+                  return ProgressBar();
                 }
               })),
     );
@@ -69,7 +199,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
         Column(children: [Text('Empresa 1 S.C')]),
         Column(children: [Text('Fecha: 29/Abr/2022')])
       ],
-    ); 
+    );
   }
 
   Widget _contentDataTable(data) {
