@@ -7,13 +7,12 @@ import 'constants.dart';
 import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
-import '/screens/home.dart';
 import 'package:get/get.dart';
 
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
 
-  LogIn({required this.onSignUpSelected});
+  const LogIn({required this.onSignUpSelected});
 
   @override
   LogInState createState() => LogInState();
@@ -38,13 +37,13 @@ class LogInState extends State<LogIn> {
       child: Center(
         child: Card(
           elevation: 4,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(25),
             ),
           ),
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             height: size.height *
                 (size.height > 770
                     ? 0.7
@@ -56,7 +55,7 @@ class LogInState extends State<LogIn> {
             child: Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(40),
+                  padding: const EdgeInsets.all(40),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -67,22 +66,22 @@ class LogInState extends State<LogIn> {
                           color: Colors.grey[700],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
-                      Container(
+                      SizedBox(
                         width: 30,
                         child: Divider(
                           color: kPrimaryColor,
                           thickness: 2,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       TextField(
                         controller: _controller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Username',
                           labelText: 'Username',
                           suffixIcon: Icon(
@@ -90,12 +89,12 @@ class LogInState extends State<LogIn> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       TextField(
                         controller: _controller3,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Contraseña',
                           labelText: 'Contraseña',
                           suffixIcon: Icon(
@@ -106,7 +105,7 @@ class LogInState extends State<LogIn> {
                         enableSuggestions: false,
                         autocorrect: false,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 64,
                       ),
                       ElevatedButton(
@@ -119,20 +118,20 @@ class LogInState extends State<LogIn> {
                         child: const Text('Iniciar Sesión'),
                       ),
                       //actionButton("Iniciar Sesión"),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "¿No tienes cuenta?",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           GestureDetector(
@@ -149,7 +148,7 @@ class LogInState extends State<LogIn> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Icon(
@@ -254,7 +253,7 @@ class LogInState extends State<LogIn> {
     } else {
       Get.defaultDialog(
         title: "Alerta",
-        content: Text(
+        content: const Text(
           "Credenciales incorrectas",
         ),
       );

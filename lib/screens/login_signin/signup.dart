@@ -11,7 +11,7 @@ import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
 
-  SignUp({required this.onLogInSelected});
+  const SignUp({required this.onLogInSelected});
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -36,13 +36,13 @@ class _SignUpState extends State<SignUp> {
       child: Center(
         child: Card(
           elevation: 4,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(25),
             ),
           ),
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             height: size.height *
                 (size.height > 770
                     ? 0.7
@@ -54,7 +54,7 @@ class _SignUpState extends State<SignUp> {
             child: Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(40),
+                  padding: const EdgeInsets.all(40),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -65,22 +65,22 @@ class _SignUpState extends State<SignUp> {
                           color: Colors.grey[700],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
-                      Container(
+                      SizedBox(
                         width: 30,
                         child: Divider(
                           color: kPrimaryColor,
                           thickness: 2,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       TextField(
                         controller: _controller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Nombre',
                           labelText: 'Nombre',
                           suffixIcon: Icon(
@@ -88,12 +88,12 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       TextField(
                         controller: _controller2,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Correo',
                           labelText: 'Correo',
                           suffixIcon: Icon(
@@ -101,12 +101,12 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       TextField(
                         controller: _controller3,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Contraseña',
                           labelText: 'Contraseña',
                           suffixIcon: Icon(
@@ -117,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                         enableSuggestions: false,
                         autocorrect: false,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 64,
                       ),
                       ElevatedButton(
@@ -130,20 +130,20 @@ class _SignUpState extends State<SignUp> {
                         child: const Text('Registrarse'),
                       ),
                       //actionButton("Crear cuenta"),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "¿Ya tienes cuenta?",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           GestureDetector(
@@ -160,7 +160,7 @@ class _SignUpState extends State<SignUp> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Icon(

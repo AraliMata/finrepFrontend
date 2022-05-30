@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'package:flutter_frontend_test/screens/mostrar_estado_resultados.dart';
+import '../model/widgets/simple_elevated_button.dart';
 import 'subirArchivo.dart';
-import 'mostrar_balance_general.dart';
-import 'login_signin/BackgroundPage.dart';
-import 'login_signin/login.dart';
+import 'dart:convert';
+import 'dart:html';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,6 +14,29 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+
+  Future<void> _createPDF() async {
+    //Create a PDF document.
+    PdfDocument document = PdfDocument();
+    //Add a page and draw text
+    document.pages.add().graphics.drawString(
+        'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
+        brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        bounds: Rect.fromLTWH(20, 60, 150, 30));    
+    //Save the document
+    List<int> bytes = document.save();
+    //Dispose the document
+    document.dispose();
+
+        //Download the output file
+    AnchorElement(
+        href:
+            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
+      ..setAttribute("download", "output.pdf")
+      ..click();
+ }
+      
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -78,6 +101,12 @@ class HomeState extends State<Home> {
                 //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
               );},
               ),
+              SizedBox(height: screenHeight * .025),
+              SimpleElevatedButton(
+                child: const Text("Crear pdf falso"),
+                color: Colors.blue,
+                onPressed: _createPDF,
+              ),
              
             ],
           ),
@@ -96,36 +125,6 @@ class HomeState extends State<Home> {
   }
 }
 
-class SimpleElevatedButton extends StatelessWidget {
-  const SimpleElevatedButton(
-      {this.child,
-      this.color,
-      this.onPressed,
-      this.borderRadius = 6,
-      this.padding = const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-      Key? key})
-      : super(key: key);
-  final Color? color;
-  final Widget? child;
-  final Function? onPressed;
-  final double borderRadius;
-  final EdgeInsetsGeometry padding;
 
-  @override
-  Widget build(BuildContext context) {
-    ThemeData currentTheme = Theme.of(context);
-    return ElevatedButton(
-      child: child,
-      style: ElevatedButton.styleFrom(
-        padding: padding,
-        primary: color ?? currentTheme.primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-        ),
-      ),
-      onPressed: onPressed as void Function()?,
-    );
-  }
-}
 
 //Seleccionar archivo

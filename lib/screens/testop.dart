@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
-import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 // import 'package:flutter_session/flutter_session.dart';
@@ -12,6 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../env.sample.dart';
 import 'dart:developer' as developer;
+
+import '../model/widgets/simple_elevated_button.dart';
 
 class ElegirEmpresa extends StatefulWidget {
   const ElegirEmpresa({Key? key}) : super(key: key);
@@ -196,6 +196,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                                 builder: (context) => const Home()),
                           );
                         }
+                        return null;
                       },
                       onChanged: (value) {
                         //Do something when changing the item if you want.
