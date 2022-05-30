@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
-import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
+import 'package:flutter_frontend_test/screens/home.dart';
+import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_signin/constants.dart';
-import './screens/home.dart';
-import 'screens/login_signin/BackgroundPage.dart';
 import 'package:get/get.dart';
 
 void main() {

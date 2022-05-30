@@ -1,9 +1,6 @@
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
-import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart';
 import 'package:test/test.dart';
-import 'package:flutter_frontend_test/model/tools/convertidor_json_to.dart';
-import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'dart:convert';
 
 void main() {
