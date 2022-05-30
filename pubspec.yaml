@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.16.2 <4.6.3"
 
 dependencies:
   flutter:
@@ -25,9 +25,13 @@ dependencies:
   dropdown_button2: ^1.4.0
   shared_preferences: <=2.0.15
   # flutter_session: ^0.1.1
-  google_fonts: ^2.3.2
+  google_fonts: ^3.0.1
   universal_html: ^2.0.8
   get: ^4.6.3
+  pdf: ^3.8.1
+  syncfusion_flutter_pdf: ^20.1.57-beta
+  syncfusion_flutter_datagrid_export: ^20.1.57-beta
+  screenshot: ^1.2.3
 
   #flutter_bloc: ^6.1.1 #EEEEE
   #meta: ^1.1.8 

@@ -116,9 +116,9 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(children: [ Text('FinRep', style: TextStyle( color: Colors.blue, fontSize: 16)) ]),
-                        Column(children: [Text('Empresa 1 S.C')]),
-                        Column(children: [Text('Fecha: 29/Abr/2022')])
+                        Column(children: const [ Text('FinRep', style: TextStyle( color: Colors.blue, fontSize: 16)) ]),
+                        Column(children: const [Text('Empresa 1 S.C')]),
+                        Column(children: const [Text('Fecha: 29/Abr/2022')])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
@@ -174,6 +174,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                           //rows: createRows(snapshot.data?.ingresos),
                           ),
                     )
+                    //AQUI AGREGAS UN BOTÓN
+                    
                   ]);
                   /*return Column(children: [
                     _contentFirstRow(snapshot.data),
@@ -181,7 +183,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                   ]);*/
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');
-                  return ProgressBar();
+                  return const ProgressBar();
                 }
               })),
     );
@@ -196,8 +198,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
               style: TextStyle(
                   color: Color.fromARGB(255, 33, 212, 243), fontSize: 16))
         ]),
-        Column(children: [Text('Empresa 1 S.C')]),
-        Column(children: [Text('Fecha: 29/Abr/2022')])
+        Column(children: const [Text('Empresa 1 S.C')]),
+        Column(children: const [Text('Fecha: 29/Abr/2022')])
       ],
     );
   }

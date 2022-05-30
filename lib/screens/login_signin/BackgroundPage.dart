@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/screens/home.dart';
 import 'constants.dart';
 import 'login.dart';
 import 'signup.dart';
-import '../home.dart';
 
 class BackgroundPage extends StatefulWidget {
   @override
@@ -21,7 +19,7 @@ class _BackgroundPageState extends State<BackgroundPage> {
     //print(size.width);
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: size.width,
         height: size.height,
         child: Stack(
@@ -56,7 +54,7 @@ class _BackgroundPageState extends State<BackgroundPage> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.all(32),
+                padding: const EdgeInsets.all(32),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,9 +64,9 @@ class _BackgroundPageState extends State<BackgroundPage> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: EdgeInsets.all(32),
+                padding: const EdgeInsets.all(32),
                 child: Row(
-                  children: [
+                  children: const [
                     // IconButton(
                     //   icon: Icon(
                     //     Icons.keyboard_arrow_left,
@@ -100,7 +98,7 @@ class _BackgroundPageState extends State<BackgroundPage> {
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.all(32),
+                padding: const EdgeInsets.all(32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: const [
@@ -124,7 +122,7 @@ class _BackgroundPageState extends State<BackgroundPage> {
               ),
             ),
             AnimatedSwitcher(
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
 
               //Animation 1
               //transitionBuilder: (widget, animation) => RotationTransition(

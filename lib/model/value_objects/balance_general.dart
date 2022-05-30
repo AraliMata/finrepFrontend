@@ -1,7 +1,5 @@
 import 'package:flutter_frontend_test/model/value_objects/activo_pasivo.dart';
 import 'package:flutter_frontend_test/model/value_objects/capital.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
-import 'dart:developer' as developer;
 
 class BalanceGeneral {
   final ActivoPasivo activo;

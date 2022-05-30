@@ -1,5 +1,4 @@
 // import 'testop.dart';
-import 'elegir_empresas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:http/http.dart' as http;
@@ -10,13 +9,8 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:flutter_frontend_test/model/value_objects/cuentas.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import '../model/value_objects/employee.dart';
-import '../model/value_objects/cuentas.dart';
-import 'package:dio/dio.dart';
-import 'prueba_arquitectura.dart';
+
+import '../model/widgets/simple_elevated_button.dart';
 
 class SubirArchivo extends StatefulWidget {
   const SubirArchivo({Key? key}) : super(key: key);
@@ -62,7 +56,7 @@ class SubirArchivoState extends State<SubirArchivo>
     developer.log(request.files.first.filename!, name: 'request chequeo');
   }
 
-  String _image =
+  final String _image =
       'https://ouch-cdn2.icons8.com/84zU-uvFboh65geJMR5XIHCaNkx-BZ2TahEpE9TpVJM/rs:fit:784:784/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvODU5/L2E1MDk1MmUyLTg1/ZTMtNGU3OC1hYzlh/LWU2NDVmMWRiMjY0/OS5wbmc.png';
   late AnimationController loadingController;
 
@@ -86,7 +80,7 @@ class SubirArchivoState extends State<SubirArchivo>
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
             ),
           ],
         ),
@@ -103,7 +97,7 @@ class SubirArchivoState extends State<SubirArchivo>
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
             ),
           ],
         ),
@@ -176,11 +170,11 @@ class SubirArchivoState extends State<SubirArchivo>
     return GestureDetector(
       onTap: () => selectFile(key),
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           child: DottedBorder(
             borderType: BorderType.RRect,
-            radius: Radius.circular(10),
-            dashPattern: [10, 4],
+            radius: const Radius.circular(10),
+            dashPattern: const [10, 4],
             strokeCap: StrokeCap.round,
             color: Colors.blue.shade400,
             child: Container(
@@ -192,12 +186,12 @@ class SubirArchivoState extends State<SubirArchivo>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Iconsax.folder_open,
                     color: Colors.blue,
                     size: 40,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Text(
@@ -217,14 +211,14 @@ class SubirArchivoState extends State<SubirArchivo>
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Image.network(
               _image,
               width: 300,
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Text(
@@ -234,21 +228,21 @@ class SubirArchivoState extends State<SubirArchivo>
                   color: Colors.grey.shade800,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               'La extensión de los archivos debe ser xlsx',
               style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             _getGestureDetector('movimientos'),
             _getGestureDetector('catalogo'),
             _platformFile != null
                 ? Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -259,18 +253,18 @@ class SubirArchivoState extends State<SubirArchivo>
                             fontSize: 15,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.shade200,
-                                    offset: Offset(0, 1),
+                                    offset: const Offset(0, 1),
                                     blurRadius: 3,
                                     spreadRadius: 2,
                                   )
@@ -283,7 +277,7 @@ class SubirArchivoState extends State<SubirArchivo>
                                       _file!,
                                       width: 70,
                                     )),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
@@ -293,10 +287,10 @@ class SubirArchivoState extends State<SubirArchivo>
                                     children: [
                                       Text(
                                         _platformFile!.name,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 13, color: Colors.black),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
@@ -305,7 +299,7 @@ class SubirArchivoState extends State<SubirArchivo>
                                             fontSize: 13,
                                             color: Colors.grey.shade500),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Container(
@@ -322,18 +316,18 @@ class SubirArchivoState extends State<SubirArchivo>
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                               ],
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                       ],
                     ))
                 : Container(),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             SimpleElevatedButton(
@@ -341,7 +335,7 @@ class SubirArchivoState extends State<SubirArchivo>
               color: Colors.blue,
               onPressed: subirArchivo,
             ),
-            SizedBox(height: 50)
+            const SizedBox(height: 50)
           ],
         ),
       ),
