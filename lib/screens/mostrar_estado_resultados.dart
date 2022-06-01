@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
@@ -16,7 +17,7 @@ class MEstadoResultados extends StatefulWidget {
 class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
   late ConvertidorDataTable convertidor;
-  
+  ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
 
   @override
   void initState() {
@@ -25,8 +26,9 @@ class EstadoResultadosState extends State<MEstadoResultados> {
   }
 
   Future<EstadoResultados> getEstadoResultados() async {
-    final response =
-        await http.get(Uri.parse("${Env.URL_PREFIX}/estadoResultados"));
+    var idEmpresa = await elegirEmpresaData.getIdEmpresa();
+    final response = await http.get(Uri.parse(
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/estado-resultados"));
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -105,18 +107,25 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                       name: 'TieneData ingresos');
                   return ListView(children: [
                     SizedBox(height: screenHeight * .05),
-          Center( child: Text("Estado de resultados", style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
-                decoration: TextDecoration.none
-              ),)),
-          SizedBox(height: screenHeight * .05),
-            
+                    Center(
+                        child: Text(
+                      "Estado de resultados",
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade800,
+                          decoration: TextDecoration.none),
+                    )),
+                    SizedBox(height: screenHeight * .05),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(children: const [ Text('FinRep', style: TextStyle( color: Colors.blue, fontSize: 16)) ]),
+                        Column(children: const [
+                          Text('FinRep',
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 16))
+                        ]),
                         Column(children: const [Text('Empresa 1 S.C')]),
                         Column(children: const [Text('Fecha: 29/Abr/2022')])
                       ],
@@ -175,7 +184,6 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                           ),
                     )
                     //AQUI AGREGAS UN BOTÓN
-                    
                   ]);
                   /*return Column(children: [
                     _contentFirstRow(snapshot.data),

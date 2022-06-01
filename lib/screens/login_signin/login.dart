@@ -204,34 +204,6 @@ class LogInState extends State<LogIn> {
     });
   }
 
-  Future<void> registerUser(
-      String username, String email, String password) async {
-    final response = await http.post(
-      Uri.parse("${Env.URL_PREFIX}/login"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': username,
-        'email': email,
-        'password': password
-      }),
-    );
-    if (response.statusCode == 200) {
-      developer.log("se armo");
-      developer.log(response.body.toString(), name: 'response de Id');
-      saveIdUsuario(int.parse(response.body));
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-
-      // return User.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to register employee.');
-    }
-  }
-
   Future<User> loginUser(String username, String email, String password) async {
     final response = await http.post(
       Uri.parse("${Env.URL_PREFIX}/login"),
@@ -244,8 +216,14 @@ class LogInState extends State<LogIn> {
         'password': password
       }),
     );
+
+    developer.log(response.statusCode.toString(),
+        name: 'response.statusCode fuera');
+    developer.log(response.body.toString(), name: 'response de Id fuera');
     if (response.statusCode == 202) {
       developer.log("se armo");
+      developer.log(response.body.toString(), name: 'response de Id');
+      saveIdUsuario(int.parse(response.body));
       Get.to(const ElegirEmpresa());
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
@@ -257,7 +235,7 @@ class LogInState extends State<LogIn> {
           "Credenciales incorrectas",
         ),
       );
-      throw Exception('Failed to register employee.');
+      throw Exception('Failed to login.');
     }
   }
 }

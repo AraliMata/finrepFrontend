@@ -42,8 +42,8 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
     var idUsuario = await loginData.getIdUsuario();
     // developer.log(idUsuario.toString(), name: 'idUsuarioPruebaSuprema');
 
-    final response = await http
-        .get(Uri.parse("${Env.URL_PREFIX}/contabilidad/usuarios/1/empresas"));
+    final response = await http.get(Uri.parse(
+        "${Env.URL_PREFIX}/contabilidad/usuarios/$idUsuario/empresas"));
 
     developer.log(jsonDecode(response.body).toString(), name: 'response');
 
@@ -70,7 +70,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
     final prefs = await SharedPreferences.getInstance();
     // developer.log('entro', name: 'entro');
     // developer.log(prefs.getInt('idEmpresa').toString(), name: 'getIdEmpresa');
-    return prefs.getInt('idEmpresa') ?? 1;
+    return prefs.getInt('idEmpresa') ?? 0;
   }
 
   //Incrementing counter after click

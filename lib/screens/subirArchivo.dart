@@ -11,6 +11,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../model/widgets/simple_elevated_button.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 
 class SubirArchivo extends StatefulWidget {
   const SubirArchivo({Key? key}) : super(key: key);
@@ -21,8 +22,18 @@ class SubirArchivo extends StatefulWidget {
 
 class SubirArchivoState extends State<SubirArchivo>
     with SingleTickerProviderStateMixin {
-  var request =
-      http.MultipartRequest('POST', Uri.parse("${Env.URL_PREFIX}/xlsx"));
+  // late Future<List<String>> empresas;
+
+  ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
+  var request;
+  Future<void> initRequest() async {
+    var idEmpresa = await elegirEmpresaData.getIdEmpresa();
+    developer.log(idEmpresa.toString(), name: 'getIdEmpresaToEndpoint');
+    request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/subir-archivos"));
+  }
 
   Future<String> subirArchivo() async {
     //var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -142,6 +153,7 @@ class SubirArchivoState extends State<SubirArchivo>
 
   @override
   void initState() {
+    initRequest();
     // ElegirEmpresaState hola = ElegirEmpresaState();
     // developer.log(hola.getIdEmpresa().toString(), name: 'getIdEmpresaArchivo');
     loadingController = AnimationController(
@@ -162,7 +174,7 @@ class SubirArchivoState extends State<SubirArchivo>
   ///
   Widget _getGestureDetector(String key) {
     if (key == "catalogo") {
-      key = "catálogo";
+      key = "catalogo";
     } else {
       key = "movimientos";
     }

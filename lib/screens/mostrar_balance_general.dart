@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import '../model/widgets/simple_elevated_button.dart';
@@ -20,6 +21,7 @@ class MBalanceGeneral extends StatefulWidget {
 class BalanceGeneralState extends State<MBalanceGeneral> {
   late Future<BalanceGeneral> balance;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
+  ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
 
   @override
   void initState() {
@@ -28,8 +30,13 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
   }
 
   Future<BalanceGeneral> getBalanceGeneral() async {
-    final response =
-        await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
+    var idEmpresa = await elegirEmpresaData.getIdEmpresa();
+    developer.log(idEmpresa.toString(),
+        name: 'idEmpresaDentrodeBalanceGeneral');
+
+    final response = await http.get(Uri.parse(
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/balance-general"));
+    // await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
     developer.log(jsonDecode(response.body).toString(), name: 'response18');
     developer.log(jsonDecode(response.body).runtimeType.toString(),
@@ -120,13 +127,12 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
 
     activoGrid.rows.add();
     activoGrid.rows[0].cells[0].value = "Circulante";
-                        //data.ingreso.length
+    //data.ingreso.length
     for (int i = 0; i < data.activo.circulante.length; i++) {
       PdfGridRow curRow = activoGrid.rows.add();
-                                //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
+      //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
       curRow.cells[0].value = data.activo.circulante[i][0];
       curRow.cells[1].value = data.activo.circulante[i][1];
-      
     }
 
     //LO DE ISAAC QUEDA HASTA AQUI

@@ -6,6 +6,7 @@ import 'subirArchivo.dart';
 import 'dart:convert';
 import 'dart:html';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'mostrar_balance_general.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-
   Future<void> _createPDF() async {
     //Create a PDF document.
     PdfDocument document = PdfDocument();
@@ -22,20 +22,19 @@ class HomeState extends State<Home> {
     document.pages.add().graphics.drawString(
         'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
         brush: PdfSolidBrush(PdfColor(0, 0, 0)),
-        bounds: Rect.fromLTWH(20, 60, 150, 30));    
+        bounds: Rect.fromLTWH(20, 60, 150, 30));
     //Save the document
     List<int> bytes = document.save();
     //Dispose the document
     document.dispose();
 
-        //Download the output file
+    //Download the output file
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
       ..setAttribute("download", "output.pdf")
       ..click();
- }
-      
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +94,14 @@ class HomeState extends State<Home> {
               SimpleElevatedButton(
                 child: const Text("Ver estado de resultados"),
                 color: Colors.blue,
-                onPressed: () {Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MEstadoResultados()),
-                //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
-              );},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MEstadoResultados()),
+                    //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
+                  );
+                },
               ),
               SizedBox(height: screenHeight * .025),
               SimpleElevatedButton(
@@ -107,7 +109,6 @@ class HomeState extends State<Home> {
                 color: Colors.blue,
                 onPressed: _createPDF,
               ),
-             
             ],
           ),
           /*ElevatedButton(
