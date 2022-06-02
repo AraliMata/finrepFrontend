@@ -11,6 +11,7 @@ import 'dart:developer' as developer;
 import 'dart:convert';
 import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart'; //Para PDF
+import 'package:get/get.dart';
 
 class MBalanceGeneral extends StatefulWidget {
   const MBalanceGeneral({Key? key}) : super(key: key);
@@ -343,7 +344,15 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                                   color: Colors.blue,
                                   onPressed: () => gridsillo(snapshot.data),
                                   //getPDF(screenHeight, snapshot),
-                                )
+                                ),
+                                const SizedBox(height: 25),
+                                SimpleElevatedButton(
+                                  child: const Text("Volver"),
+                                  color: Colors.red,
+                                  onPressed: () => Get.back(),
+                                  //getPDF(screenHeight, snapshot),
+                                ),
+                                const SizedBox(height: 25),
                               ]);
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');

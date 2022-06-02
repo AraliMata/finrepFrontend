@@ -113,7 +113,7 @@ class _SignUpState extends State<SignUp> {
                             Icons.lock_outline,
                           ),
                         ),
-                        obscureText: true,
+                        obscureText: false,
                         enableSuggestions: false,
                         autocorrect: false,
                       ),
@@ -122,10 +122,33 @@ class _SignUpState extends State<SignUp> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            _futureUser = registerUser(_controller.text,
-                                _controller2.text, _controller3.text);
-                          });
+                          if (isEmailValid(_controller2.text)) {
+                            if (isPassValid(_controller3.text)) {
+                              setState(() {
+                                _futureUser = registerUser(_controller.text,
+                                    _controller2.text, _controller3.text);
+                              });
+                              Get.to(const ElegirEmpresa());
+                            } else {
+                              Get.defaultDialog(
+                                  title: "Alerta",
+                                  content: const Text(
+                                    "Contraseña inválida, asegurate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
+                                  ));
+                            }
+                          } else {
+                            Get.defaultDialog(
+                              title: "Alerta",
+                              content: const Text(
+                                "Correo Incorrecto, asegurate ingresar un correo válido",
+                              ),
+                            );
+                          }
+
+                          // setState(() {
+                          //   _futureUser = registerUser(_controller.text,
+                          //       _controller2.text, _controller3.text);
+                          // });
                         },
                         child: const Text('Registrarse'),
                       ),
@@ -223,4 +246,14 @@ Future<User> registerUser(
     // then throw an exception.
     throw Exception('Failed to register employee.');
   }
+}
+
+bool isEmailValid(String email) {
+  return RegExp(
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+      .hasMatch(email);
+}
+
+bool isPassValid(String pass) {
+  return RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)").hasMatch(pass);
 }
