@@ -36,7 +36,10 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
         name: "RelacionesAnaliticas");
 
     final relacionesAnaliticas =
-        RelacionesAnaliticas.fromJson((jsonDecode(response.body)));
+        RelacionesAnaliticas.fromJson(jsonDecode(response.body));
+
+    developer.log(relacionesAnaliticas.movimientos[0][0].toString(),
+        name: "RelacionesAnaliticasMovimiento");
 
     return relacionesAnaliticas;
   }
@@ -297,7 +300,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                     )
                   ]);
                 } else {
-                  developer.log('${snapshot.error}', name: 'NoTieneData');
+                  developer.log('${snapshot.error}', name: 'NoTieneData55');
                   return const ProgressBar();
                 }
               })),
