@@ -1,3 +1,5 @@
+import 'package:flutter_frontend_test/model/tools/convertidor_json_to.dart';
+
 class RelacionesAnaliticas {
   List<List<dynamic>> movimientos;
   List<List<dynamic>> totalCuentas;
