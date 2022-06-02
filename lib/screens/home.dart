@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
+import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
 import 'package:flutter_frontend_test/screens/mostrar_estado_resultados.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
+import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'subirArchivo.dart';
 import 'dart:convert';
@@ -108,9 +110,16 @@ class HomeState extends State<Home> {
               ),
               SizedBox(height: screenHeight * .025),
               SimpleElevatedButton(
-                child: const Text("Crear pdf falso"),
+                child: const Text("Ver relaciones analiticas"),
                 color: Colors.blue,
-                onPressed: _createPDF,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MRelacionesAnaliticas()),
+                    //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
+                  );
+                },
               ),
               SizedBox(height: screenHeight * .025),
               SimpleElevatedButton(
