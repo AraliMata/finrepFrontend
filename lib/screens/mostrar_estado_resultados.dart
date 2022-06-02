@@ -207,7 +207,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                   color: Color.fromARGB(255, 33, 212, 243), fontSize: 16))
         ]),
         Column(children: const [Text('Empresa 1 S.C')]),
-        Column(children: const [Text('Fecha: 29/Abr/2022')])
+        Column(children: const [Text('Fecha: 29/Abr/2022')]),
+        Column(children: const [Text('Hola')])
       ],
     );
   }

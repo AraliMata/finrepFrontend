@@ -10,7 +10,6 @@ import 'dart:developer' as developer;
 import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart'; //Para PDF
 
-
 class MRelacionesAnaliticas extends StatefulWidget {
   const MRelacionesAnaliticas({Key? key}) : super(key: key);
   @override
@@ -190,7 +189,6 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
       ..click();
   }
 
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -237,7 +235,8 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
                         Column(children: const [Text('Empresa 1 S.C')]),
-                        Column(children: const [Text('Fecha: 29/Abr/2022')])
+                        Column(children: const [Text('Fecha: 29/Abr/2022')]),
+                        Column(children: const [Text('Hola')])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),

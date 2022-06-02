@@ -9,7 +9,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'package:get/get.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 
@@ -347,7 +347,13 @@ class SubirArchivoState extends State<SubirArchivo>
               color: Colors.blue,
               onPressed: subirArchivo,
             ),
-            const SizedBox(height: 50)
+            const SizedBox(height: 50),
+            SimpleElevatedButton(
+              child: const Text("Volver"),
+              color: Colors.red,
+              onPressed: () => Get.back(),
+            ),
+            const SizedBox(height: 50),
           ],
         ),
       ),

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'package:flutter_frontend_test/screens/mostrar_estado_resultados.dart';
+import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'subirArchivo.dart';
 import 'dart:convert';
 import 'dart:html';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'mostrar_balance_general.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -108,6 +111,12 @@ class HomeState extends State<Home> {
                 child: const Text("Crear pdf falso"),
                 color: Colors.blue,
                 onPressed: _createPDF,
+              ),
+              SizedBox(height: screenHeight * .025),
+              SimpleElevatedButton(
+                child: const Text("Cerrar Sesion"),
+                color: Colors.red,
+                onPressed: () => Get.to(BackgroundPage()),
               ),
             ],
           ),
