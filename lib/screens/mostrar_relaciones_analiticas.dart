@@ -35,6 +35,9 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     developer.log(jsonDecode(response.body).toString(),
         name: "RelacionesAnaliticas");
 
+    developer.log(jsonDecode(response.body).runtimeType.toString(),
+        name: "RelacionesAnaliticasTipo");
+
     final relacionesAnaliticas =
         RelacionesAnaliticas.fromJson(jsonDecode(response.body));
 
@@ -47,7 +50,8 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   List<DataCell> _createCells(datos) {
     List<DataCell> celdas = [];
 
-    String type = datos[7].toString();
+    //String type = datos[6].toString();
+    String type = "n";
 
     for (int i = 0; i < 6; i++) {
       if (type == "n") {
@@ -207,11 +211,11 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
               builder: (context, snapshot) {
                 RelacionesAnaliticas datos = snapshot.data ??
                     RelacionesAnaliticas(movimientos: [
-                      ['', '', '', '', '', '', '']
+                      ['', '', '', '', '', '', '', '']
                     ], totalCuentas: [
-                      ['', '', '', '', '', '', '']
+                      ['', '', '', '', '', '', '', '']
                     ], sumasIguales: [
-                      ['', '', '', '', '', '', '']
+                      ['', '', '', '', '', '', '', '']
                     ]);
 
                 if (snapshot.hasData) {
@@ -221,7 +225,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                     SizedBox(height: screenHeight * .05),
                     Center(
                         child: Text(
-                      "Estado de resultados",
+                      "Relaciones Analiticas",
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,

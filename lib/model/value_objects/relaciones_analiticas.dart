@@ -1,9 +1,10 @@
 import 'package:flutter_frontend_test/model/tools/convertidor_json_to.dart';
+import 'dart:developer' as developer;
 
 class RelacionesAnaliticas {
-  List<List<dynamic>> movimientos;
-  List<List<dynamic>> totalCuentas;
-  List<List<dynamic>> sumasIguales;
+  List<dynamic> movimientos;
+  List<dynamic> totalCuentas;
+  List<dynamic> sumasIguales;
 
   RelacionesAnaliticas(
       {required this.movimientos,
@@ -11,8 +12,17 @@ class RelacionesAnaliticas {
       required this.sumasIguales});
 
   factory RelacionesAnaliticas.fromJson(Map<String, dynamic> json) {
+    developer.log(json['movimientos'].runtimeType.toString(),
+        name: 'ActivoPasivojuju');
+
+    //List<List<dynamic>> movimientos = ConvertidorJson.jsonToListDynamic(json, 'movimientos');
+    //List<List<dynamic>> totalCuentas = ConvertidorJson.jsonToListDynamic(json, 'totalCuentas');
+    //List<List<dynamic>> sumasIguales = ConvertidorJson.jsonToListDynamic(json, 'sumasIguales');
+
+    developer.log(json['movimientos'][0].length.toString(),name: "tipoMovimientosConvertido");
+
     return RelacionesAnaliticas(
-        movimientos: json['movimientos'], //Convertir a ActivoPasivo
+        movimientos: json['movimientos'], 
         totalCuentas: json['totalCuentas'],
         sumasIguales: json['sumasIguales']);
   }
