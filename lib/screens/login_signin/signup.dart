@@ -113,7 +113,7 @@ class _SignUpState extends State<SignUp> {
                             Icons.lock_outline,
                           ),
                         ),
-                        obscureText: false,
+                        obscureText: true,
                         enableSuggestions: false,
                         autocorrect: false,
                       ),
