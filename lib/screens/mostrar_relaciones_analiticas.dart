@@ -21,6 +21,7 @@ class MRelacionesAnaliticas extends StatefulWidget {
 
 class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   late Future<RelacionesAnaliticas> balance;
+  late String nombreEmpresa;
   late ConvertidorDataTable convertidor;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
 
@@ -28,6 +29,11 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   void initState() {
     super.initState();
     balance = getRelacionesAnaliticas();
+    getNombreDeEmpresa();
+  }
+
+  Future<void> getNombreDeEmpresa() async {
+    nombreEmpresa = await elegirEmpresaData.getNombreEmpresa();
   }
 
   Future<RelacionesAnaliticas> getRelacionesAnaliticas() async {
@@ -55,14 +61,32 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
 
     String type = datos[6].toString();
     // String type = "n";
+    String acrdeud = datos[7].toString();
+    // String acrdeud = "a";
 
     for (int i = 0; i < 6; i++) {
+      Text text = Text(
+        datos[i].toString(),
+        textAlign: TextAlign.left,
+      );
       if (type == "n") {
-        celdas.add(DataCell(Text(datos[i].toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold))));
+        if (acrdeud == "a") {
+          text = Text(datos[i].toString(),
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontWeight: FontWeight.bold));
+        } else {
+          text = Text(datos[i].toString(),
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontWeight: FontWeight.bold));
+        }
       } else {
-        celdas.add(DataCell(Text(datos[i].toString())));
+        if (acrdeud == "a") {
+          text = Text(datos[i].toString(), textAlign: TextAlign.right);
+        }
       }
+
+      developer.log(text.textAlign.toString(), name: "texAlign");
+      celdas.add(DataCell(text));
     }
 
     return celdas;
@@ -322,7 +346,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                             const SizedBox(height: 25),
                             SimpleElevatedButton(
                               child: const Text("Volver"),
-                              color: Colors.red,
+                              color: Colors.green,
                               onPressed: () => Get.back(),
                               //getPDF(screenHeight, snapshot),
                             ),
@@ -340,7 +364,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                     const SizedBox(height: 25),
                     SimpleElevatedButton(
                       child: const Text("Volver"),
-                      color: Colors.red,
+                      color: Colors.green,
                       onPressed: () => Get.back(),
                       //getPDF(screenHeight, snapshot),
                     ),

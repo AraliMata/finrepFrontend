@@ -15,10 +15,6 @@ class RelacionesAnaliticas {
     developer.log(json['movimientos'].runtimeType.toString(),
         name: 'ActivoPasivojuju');
 
-    //List<List<dynamic>> movimientos = ConvertidorJson.jsonToListDynamic(json, 'movimientos');
-    //List<List<dynamic>> totalCuentas = ConvertidorJson.jsonToListDynamic(json, 'totalCuentas');
-    //List<List<dynamic>> sumasIguales = ConvertidorJson.jsonToListDynamic(json, 'sumasIguales');
-
     developer.log(json['movimientos'][0].length.toString(),name: "tipoMovimientosConvertido");
 
     return RelacionesAnaliticas(

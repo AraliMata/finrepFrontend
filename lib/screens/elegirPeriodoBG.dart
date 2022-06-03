@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:flutter_frontend_test/model/value_objects/meses.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter_frontend_test/screens/home.dart';
+import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/screens/login_signin/login.dart';
+import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 // import 'package:flutter_session/flutter_session.dart';
 
 import 'package:http/http.dart' as http;
@@ -15,13 +18,13 @@ import '../env.sample.dart';
 import 'dart:developer' as developer;
 import 'package:universal_html/html.dart';
 
-class ElegirEmpresa extends StatefulWidget {
-  const ElegirEmpresa({Key? key}) : super(key: key);
+class ElegirPeriodoBG extends StatefulWidget {
+  const ElegirPeriodoBG({Key? key}) : super(key: key);
   @override
-  State<ElegirEmpresa> createState() => ElegirEmpresaState();
+  State<ElegirPeriodoBG> createState() => ElegirPeriodoBGState();
 }
 
-class ElegirEmpresaState extends State<ElegirEmpresa> {
+class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
   final Storage localStorage = window.localStorage;
 
   // late Future<List<dynamic>> empresas;
@@ -29,79 +32,74 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
   ConvertidorDataTable convertidor = ConvertidorDataTable();
   late List<Empresa> empresasTodo;
   LogInState loginData = LogInState();
+  ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
 
   @override
   void initState() {
     super.initState();
-    empresas = getEmpresas();
+    empresas = getMeses();
   }
 
   int idEmpresaGlobal = 0;
+  Map<String, int> monthInt = {
+    "Enero": 1,
+    "Febrero": 2,
+    "Marzo": 3,
+    "Abril": 4,
+    "Mayo": 5,
+    "Junio": 6,
+    "Julio": 7,
+    "Agosto": 8,
+    "Septiembre": 9,
+    "Octubre": 10,
+    "Noviembre": 11,
+    "Diciembre": 12, 
+    "Periodo acumulado": 13,
+  };
 
-  Future<List<String>> getEmpresas() async {
-    var idUsuario = await loginData.getIdUsuario();
+  Future<List<String>> getMeses() async {
+    var idEmpresa = await elegirEmpresaData.getIdEmpresa();
+
     // developer.log(idUsuario.toString(), name: 'idUsuarioPruebaSuprema');
 
     final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/usuarios/$idUsuario/empresas"));
+        "${Env.URL_PREFIX}/contabilidad/empresas/$idEmpresa/meses-disponibles"));
 
     developer.log(jsonDecode(response.body).toString(), name: 'response');
+    developer.log(jsonDecode(response.body).runtimeType.toString(),
+        name: 'response');
 
-    final items = json.decode(response.body).cast<Map<String, dynamic>>();
+    /*Meses meses = items.map<Meses>((json) {
+      return Meses.fromJson(json);
+    }).toList();*/
 
-    List<Empresa> empresas = items.map<Empresa>((json) {
-      return Empresa.fromJson(json);
-    }).toList();
+    final meses = Meses.fromJson(jsonDecode(response.body));
 
-    empresasTodo = empresas;
-    developer.log(empresas.toString(), name: 'list<empresa>');
+    List<String> months1 = ["Periodo acumulado"];
 
-    List<String> nombresEmpresas = [];
+    months1 += meses.months;
+    developer.log(months1.toString(), name: 'response2');
 
-    for (int i = 0; i < empresas.length; i++) {
-      nombresEmpresas.add(empresas[i].empresa);
-    }
-    developer.log(nombresEmpresas.toString(), name: 'empresas');
+    developer.log(months1.runtimeType.toString(), name: 'response');
 
-    return nombresEmpresas;
+    return months1;
   }
 
-  Future<int> getIdEmpresa() async {
+  Future<int> getMonth() async {
     final prefs = await SharedPreferences.getInstance();
     // developer.log('entro', name: 'entro');
     // developer.log(prefs.getInt('idEmpresa').toString(), name: 'getIdEmpresa');
-    return prefs.getInt('idEmpresa') ?? 0;
-  }
-
-  Future<String> getNombreEmpresa() async {
-    final prefs = await SharedPreferences.getInstance();
-    // developer.log('entro', name: 'entro');
-    // developer.log(prefs.getInt('idEmpresa').toString(), name: 'getIdEmpresa');
-    return prefs.getString('nombreEmpresa') ?? 'Empresa';
+    return prefs.getInt('mes') ?? 0;
   }
 
   //Incrementing counter after click
-  Future<void> saveIdEmpresa(nombreEmpresa) async {
+  Future<void> saveMonth(mes) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      for (int i = 0; i < empresasTodo.length; i++) {
-        if (empresasTodo[i].empresa == nombreEmpresa) {
-          prefs.setInt('idEmpresa', empresasTodo[i].id);
-          // developer.log(empresasTodo[i].id.toString(), name: 'saveIdEmpresa');
-          // developer.log(prefs.getInt('idEmpresa').toString(),
-          // name: 'saveIdEmpresaPrefs');
-          // developer.log('guardo', name: 'saveIdEmpresa');
-          break;
-        }
-      }
-      prefs.setString('nombreEmpresa', nombreEmpresa);
+      developer.log(monthInt[mes].toString(), name: 'save month');
+      prefs.setInt('mes', monthInt[mes] ?? 6);
     });
   }
-
-  final List<String> genderItems = [
-    'Male',
-    'Female',
-  ];
 
   String? selectedValue;
 
@@ -119,7 +117,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '¡Bienvenido a FinRep!',
+                'Balance General',
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.grey.shade800,
@@ -127,7 +125,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
               ),
               SizedBox(height: screenHeight * .01),
               Text(
-                "Elige la empresa de la cual vas a ver reportes o subir archivos",
+                "Elige el periodo del cual deseas ver el balance general",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey.shade500,
@@ -161,7 +159,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                       ),
                       isExpanded: true,
                       hint: const Text(
-                        'Selecciona empresa',
+                        'Selecciona un periodo',
                         style: TextStyle(fontSize: 14),
                       ),
                       icon: const Icon(
@@ -187,7 +185,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                           .toList(),
                       validator: (value) {
                         if (value == null) {
-                          return 'Por favor selecciona la empresa.';
+                          return 'Por favor selecciona el periodo.';
                         } else {
                           // obtain shared preferences
                           // developer.log(idEmpresaGlobal.toString(),
@@ -199,7 +197,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Home()),
+                                builder: (context) => const MBalanceGeneral()),
                           );
                         }
                         return null;
@@ -213,7 +211,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                       onSaved: (value) {
                         selectedValue = value.toString();
                         developer.log('guardado');
-                        saveIdEmpresa(value.toString());
+                        saveMonth(value.toString());
                       },
                     );
                   }

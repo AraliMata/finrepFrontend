@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
-import 'package:flutter_frontend_test/screens/mostrar_estado_resultados.dart';
+import 'package:flutter_frontend_test/screens/prueba_mostrar_estado_resultados.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
+import 'package:flutter_frontend_test/screens/elegirPeriodoBG.dart';
+import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'subirArchivo.dart';
 import 'dart:convert';
@@ -90,7 +92,7 @@ class HomeState extends State<Home> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MBalanceGeneral()),
+                        builder: (context) => const ElegirPeriodoBG()),
                     //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
                   );
                 },
@@ -103,7 +105,7 @@ class HomeState extends State<Home> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MEstadoResultados()),
+                        builder: (context) => const ElegirPeriodo()),
                     //MaterialPageRoute(builder: (context) => const ElegirEmpresa()),
                   );
                 },

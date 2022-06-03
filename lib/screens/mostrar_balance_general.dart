@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
+import 'package:flutter_frontend_test/screens/elegirPeriodoBG.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
@@ -21,22 +22,33 @@ class MBalanceGeneral extends StatefulWidget {
 
 class BalanceGeneralState extends State<MBalanceGeneral> {
   late Future<BalanceGeneral> balance;
+  late String nombreEmpresa;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
+  ElegirPeriodoBGState elegirPeriodoData = ElegirPeriodoBGState();
 
   @override
   void initState() {
     super.initState();
     balance = getBalanceGeneral();
+    getNombreDeEmpresa();
+  }
+
+  Future<void> getNombreDeEmpresa() async {
+    nombreEmpresa = await elegirEmpresaData.getNombreEmpresa();
   }
 
   Future<BalanceGeneral> getBalanceGeneral() async {
     var idEmpresa = await elegirEmpresaData.getIdEmpresa();
+    var periodo = await elegirPeriodoData.getMonth();
     developer.log(idEmpresa.toString(),
         name: 'idEmpresaDentrodeBalanceGeneral');
+    
+    developer.log(periodo.toString(),
+        name: 'periodoDentrodeBalanceGeneral');
 
     final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/balance-general"));
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/balance-general"));
     // await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
     developer.log(jsonDecode(response.body).toString(), name: 'response18');
@@ -244,80 +256,81 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                 style: TextStyle(
                     color: Color.fromARGB(255, 33, 212, 243), fontSize: 16))
           ]),
-          Column(children: [Text('Empresa 1 S.C')]),
+          Column(children: [Text(nombreEmpresa)]),
+          // Column(children: [Text('Empresa 1 S.C')]),
           Column(children: [Text('Fecha: 29/Abr/2022')])
         ],
       ),
-      Expanded(
-          child: GridView.count(
-              // Create a grid with 2 columns. If you change the scrollDirection to
-              // horizontal, this produces 2 rows.
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              children: [
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    'ACTIVO',
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold),
-                  ),
+     Expanded(
+              child: GridView.count(
+                  // Create a grid with 2 columns. If you change the scrollDirection to
+                  // horizontal, this produces 2 rows.
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  children: [
+                DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'ACTIVO',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        '',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  rows: createRows(snapshot.data!.activo),
                 ),
-                DataColumn(
-                  label: Text(
-                    '',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
+                DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'PASIVO',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        '',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  rows: createRows(snapshot.data!.pasivo),
                 ),
-              ],
-              rows: createRows(snapshot.data!.activo),
-            ),
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    'PASIVO',
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold),
-                  ),
+                DataTable(columns: const <DataColumn>[
+                  DataColumn(label: Text(' '))
+                ], rows: const <DataRow>[
+                  DataRow(cells: <DataCell>[DataCell(Text(' '))])
+                ]),
+                DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'CAPITAL',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        '',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  rows: createRowsCapital(snapshot.data!.capital),
                 ),
-                DataColumn(
-                  label: Text(
-                    '',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ],
-              rows: createRows(snapshot.data!.pasivo),
-            ),
-            DataTable(columns: const <DataColumn>[
-              DataColumn(label: Text(' '))
-            ], rows: const <DataRow>[
-              DataRow(cells: <DataCell>[DataCell(Text(' '))])
-            ]),
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    'CAPITAL',
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    '',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ],
-              rows: createRowsCapital(snapshot.data!.capital),
-            ),
-          ]))
+              ]))
     ];
   }
 
@@ -335,25 +348,25 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
-                  return Column(
-                      children:
-                          _getBalanceGeneral(screenHeight, context, snapshot) +
-                              [
-                                SimpleElevatedButton(
-                                  child: const Text("Crear pdf falso"),
-                                  color: Colors.blue,
-                                  onPressed: () => gridsillo(snapshot.data),
-                                  //getPDF(screenHeight, snapshot),
-                                ),
-                                const SizedBox(height: 25),
-                                SimpleElevatedButton(
-                                  child: const Text("Volver"),
-                                  color: Colors.red,
-                                  onPressed: () => Get.back(),
-                                  //getPDF(screenHeight, snapshot),
-                                ),
-                                const SizedBox(height: 25),
-                              ]);
+                  return Column(children:
+                      _getBalanceGeneral(screenHeight, context, snapshot) +
+                      [
+                   
+                    SimpleElevatedButton(
+                      child: const Text("Descargar balance general"),
+                      color: Colors.blue,
+                      onPressed: () => gridsillo(snapshot.data),
+                      //getPDF(screenHeight, snapshot),
+                    ),
+                    const SizedBox(height: 25),
+                    SimpleElevatedButton(
+                      child: const Text("Volver"),
+                      color: Colors.green,
+                      onPressed: () => Get.back(),
+                      //getPDF(screenHeight, snapshot),
+                    ),
+                    const SizedBox(height: 25),
+                  ]);
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');
                   return const ProgressBar();
