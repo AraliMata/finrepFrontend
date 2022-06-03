@@ -337,39 +337,28 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                             )
                           ] +
                           [
-                            SimpleElevatedButton(
-                              child: const Text("Crear pdf falso"),
+                            const SizedBox(height: 25),
+                            Center(
+                                child: SimpleElevatedButton(
+                              child:
+                                  const Text("Descargar relaciones analiticas"),
                               color: Colors.blue,
                               onPressed: () => gridsillo(snapshot.data),
                               //getPDF(screenHeight, snapshot),
-                            ),
+                            )),
                             const SizedBox(height: 25),
-                            SimpleElevatedButton(
+                            Center(
+                                child: SimpleElevatedButton(
                               child: const Text("Volver"),
                               color: Colors.green,
                               onPressed: () => Get.back(),
                               //getPDF(screenHeight, snapshot),
-                            ),
+                            )),
                             const SizedBox(height: 25),
                           ]);
                 } else {
                   // developer.log('${snapshot.error}', name: 'NoTieneData55');
-                  return ListView(children: [
-                    SimpleElevatedButton(
-                      child: const Text("Crear pdf falso"),
-                      color: Colors.blue,
-                      onPressed: () => gridsillo(snapshot.data),
-                      //getPDF(screenHeight, snapshot),
-                    ),
-                    const SizedBox(height: 25),
-                    SimpleElevatedButton(
-                      child: const Text("Volver"),
-                      color: Colors.green,
-                      onPressed: () => Get.back(),
-                      //getPDF(screenHeight, snapshot),
-                    ),
-                    const SizedBox(height: 25),
-                  ]);
+                  return const ProgressBar();
                   // return const ProgressBar();
                 }
               })),
