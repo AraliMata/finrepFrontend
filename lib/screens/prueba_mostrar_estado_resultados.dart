@@ -21,6 +21,7 @@ class MEstadoResultados extends StatefulWidget {
 class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
   late ConvertidorDataTable convertidor;
+  late String nombreEmpresa;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
   ElegirPeriodoState elegirPeriodoData = ElegirPeriodoState();
 
@@ -28,6 +29,11 @@ class EstadoResultadosState extends State<MEstadoResultados> {
   void initState() {
     super.initState();
     balance = getEstadoResultados();
+    getNombreDeEmpresa();
+  }
+
+  Future<void> getNombreDeEmpresa() async {
+    nombreEmpresa = await elegirEmpresaData.getNombreEmpresa();
   }
 
   Future<EstadoResultados> getEstadoResultados() async {
@@ -36,6 +42,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
     final response = await http.get(Uri.parse(
         "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
+
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -206,7 +213,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
-                        Column(children: [Text('Empresa 1 S.C')]),
+
+                        Column(children: [Text(nombreEmpresa)]),
                         Column(children: [Text('Fecha: 29/Abr/2022')])
                       ],
                     ),
@@ -271,6 +279,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                             child: const Text("Descargar estado de resultados"),
                             color: Colors.blue,
                             onPressed: () => gridPDF(snapshot.data)))
+
                   ]);
                   /*return Column(children: [
                     _contentFirstRow(snapshot.data),

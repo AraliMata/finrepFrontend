@@ -22,6 +22,7 @@ class MBalanceGeneral extends StatefulWidget {
 
 class BalanceGeneralState extends State<MBalanceGeneral> {
   late Future<BalanceGeneral> balance;
+  late String nombreEmpresa;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
   ElegirPeriodoBGState elegirPeriodoData = ElegirPeriodoBGState();
@@ -30,6 +31,11 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
   void initState() {
     super.initState();
     balance = getBalanceGeneral();
+    getNombreDeEmpresa();
+  }
+
+  Future<void> getNombreDeEmpresa() async {
+    nombreEmpresa = await elegirEmpresaData.getNombreEmpresa();
   }
 
   Future<BalanceGeneral> getBalanceGeneral() async {
@@ -250,7 +256,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                 style: TextStyle(
                     color: Color.fromARGB(255, 33, 212, 243), fontSize: 16))
           ]),
-          Column(children: [Text('Empresa 1 S.C')]),
+          Column(children: [Text(nombreEmpresa)]),
+          // Column(children: [Text('Empresa 1 S.C')]),
           Column(children: [Text('Fecha: 29/Abr/2022')])
         ],
       ),

@@ -18,6 +18,7 @@ class MRelacionesAnaliticas extends StatefulWidget {
 
 class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   late Future<RelacionesAnaliticas> balance;
+  late String nombreEmpresa;
   late ConvertidorDataTable convertidor;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
 
@@ -25,6 +26,11 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   void initState() {
     super.initState();
     balance = getRelacionesAnaliticas();
+    getNombreDeEmpresa();
+  }
+
+  Future<void> getNombreDeEmpresa() async {
+    nombreEmpresa = await elegirEmpresaData.getNombreEmpresa();
   }
 
   Future<RelacionesAnaliticas> getRelacionesAnaliticas() async {
@@ -261,69 +267,70 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
-                        Column(children: const [Text('Empresa 1 S.C')]),
+                        Column(children: [Text(nombreEmpresa)]),
                         Column(children: const [Text('Fecha: 29/Abr/2022')]),
                         Column(children: const [Text('Hola')])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
                     FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Expanded(
-                      child: DataTable(
-                          columns: const <DataColumn>[
-                            DataColumn(
-                              label: Text(
-                                'Cuenta',
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                        fit: BoxFit.scaleDown,
+                        child: Expanded(
+                          child: DataTable(
+                              columns: const <DataColumn>[
+                                DataColumn(
+                                  label: Text(
+                                    'Cuenta',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Nombre',
+                                    style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Saldos Iniciales \n Deudor  Acreedor',
+                                    style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    '\n Cargos',
+                                    style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    '\n Abonos',
+                                    style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Saldos Actuales \n Deudor  Acreedor',
+                                    style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                              rows: _createRows(datos.movimientos,
+                                  datos.totalCuentas, datos.sumasIguales)
+                              //rows: createRows(snapshot.data?.ingresos),
                               ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Nombre',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Saldos Iniciales \n Deudor  Acreedor',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                '\n Cargos',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                '\n Abonos',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Saldos Actuales \n Deudor  Acreedor',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                          rows: _createRows(datos.movimientos,
-                              datos.totalCuentas, datos.sumasIguales)
-                          //rows: createRows(snapshot.data?.ingresos),
-                          ),
-                      ))
+                        ))
                   ]);
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData55');
