@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
+import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
@@ -22,6 +23,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
   late ConvertidorDataTable convertidor;
   late String nombreEmpresa;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
+  ElegirPeriodoState elegirPeriodoData = ElegirPeriodoState();
 
   @override
   void initState() {
@@ -36,8 +38,11 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
   Future<EstadoResultados> getEstadoResultados() async {
     var idEmpresa = await elegirEmpresaData.getIdEmpresa();
+    var periodo = await elegirPeriodoData.getMonth();
+
     final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/2/estado-resultados"));
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
+
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -163,7 +168,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "Balance General.pdf")
+      ..setAttribute("download", "Estado-de-resultados.pdf")
       ..click();
   }
 
@@ -208,14 +213,17 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
+
                         Column(children: [Text(nombreEmpresa)]),
                         Column(children: [Text('Fecha: 29/Abr/2022')])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
-                    Expanded(
-                      child: DataTable(columns: const <DataColumn>[
-                        /*DataColumn(
+                    FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Expanded(
+                          child: DataTable(columns: const <DataColumn>[
+                            /*DataColumn(
                           label: Text(
                             'Ingresos',
                             style: TextStyle(
@@ -223,53 +231,55 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),*/
-                        DataColumn(
-                          label: Text(
-                            '',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Periodo',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            '%',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Acumulado',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            '%',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ], rows: _createRows(datos.ingresos, datos.egresos)
-                          //rows: createRows(snapshot.data?.ingresos),
-                          ),
-                    ),
-                    SizedBox(height: screenHeight * .025),
-                    SimpleElevatedButton(
-                        child: const Text("Descargar estado resultados"),
-                        color: Colors.blue,
-                        onPressed: () => gridPDF(snapshot.data)),
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Periodo',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '%',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Acumulado',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '%',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ], rows: _createRows(datos.ingresos, datos.egresos)
+                              //rows: createRows(snapshot.data?.ingresos),
+                              ),
+                        )),
+                    SizedBox(height: screenHeight * .05),
+                    Center(
+                        child: SimpleElevatedButton(
+                            child: const Text("Descargar estado de resultados"),
+                            color: Colors.blue,
+                            onPressed: () => gridPDF(snapshot.data)))
+
                   ]);
                   /*return Column(children: [
                     _contentFirstRow(snapshot.data),

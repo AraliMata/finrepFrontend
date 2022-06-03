@@ -244,7 +244,10 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
 
-                  return ListView(scrollDirection: Axis.vertical, children: [
+                  return ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: [
                     SizedBox(height: screenHeight * .05),
                     Center(
                         child: Text(
