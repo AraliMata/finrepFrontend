@@ -50,16 +50,33 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   List<DataCell> _createCells(datos) {
     List<DataCell> celdas = [];
 
-    //String type = datos[6].toString();
-    String type = "n";
+    String type = datos[6].toString();
+    //String acrdeud = datos[7].toString();
+    String acrdeud = "a";
 
     for (int i = 0; i < 6; i++) {
+      Text text = Text(
+        datos[i].toString(),
+        textAlign: TextAlign.left,
+      );
       if (type == "n") {
-        celdas.add(DataCell(Text(datos[i].toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold))));
+        if (acrdeud == "a") {
+          text = Text(datos[i].toString(),
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontWeight: FontWeight.bold));
+        } else {
+          text = Text(datos[i].toString(),
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontWeight: FontWeight.bold));
+        }
       } else {
-        celdas.add(DataCell(Text(datos[i].toString())));
+        if (acrdeud == "a") {
+          text = Text(datos[i].toString(), textAlign: TextAlign.right);
+        }
       }
+
+      developer.log(text.textAlign.toString(), name: "texAlign");
+      celdas.add(DataCell(text));
     }
 
     return celdas;
@@ -221,7 +238,9 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
 
-                  return ListView(children: [
+                  return ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [
                     SizedBox(height: screenHeight * .05),
                     Center(
                         child: Text(
@@ -247,7 +266,9 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
-                    Expanded(
+                    FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Expanded(
                       child: DataTable(
                           columns: const <DataColumn>[
                             DataColumn(
@@ -301,7 +322,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                               datos.totalCuentas, datos.sumasIguales)
                           //rows: createRows(snapshot.data?.ingresos),
                           ),
-                    )
+                      ))
                   ]);
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData55');
