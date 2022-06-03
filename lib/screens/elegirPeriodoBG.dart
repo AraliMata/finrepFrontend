@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
+import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/model/value_objects/meses.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../model/widgets/general_app_bar.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'login_signin/login.dart';
 import '../env.sample.dart';
@@ -109,6 +111,7 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
     double screenHeight = MediaQuery.of(context).size.height;
     // TODO: implement build
     return Scaffold(
+      appBar: GeneralAppBar(),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -141,7 +144,7 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
                       name: "Snapshot data");
                   List<String> empresaMostrar = snapshot.data ?? [''];
                   if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
+                    return const ProgressBar();
                   }
                   // Render employee lists
                   else {

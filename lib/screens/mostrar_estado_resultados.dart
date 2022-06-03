@@ -8,6 +8,8 @@ import '../env.sample.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
 
+import '../model/widgets/general_app_bar.dart';
+
 class MEstadoResultados extends StatefulWidget {
   const MEstadoResultados({Key? key}) : super(key: key);
   @override
@@ -97,9 +99,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return MaterialApp(
       title: 'FinRep',
       home: Scaffold(
-          /*appBar: AppBar(
-            title: const Text('Balance general'),
-          )*/
+          appBar: GeneralAppBar(),
           body: FutureBuilder<EstadoResultados>(
               future: balance,
               builder: (context, snapshot) {

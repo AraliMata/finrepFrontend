@@ -7,6 +7,9 @@ import 'package:flutter_frontend_test/screens/elegirPeriodoBG.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
+import '../model/value_objects/activo_pasivo.dart';
+import '../model/value_objects/capital.dart';
+import '../model/widgets/general_app_bar.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'dart:developer' as developer;
 import 'dart:convert';
@@ -22,6 +25,7 @@ class MBalanceGeneral extends StatefulWidget {
 
 class BalanceGeneralState extends State<MBalanceGeneral> {
   late Future<BalanceGeneral> balance;
+  late BalanceGeneral balanceGeneral;
   late String nombreEmpresa;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
@@ -428,34 +432,31 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     return MaterialApp(
       title: 'FinRep',
       home: Scaffold(
-          /*appBar: AppBar(
-            title: const Text('Balance general'),
-          )*/
+          appBar: GeneralAppBar(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => gridsillo(balanceGeneral),
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.download),
+          ),
           body: FutureBuilder<BalanceGeneral>(
               future: balance,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
+                  ActivoPasivo activo = ActivoPasivo(circulante: [
+                    ['']
+                  ], fijo: [
+                    ['']
+                  ], diferido: [
+                    ['']
+                  ]);
+                  
+                  balanceGeneral = snapshot.data ??
+                      BalanceGeneral(
+                          activo: activo, pasivo: activo, capital: Capital(capital:[['']]));
                   return Column(
                       children:
-                          _getBalanceGeneral(screenHeight, context, snapshot) +
-                              [
-                                SimpleElevatedButton(
-                                  child:
-                                      const Text("Descargar balance general"),
-                                  color: Colors.blue,
-                                  onPressed: () => gridsillo(snapshot.data),
-                                  //getPDF(screenHeight, snapshot),
-                                ),
-                                const SizedBox(height: 25),
-                                SimpleElevatedButton(
-                                  child: const Text("Volver"),
-                                  color: Colors.green,
-                                  onPressed: () => Get.back(),
-                                  //getPDF(screenHeight, snapshot),
-                                ),
-                                const SizedBox(height: 25),
-                              ]);
+                          _getBalanceGeneral(screenHeight, context, snapshot) );
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');
                   return const ProgressBar();

@@ -7,6 +7,7 @@ import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
 import 'package:flutter_frontend_test/screens/elegirPeriodoBG.dart';
 import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
+import '../model/widgets/init_app_bar.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'subirArchivo.dart';
 import 'dart:convert';
@@ -47,8 +48,10 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+    return Scaffold(
+      appBar: InitAppBar(),
+      body:Center(
+      //padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -142,6 +145,7 @@ class HomeState extends State<Home> {
           ),*/
         ],
       ),
+    )
     );
   }
 }
