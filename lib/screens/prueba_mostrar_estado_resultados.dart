@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
+import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
@@ -10,7 +11,6 @@ import 'dart:developer' as developer;
 import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../model/widgets/simple_elevated_button.dart';
-
 
 class MEstadoResultados extends StatefulWidget {
   const MEstadoResultados({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
   late ConvertidorDataTable convertidor;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
-  
+  ElegirPeriodoState elegirPeriodoData = ElegirPeriodoState();
 
   @override
   void initState() {
@@ -32,8 +32,10 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
   Future<EstadoResultados> getEstadoResultados() async {
     var idEmpresa = await elegirEmpresaData.getIdEmpresa();
-    final response =
-        await http.get(Uri.parse("${Env.URL_PREFIX}/contabilidad/reportes/empresas/2/estado-resultados"));
+    var periodo = await elegirPeriodoData.getMonth();
+
+    final response = await http.get(Uri.parse(
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -89,7 +91,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return renglon;
   }
 
-    //FUNCIÓN QUE ARMA EL PDF Y LO DESCARGA
+  //FUNCIÓN QUE ARMA EL PDF Y LO DESCARGA
   gridPDF(data) {
     //Create a new PDF document
     PdfDocument document = PdfDocument();
@@ -99,7 +101,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     // PdfGrid pasivoGrid = PdfGrid();
     // PdfGrid capitalGrid = PdfGrid();
 //Add the columns to the grid
-    grid.columns.add(count: 5); //Poner el número de columnas (Estado de resultados: 5)
+    grid.columns
+        .add(count: 5); //Poner el número de columnas (Estado de resultados: 5)
     //activoGrid.columns.add(count: 2);
     //pasivoGrid.columns.add(count: 2);
     //capitalGrid.columns.add(count: 2);
@@ -117,10 +120,10 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
     PdfGridRow curRow1 = grid.rows.add();
     curRow1.cells[0].value = "Ingresos";
-                        //data.ingreso.length
+    //data.ingreso.length
     for (int i = 0; i < data.ingresos.length; i++) {
       PdfGridRow curRow = grid.rows.add();
-                                //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
+      //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
       curRow.cells[0].value = data.ingresos[i][0].toString();
       curRow.cells[1].value = data.ingresos[i][1].toString();
       curRow.cells[2].value = data.ingresos[i][2].toString();
@@ -131,15 +134,14 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     PdfGridRow curRow2 = grid.rows.add();
     curRow2.cells[0].value = "Egresos";
     for (int i = 0; i < data.egresos.length; i++) {
-          PdfGridRow curRow = grid.rows.add();
-                                    //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
-          curRow.cells[0].value = data.egresos[i][0].toString();
-          curRow.cells[1].value = data.egresos[i][1].toString();
-          curRow.cells[2].value = data.egresos[i][2].toString();
-          curRow.cells[3].value = data.egresos[i][3].toString();
-          curRow.cells[4].value = data.egresos[i][4].toString();
-          
-        }
+      PdfGridRow curRow = grid.rows.add();
+      //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
+      curRow.cells[0].value = data.egresos[i][0].toString();
+      curRow.cells[1].value = data.egresos[i][1].toString();
+      curRow.cells[2].value = data.egresos[i][2].toString();
+      curRow.cells[3].value = data.egresos[i][3].toString();
+      curRow.cells[4].value = data.egresos[i][4].toString();
+    }
 
 //AQUI VUELVES A GUIARTE
 
@@ -159,7 +161,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "Balance General.pdf")
+      ..setAttribute("download", "Estado-de-resultados.pdf")
       ..click();
   }
 
@@ -186,26 +188,34 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                       name: 'TieneData ingresos');
                   return ListView(children: [
                     SizedBox(height: screenHeight * .05),
-          Center( child: Text("Estado de resultados", style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
-                decoration: TextDecoration.none
-              ),)),
-          SizedBox(height: screenHeight * .05),
-            
+                    Center(
+                        child: Text(
+                      "Estado de resultados",
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade800,
+                          decoration: TextDecoration.none),
+                    )),
+                    SizedBox(height: screenHeight * .05),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(children: [ Text('FinRep', style: TextStyle( color: Colors.blue, fontSize: 16)) ]),
+                        Column(children: [
+                          Text('FinRep',
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 16))
+                        ]),
                         Column(children: [Text('Empresa 1 S.C')]),
                         Column(children: [Text('Fecha: 29/Abr/2022')])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
-                    Expanded(
-                      child: DataTable(columns: const <DataColumn>[
-                        /*DataColumn(
+                    FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Expanded(
+                          child: DataTable(columns: const <DataColumn>[
+                            /*DataColumn(
                           label: Text(
                             'Ingresos',
                             style: TextStyle(
@@ -213,56 +223,54 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),*/
-                        DataColumn(
-                          label: Text(
-                            '',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Periodo',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            '%',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Acumulado',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            '%',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ], rows: _createRows(datos.ingresos, datos.egresos)
-                          //rows: createRows(snapshot.data?.ingresos),
-                          ),
-                    ),
-
-                    SizedBox(height: screenHeight * .025),
-                SimpleElevatedButton(
-                child: const Text("Descargar estado resultados"),
-                color: Colors.blue,
-                onPressed: () => gridPDF(snapshot.data)
-              ),
-
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Periodo',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '%',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Acumulado',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '%',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ], rows: _createRows(datos.ingresos, datos.egresos)
+                              //rows: createRows(snapshot.data?.ingresos),
+                              ),
+                        )),
+                    SizedBox(height: screenHeight * .05),
+                    Center(
+                        child: SimpleElevatedButton(
+                            child: const Text("Descargar estado de resultados"),
+                            color: Colors.blue,
+                            onPressed: () => gridPDF(snapshot.data)))
                   ]);
                   /*return Column(children: [
                     _contentFirstRow(snapshot.data),

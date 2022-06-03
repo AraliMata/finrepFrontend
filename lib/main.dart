@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       home: ResponsiveSizer(builder: (context, orientation, screenType) {
-        return Home();
+        return BackgroundPage();
       }),
       theme: ThemeData(
         primaryColor: kPrimaryColor,

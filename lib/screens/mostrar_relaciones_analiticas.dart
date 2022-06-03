@@ -239,6 +239,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                   developer.log('Uno', name: 'TieneData');
 
                   return ListView(
+                    shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     children: [
                     SizedBox(height: screenHeight * .05),
