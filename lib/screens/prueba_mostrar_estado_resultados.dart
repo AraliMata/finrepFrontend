@@ -111,6 +111,11 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 //Add the columns to the grid
     grid.columns
         .add(count: 5); //Poner el número de columnas (Estado de resultados: 5)
+    grid.columns[0].width = 183;
+    grid.columns[1].width = 82;
+    grid.columns[2].width = 41;
+    grid.columns[3].width = 82;
+    grid.columns[4].width = 41;
     //activoGrid.columns.add(count: 2);
     //pasivoGrid.columns.add(count: 2);
     //capitalGrid.columns.add(count: 2);
@@ -122,7 +127,9 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 //Add values to header
     grid.headers[0].cells[0].value = '';
     grid.headers[0].cells[1].value = 'Periodo';
-    grid.headers[0].cells[2].value = 'Acumulado';
+    grid.headers[0].cells[2].value = '%';
+    grid.headers[0].cells[3].value = 'Acumulado';
+    grid.headers[0].cells[4].value = '%';
     //pasivoGrid.headers[0].cells[0].value = 'PASIVO';
     //capitalGrid.headers[0].cells[0].value = 'CAPITAL';
 
@@ -157,8 +164,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
         cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
         backgroundBrush: PdfBrushes.white,
         textBrush: PdfBrushes.black,
-        borderOverlapStyle: PdfBorderOverlapStyle.inside,
-        font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
+        borderOverlapStyle: PdfBorderOverlapStyle.overlap,
+        font: PdfStandardFont(PdfFontFamily.timesRoman, 10));
 //Draw the grid
     grid.draw(page: document.pages.add(), bounds: Rect.zero);
 //Save the document.
