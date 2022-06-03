@@ -28,6 +28,7 @@ dependencies:
   google_fonts: ^2.3.2
   universal_html: ^2.0.8
   get: ^4.6.3
+  syncfusion_flutter_pdf: ^20.1.57-beta
 
   #flutter_bloc: ^6.1.1 #EEEEE
   #meta: ^1.1.8 
