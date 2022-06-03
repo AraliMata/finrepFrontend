@@ -271,7 +271,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                                       style: TextStyle(
                                           color: Colors.blue, fontSize: 16))
                                 ]),
-                                Column(children: const [Text('Empresa 1 S.C')]),
+                                Column(children: [Text(nombreEmpresa)]),
                                 Column(children: const [
                                   Text('Fecha: 29/Abr/2022')
                                 ]),
