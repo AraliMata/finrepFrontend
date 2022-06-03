@@ -131,35 +131,6 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     header.cells[4].value = 'Abonos';
     header.cells[5].value = 'Saldos Actuales\nDeudor Acreedor';
 
-//Format cells
-    header.cells[0].style.stringFormat = PdfStringFormat(
-        alignment: PdfTextAlignment.left,
-        lineAlignment: PdfVerticalAlignment.top);
-
-    header.cells[1].style.stringFormat = PdfStringFormat(
-        alignment: PdfTextAlignment.left,
-        lineAlignment: PdfVerticalAlignment.top);
-
-    header.cells[1].style.textPen = PdfPens.mediumVioletRed;
-    header.cells[2].style.backgroundBrush = PdfBrushes.yellow;
-    header.cells[2].style.textBrush = PdfBrushes.darkOrange;
-
-    PdfGridRow row1 = grid.rows.add();
-    PdfGridRow row2 = grid.rows.add();
-
-    row1.cells[0].style = PdfGridCellStyle(
-      backgroundBrush: PdfBrushes.lightYellow,
-      cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
-      font: PdfStandardFont(PdfFontFamily.timesRoman, 17),
-      textBrush: PdfBrushes.white,
-      textPen: PdfPens.orange,
-    );
-
-    row2.cells[2].style.borders = PdfBorders(
-        left: PdfPen(PdfColor(240, 0, 0), width: 2),
-        top: PdfPen(PdfColor(0, 240, 0), width: 3),
-        bottom: PdfPen(PdfColor(0, 0, 240), width: 4),
-        right: PdfPen(PdfColor(240, 100, 240), width: 5));
     //data.ingreso.length
     for (int i = 0; i < data.movimientos.length; i++) {
       PdfGridRow curRow = grid.rows.add();
