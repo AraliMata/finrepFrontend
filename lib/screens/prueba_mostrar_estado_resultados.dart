@@ -11,6 +11,7 @@ import 'dart:developer' as developer;
 import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../model/widgets/simple_elevated_button.dart';
+import '../model/widgets/general_app_bar.dart';
 
 class MEstadoResultados extends StatefulWidget {
   const MEstadoResultados({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class MEstadoResultados extends StatefulWidget {
 
 class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
+  late EstadoResultados estadoResultados;
   late ConvertidorDataTable convertidor;
   late String nombreEmpresa;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
@@ -42,7 +44,6 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
     final response = await http.get(Uri.parse(
         "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
-
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -179,9 +180,12 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return MaterialApp(
       title: 'FinRep',
       home: Scaffold(
-          /*appBar: AppBar(
-            title: const Text('Balance general'),
-          )*/
+          appBar: GeneralAppBar(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => gridPDF(estadoResultados),
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.download),
+          ),
           body: FutureBuilder<EstadoResultados>(
               future: balance,
               builder: (context, snapshot) {
@@ -189,6 +193,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                     EstadoResultados(
                         ingresos: ['', '', '', '', ''],
                         egresos: ['', '', '', '', '']);
+                estadoResultados = datos;
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
                   developer.log(datos.ingresos[0].toString(),
@@ -213,7 +218,6 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
-
                         Column(children: [Text(nombreEmpresa)]),
                         Column(children: [Text('Fecha: 29/Abr/2022')])
                       ],
@@ -274,12 +278,11 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                               ),
                         )),
                     SizedBox(height: screenHeight * .05),
-                    Center(
+                    /*Center(
                         child: SimpleElevatedButton(
                             child: const Text("Descargar estado de resultados"),
                             color: Colors.blue,
-                            onPressed: () => gridPDF(snapshot.data)))
-
+                            onPressed: () => gridPDF(snapshot.data)))*/
                   ]);
                   /*return Column(children: [
                     _contentFirstRow(snapshot.data),

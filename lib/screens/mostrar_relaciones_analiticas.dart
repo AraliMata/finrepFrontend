@@ -4,6 +4,8 @@ import 'package:flutter_frontend_test/model/value_objects/relaciones_analiticas.
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/widgets/simple_elevated_button.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:flutter_frontend_test/screens/home.dart';
+import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +13,9 @@ import '../env.sample.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
 import 'dart:html'; //Para PDF
-import 'package:syncfusion_flutter_pdf/pdf.dart'; //Para PDF
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+
+import '../model/widgets/general_app_bar.dart'; //Para PDF
 
 class MRelacionesAnaliticas extends StatefulWidget {
   const MRelacionesAnaliticas({Key? key}) : super(key: key);
@@ -20,7 +24,8 @@ class MRelacionesAnaliticas extends StatefulWidget {
 }
 
 class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
-  late Future<RelacionesAnaliticas> balance;
+  late Future<RelacionesAnaliticas> relacionesAnaliticas;
+  late RelacionesAnaliticas relacionesAnaliticas2;
   late String nombreEmpresa;
   late ConvertidorDataTable convertidor;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
@@ -28,7 +33,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   @override
   void initState() {
     super.initState();
-    balance = getRelacionesAnaliticas();
+    relacionesAnaliticas = getRelacionesAnaliticas();
     getNombreDeEmpresa();
   }
 
@@ -203,11 +208,14 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     return MaterialApp(
       title: 'FinRep',
       home: Scaffold(
-          /*appBar: AppBar(
-            title: const Text('Balance general'),
-          )*/
+          appBar: GeneralAppBar(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => gridsillo(relacionesAnaliticas2),
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.download),
+          ),
           body: FutureBuilder<RelacionesAnaliticas>(
-              future: balance,
+              future: relacionesAnaliticas,
               builder: (context, snapshot) {
                 RelacionesAnaliticas datos = snapshot.data ??
                     RelacionesAnaliticas(movimientos: [
@@ -217,7 +225,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                     ], sumasIguales: [
                       ['', '', '', '', '', '', '', '']
                     ]);
-
+                relacionesAnaliticas2 = datos;
                 if (snapshot.hasData) {
                   developer.log('Uno', name: 'TieneData');
 
@@ -246,7 +254,6 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                                 Column(children: const [
                                   Text('Fecha: 29/Abr/2022')
                                 ]),
-                                Column(children: const [Text('Hola')])
                               ],
                             ),
                             SizedBox(height: screenHeight * .12),
@@ -309,7 +316,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                           ] +
                           [
                             const SizedBox(height: 25),
-                            Center(
+                            /*Center(
                                 child: SimpleElevatedButton(
                               child:
                                   const Text("Descargar relaciones analiticas"),
@@ -325,7 +332,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                               onPressed: () => Get.back(),
                               //getPDF(screenHeight, snapshot),
                             )),
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 25),*/
                           ]);
                 } else {
                   // developer.log('${snapshot.error}', name: 'NoTieneData55');

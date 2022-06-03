@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_frontend_test/model/widgets/general_app_bar.dart';
+import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 // import 'package:flutter_session/flutter_session.dart';
@@ -143,9 +145,9 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                       name: "Snapshot data");
                   List<String> empresaMostrar = snapshot.data ?? [''];
                   if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
+                    return const ProgressBar();
                   }
-                  // Render employee lists
+                  // Render employee listsw
                   else {
                     return DropdownButtonFormField2(
                       decoration: InputDecoration(
@@ -229,6 +231,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                 color: Colors.blue,
                 child: const Text('Confirmar selección'),
               ),
+              
             ],
           ),
         ),
