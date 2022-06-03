@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'dart:convert';
 import 'constants.dart';
 import '/model/value_objects/user.dart';
@@ -128,7 +129,7 @@ class _SignUpState extends State<SignUp> {
                                 _futureUser = registerUser(_controller.text,
                                     _controller2.text, _controller3.text);
                               });
-                              Get.to(const ElegirEmpresa());
+                              Get.to(BackgroundPage());
                             } else {
                               Get.defaultDialog(
                                   title: "Alerta",
