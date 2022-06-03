@@ -73,6 +73,13 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
     return prefs.getInt('idEmpresa') ?? 0;
   }
 
+  Future<String> getNombreEmpresa() async {
+    final prefs = await SharedPreferences.getInstance();
+    // developer.log('entro', name: 'entro');
+    // developer.log(prefs.getInt('idEmpresa').toString(), name: 'getIdEmpresa');
+    return prefs.getString('nombreEmpresa') ?? 'Empresa';
+  }
+
   //Incrementing counter after click
   Future<void> saveIdEmpresa(nombreEmpresa) async {
     final prefs = await SharedPreferences.getInstance();
@@ -87,6 +94,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
           break;
         }
       }
+      prefs.setString('nombreEmpresa', nombreEmpresa);
     });
   }
 

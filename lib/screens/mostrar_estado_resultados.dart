@@ -17,12 +17,18 @@ class MEstadoResultados extends StatefulWidget {
 class EstadoResultadosState extends State<MEstadoResultados> {
   late Future<EstadoResultados> balance;
   late ConvertidorDataTable convertidor;
+  late String nombreEmpresa;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
 
   @override
   void initState() {
     super.initState();
     balance = getEstadoResultados();
+    getNombreDeEmpresa();
+  }
+
+  Future<void> getNombreDeEmpresa() async {
+    nombreEmpresa = await elegirEmpresaData.getNombreEmpresa();
   }
 
   Future<EstadoResultados> getEstadoResultados() async {
@@ -126,7 +132,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
-                        Column(children: const [Text('Empresa 1 S.C')]),
+                        Column(children: [Text(nombreEmpresa)]),
                         Column(children: const [Text('Fecha: 29/Abr/2022')])
                       ],
                     ),
@@ -206,7 +212,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
               style: TextStyle(
                   color: Color.fromARGB(255, 33, 212, 243), fontSize: 16))
         ]),
-        Column(children: const [Text('Empresa 1 S.C')]),
+        Column(children: [Text(nombreEmpresa)]),
         Column(children: const [Text('Fecha: 29/Abr/2022')]),
         Column(children: const [Text('Hola')])
       ],
