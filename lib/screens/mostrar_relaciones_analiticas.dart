@@ -8,6 +8,7 @@ import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
@@ -43,9 +44,8 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
 
   Future<RelacionesAnaliticas> getRelacionesAnaliticas() async {
     var idEmpresa = await elegirEmpresaData.getIdEmpresa();
-    final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/relaciones-analiticas"));
-
+    final response = await http.get(Uri.parse("${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/relaciones-analiticas"));
+   
     developer.log(jsonDecode(response.body).toString(),
         name: "RelacionesAnaliticas");
 
@@ -61,37 +61,69 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     return relacionesAnaliticas;
   }
 
+  Widget _textNumber(data, style1, type, padding) {
+    var f = NumberFormat("#,##0.00", "en_US");
+    var n = NumberFormat("-#,##0.00", "en_US");
+
+    var string = '';
+    var style = style1;
+
+    if (data.runtimeType.toString() == 'String') {
+      string = data.toString();
+      return Align(
+          alignment: Alignment.centerLeft, child: Text(string, style: style));
+    } else if (data + .0 < 0.0) {
+      string = n.format(data.abs());
+
+      if (type == "n") {
+        style = const TextStyle(color: Colors.red, fontWeight: FontWeight.bold);
+      }
+    } else {
+      string = f.format(data);
+    }
+
+    return Padding(
+        padding: padding,
+        child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              string,
+              style: style,
+            )));
+  }
+
+  String _stringFormatted(data) {
+    var f = NumberFormat("#,##0.00", "en_US");
+    var n = NumberFormat("-#,##0.00", "en_US");
+
+    if (data.runtimeType.toString() == 'String') {
+      return data;
+    } else if (data + .0 < 0.0) {
+      return n.format(data.abs());
+    } else {
+      return f.format(data);
+    }
+  }
+
   List<DataCell> _createCells(datos) {
     List<DataCell> celdas = [];
 
     String type = datos[6].toString();
-    // String type = "n";
     String acrdeud = datos[7].toString();
-    // String acrdeud = "a";
+    var style, text, padding;
 
     for (int i = 0; i < 6; i++) {
-      Text text = Text(
-        datos[i].toString(),
-        textAlign: TextAlign.left,
-      );
+      style = const TextStyle(fontWeight: FontWeight.normal);
+      padding = const EdgeInsets.only(right: 0);
+
       if (type == "n") {
-        if (acrdeud == "a") {
-          text = Text(datos[i].toString(),
-              textAlign: TextAlign.right,
-              style: const TextStyle(fontWeight: FontWeight.bold));
-        } else {
-          text = Text(datos[i].toString(),
-              textAlign: TextAlign.left,
-              style: const TextStyle(fontWeight: FontWeight.bold));
-        }
-      } else {
-        if (acrdeud == "a") {
-          text = Text(datos[i].toString(), textAlign: TextAlign.right);
-        }
+        style = const TextStyle(fontWeight: FontWeight.bold);
+      }
+      if (acrdeud == "a") {
+        padding = const EdgeInsets.only(right: 30);
       }
 
-      developer.log(text.textAlign.toString(), name: "texAlign");
-      celdas.add(DataCell(text));
+      celdas.add(DataCell(_textNumber(datos[i], style, type, padding)));
     }
 
     return celdas;
@@ -123,9 +155,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     grid.columns[3].width = 76;
     grid.columns[4].width = 76;
     grid.columns[5].width = 84;
-//Add header to the grid
-    // grid.headers.add(2);
-    // grid.headers.add(1);
+
 
 //Add values to header
     PdfGridRow header = grid.headers.add(1)[0];
@@ -142,10 +172,10 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
       //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
       curRow.cells[0].value = data.movimientos[i][0].toString();
       curRow.cells[1].value = data.movimientos[i][1].toString();
-      curRow.cells[2].value = data.movimientos[i][2].toString();
-      curRow.cells[3].value = data.movimientos[i][3].toString();
-      curRow.cells[4].value = data.movimientos[i][4].toString();
-      curRow.cells[5].value = data.movimientos[i][5].toString();
+      curRow.cells[2].value = _stringFormatted(data.movimientos[i][2]);
+      curRow.cells[3].value = _stringFormatted(data.movimientos[i][3]);
+      curRow.cells[4].value = _stringFormatted(data.movimientos[i][4]);
+      curRow.cells[5].value = _stringFormatted(data.movimientos[i][5]);
 
       //Si la linea va en negritas
       if (data.movimientos[i][6] == 'n') {
@@ -155,10 +185,12 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
       }
 
       //Alineacion de lineas de saldos
-      curRow.cells[2].style.stringFormat =
-          PdfStringFormat(alignment: PdfTextAlignment.right);
-      curRow.cells[5].style.stringFormat =
-          PdfStringFormat(alignment: PdfTextAlignment.right);
+
+      for (int i = 2; i < 6; i++) {
+        curRow.cells[i].style.stringFormat =
+            PdfStringFormat(alignment: PdfTextAlignment.right);
+      }
+        
       //Set de padding de lineas de saldos
       curRow.cells[2].style.cellPadding = PdfPaddings(right: 10);
       curRow.cells[5].style.cellPadding = PdfPaddings(right: 10);
@@ -168,18 +200,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
         curRow.cells[5].style.cellPadding = PdfPaddings(right: 20);
       }
     }
-    //LO DE  ANGEL SE QUEDA HASTA AQUI
-    /*
-//Add rows to grid
-    PdfGridRow row = grid.rows.add();
-    row.cells[0].value = activoGrid;
-    row.cells[1].value = pasivoGrid;
-    row = grid.rows.add();
-    row.cells[0].value = '';
-    row.cells[1].value = capitalGrid;
- */
-//Set the grid style
-//AQUI VUELVES A GUIARTE
+   
 
     grid.style = PdfGridStyle(
         cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 0),
@@ -276,12 +297,14 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Saldos Iniciales \n Deudor  Acreedor',
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      label: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Text(
+                                            'Saldos Iniciales            \n Deudor       Acreedor',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                                fontWeight: FontWeight.bold),
+                                          )),
                                     ),
                                     DataColumn(
                                       label: Text(
