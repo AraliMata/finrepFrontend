@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
@@ -13,9 +14,12 @@ import '../model/widgets/general_app_bar.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'dart:developer' as developer;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart'; //Para PDF
 import 'package:get/get.dart';
+
+import 'package:archive/archive.dart';
 
 class MBalanceGeneral extends StatefulWidget {
   const MBalanceGeneral({Key? key}) : super(key: key);
@@ -51,10 +55,11 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     developer.log(periodo.toString(), name: 'periodoDentrodeBalanceGeneral');
 
     final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/balance-general"));
+      "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/balance-general"));
+   
     // await http.get(Uri.parse("${Env.URL_PREFIX}/balanceGeneral"));
 
-    developer.log(jsonDecode(response.body).toString(), name: 'response18');
+    developer.log(response.body.runtimeType.toString(), name: 'response18');
     developer.log(jsonDecode(response.body).runtimeType.toString(),
         name: 'response type');
 
@@ -70,16 +75,51 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
   DataRow createRow(datos) {
     List<DataCell> celdas = [];
 
-    celdas.add(DataCell(Text(datos[0])));
-    celdas.add(DataCell(Text(datos[1])));
+    if (datos[0].runtimeType.toString() == 'List<dynamic>') {
+      datos[0] = datos[0][0];
+    }
+
+    celdas.add(DataCell(Align(alignment: Alignment.centerLeft, child:Text(datos[0]))));
+    //celdas.add(DataCell(Text(datos[1])));
+
+    var f = NumberFormat("#,##0.00", "en_US");
+    var n = NumberFormat("-#,##0.00", "en_US");
+
+    if (datos[1].runtimeType.toString() == "String") {
+      celdas.add(DataCell(Align(alignment: Alignment.centerRight, child:Text(datos[1]))));
+    } else {
+      if (datos[1] < 0.0) {
+        celdas.add(DataCell(Align(alignment: Alignment.centerRight, child:Text(n.format(datos[1].abs()),
+            style: const TextStyle(color: Colors.red)))));
+      } else {
+        celdas.add(DataCell(Align(alignment: Alignment.centerRight, child:Text(f.format(datos[1])))));
+      }
+    }
 
     DataRow renglon = DataRow(cells: celdas);
 
     return renglon;
   }
 
+   String _stringFormatted(data) {
+    var f = NumberFormat("#,##0.00", "en_US");
+    var n = NumberFormat("-#,##0.00", "en_US");
+
+    if (data.runtimeType.toString() == 'String') {
+      return data;
+    } else if (data + .0 < 0.0) {
+      return n.format(data.abs());
+    } else {
+      return f.format(data);
+    }
+  }
+
   List<DataRow> createRows(datos) {
     List<DataRow> renglones = [];
+
+    developer.log(datos.circulante.toString(), name: "Entré create rows");
+    developer.log(datos.fijo.toString(), name: "Entré create rows");
+    developer.log(datos.diferido[2].toString(), name: "Entré create rows");
 
     renglones.add(createRow(['CIRCULANTE', ' ']));
     for (int i = 0; i < datos.circulante.length; i++) {
@@ -89,16 +129,22 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
       }
     }
 
+    renglones.add(createRow(['', '']));
     renglones.add(createRow(['FIJO', ' ']));
     for (int i = 0; i < datos.fijo.length; i++) {
-      DataRow curRow = createRow(datos.fijo[i]);
-      renglones.add(curRow);
+      if (datos.circulante[i][0] != '') {
+        DataRow curRow = createRow(datos.fijo[i]);
+        renglones.add(curRow);
+      }
     }
 
+    renglones.add(createRow(['', '']));
     renglones.add(createRow(['DIFERIDO', ' ']));
     for (int i = 0; i < datos.diferido.length; i++) {
-      DataRow curRow = createRow(datos.diferido[i]);
-      renglones.add(curRow);
+      if (datos.circulante[i][0] != '') {
+        DataRow curRow = createRow(datos.diferido[i]);
+        renglones.add(curRow);
+      }
     }
 
     return renglones;
@@ -109,8 +155,10 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
 
     renglones.add(createRow(['CAPITAL', ' ']));
     for (int i = 0; i < datos.capital.length; i++) {
-      DataRow curRow = createRow(datos.capital[i]);
-      renglones.add(curRow);
+      if (datos.capital[i][0] != '') {
+        DataRow curRow = createRow(datos.capital[i]);
+        renglones.add(curRow);
+      }
     }
 
     return renglones;
@@ -141,10 +189,10 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     totalActivoGrid.headers.add(1);
 //Add values to header
     PdfBorders border = PdfBorders(
-        left: PdfPen(PdfColor(255, 255, 255), width: 0),
-        top: PdfPen(PdfColor(255, 255, 255), width: 0),
-        bottom: PdfPen(PdfColor(255, 255, 255), width: 0),
-        right: PdfPen(PdfColor(255, 255, 255), width: 0));
+        left: PdfPen(PdfColor(0,0,0), width: 0),
+        top: PdfPen(PdfColor(0,0,0), width: 0),
+        bottom: PdfPen(PdfColor(0,0,0), width: 0),
+        right: PdfPen(PdfColor(0,0,0), width: 0));
 
     //Create a cell style
     PdfGridCellStyle cellStyle = PdfGridCellStyle(
@@ -175,7 +223,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
       PdfGridRow curRow = activoGrid.rows.add();
       //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
       curRow.cells[0].value = data.activo.circulante[i][0];
-      curRow.cells[1].value = data.activo.circulante[i][1];
+      curRow.cells[1].value = _stringFormatted(data.activo.circulante[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -191,7 +239,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     for (int i = 0; i < data.activo.fijo.length; i++) {
       PdfGridRow curRow = activoGrid.rows.add();
       curRow.cells[0].value = data.activo.fijo[i][0];
-      curRow.cells[1].value = data.activo.fijo[i][1];
+      curRow.cells[1].value = _stringFormatted(data.activo.fijo[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -205,7 +253,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     for (int i = 0; i < data.activo.diferido.length - 1; i++) {
       PdfGridRow curRow = activoGrid.rows.add();
       curRow.cells[0].value = data.activo.diferido[i][0];
-      curRow.cells[1].value = data.activo.diferido[i][1];
+      curRow.cells[1].value = _stringFormatted(data.activo.diferido[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -219,7 +267,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     for (int i = 0; i < data.pasivo.circulante.length; i++) {
       PdfGridRow curRow = pasivoGrid.rows.add();
       curRow.cells[0].value = data.pasivo.circulante[i][0];
-      curRow.cells[1].value = data.pasivo.circulante[i][1];
+      curRow.cells[1].value = _stringFormatted(data.pasivo.circulante[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -233,7 +281,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     for (int i = 0; i < data.pasivo.fijo.length; i++) {
       PdfGridRow curRow = pasivoGrid.rows.add();
       curRow.cells[0].value = data.pasivo.fijo[i][0];
-      curRow.cells[1].value = data.pasivo.fijo[i][1];
+      curRow.cells[1].value = _stringFormatted(data.pasivo.fijo[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -247,7 +295,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     for (int i = 0; i < data.pasivo.diferido.length; i++) {
       PdfGridRow curRow = pasivoGrid.rows.add();
       curRow.cells[0].value = data.pasivo.diferido[i][0];
-      curRow.cells[1].value = data.pasivo.diferido[i][1];
+      curRow.cells[1].value = _stringFormatted(data.pasivo.diferido[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -272,8 +320,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
         developer.log("entroooo", name: "buenas");
         curTotalRow.cells[0].value =
             data.activo.diferido[data.activo.diferido.length - 1][0];
-        curTotalRow.cells[1].value =
-            data.activo.diferido[data.activo.diferido.length - 1][1];
+        curTotalRow.cells[1].value =_stringFormatted(
+            data.activo.diferido[data.activo.diferido.length - 1][1]);
       } else {
         curTotalRow.cells[0].value = ' ';
         curTotalRow.cells[1].value = ' ';
@@ -284,7 +332,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
 
       PdfGridRow curRow = capitalGrid.rows.add();
       curRow.cells[0].value = data.capital.capital[i][0];
-      curRow.cells[1].value = data.capital.capital[i][1];
+      curRow.cells[1].value = _stringFormatted(data.capital.capital[i][1]);
 
       curRow.cells[0].style = cellStyle;
       curRow.cells[1].style = cellStyle;
@@ -450,13 +498,17 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                   ], diferido: [
                     ['']
                   ]);
-                  
+
                   balanceGeneral = snapshot.data ??
                       BalanceGeneral(
-                          activo: activo, pasivo: activo, capital: Capital(capital:[['']]));
+                          activo: activo,
+                          pasivo: activo,
+                          capital: Capital(capital: [
+                            ['']
+                          ]));
                   return Column(
                       children:
-                          _getBalanceGeneral(screenHeight, context, snapshot) );
+                          _getBalanceGeneral(screenHeight, context, snapshot));
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');
                   return const ProgressBar();

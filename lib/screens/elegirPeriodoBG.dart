@@ -64,9 +64,8 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
 
     // developer.log(idUsuario.toString(), name: 'idUsuarioPruebaSuprema');
 
-    final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/empresas/$idEmpresa/meses-disponibles"));
-
+    final response = await http.get(Uri.parse("${Env.URL_PREFIX}/contabilidad/empresas/$idEmpresa/meses-disponibles"));
+  
     developer.log(jsonDecode(response.body).toString(), name: 'response');
     developer.log(jsonDecode(response.body).runtimeType.toString(),
         name: 'response');

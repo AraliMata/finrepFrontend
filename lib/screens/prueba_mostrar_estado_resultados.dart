@@ -6,6 +6,7 @@ import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
 import 'dart:html'; //Para PDF
@@ -43,7 +44,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     var periodo = await elegirPeriodoData.getMonth();
 
     final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
+    "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
+
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -57,26 +59,62 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return estadoResultados;
   }
 
+  DataCell _cellDataFormatted(data) {
+    developer.log((data.runtimeType is String).toString(), name: 'Entré');
+    developer.log(data.runtimeType.toString(), name: 'Entré');
+
+    var f = NumberFormat("#,##0.00", "en_US");
+    var n = NumberFormat("-#,##0.00", "en_US");
+    if (data.runtimeType.toString() == 'String') {
+      return DataCell(Text(data));
+    } else if (data + .0 < 0.0) {
+      return DataCell(Align(
+          alignment: Alignment.centerRight,
+          child: Text(n.format(data.abs()),
+              style: const TextStyle(color: Colors.red))));
+    } else {
+      return DataCell(
+          Align(alignment: Alignment.centerRight, child: Text(f.format(data))));
+    }
+  }
+
+  String _stringFormatted(data) {
+    var f = NumberFormat("#,##0.00", "en_US");
+    var n = NumberFormat("-#,##0.00", "en_US");
+
+    if (data.runtimeType.toString() == 'String') {
+      return data;
+    } else if (data + .0 < 0.0) {
+      return n.format(data.abs());
+    } else {
+      return f.format(data);
+    }
+  }
+
   List<DataCell> _createCells(datos) {
     List<DataCell> celdas = [];
     if (datos[1] == 0 && datos[2] == 0 && datos[3] == 0 && datos[4] == 0) {
       celdas.add(DataCell(Text(datos[0].toString())));
+
       for (int i = 1; i < 5; i++) {
         celdas.add(const DataCell(Text('')));
       }
     } else {
-      for (int i = 0; i < 5; i++) {
-        if (datos[i].toString() == "Total Ingresos" ||
-            datos[i].toString() == "Total Egresos" ||
-            datos[i].toString() == "Ingresos" ||
-            datos[i].toString() == "Egresos") {
-          celdas.add(DataCell(Text(datos[i].toString(),
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))));
-        } else {
-          celdas.add(DataCell(Text(datos[i].toString())));
-        }
+      if (datos[0].toString() == "Total Ingresos" ||
+          datos[0].toString() == "Total Egresos" ||
+          datos[0].toString() == "Ingresos" ||
+          datos[0].toString() == "Egresos") {
+        celdas.add(DataCell(Text(datos[0].toString(),
+            style: const TextStyle(
+                fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))));
+      } else {
+        celdas.add(DataCell(Text(datos[0].toString())));
       }
+
+      celdas.add(_cellDataFormatted(datos[1]));
+      celdas.add(_cellDataFormatted(datos[2]));
+      celdas.add(_cellDataFormatted(datos[3]));
+      celdas.add(_cellDataFormatted(datos[4]));
     }
 
     return celdas;
@@ -99,66 +137,63 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return renglon;
   }
 
-  //FUNCIÓN QUE ARMA EL PDF Y LO DESCARGA
   gridPDF(data) {
     //Create a new PDF document
     PdfDocument document = PdfDocument();
-//Create a PdfGrid class
-    PdfGrid grid = PdfGrid(); // Creación de la tabla
-    // PdfGrid activoGrid = PdfGrid();
-    // PdfGrid pasivoGrid = PdfGrid();
-    // PdfGrid capitalGrid = PdfGrid();
-//Add the columns to the grid
-    grid.columns
-        .add(count: 5); //Poner el número de columnas (Estado de resultados: 5)
+    //Create a PdfGrid class
+    PdfGrid grid = PdfGrid();
+
+    //Add the columns to the grid
+    grid.columns.add(count: 5);
     grid.columns[0].width = 183;
     grid.columns[1].width = 82;
     grid.columns[2].width = 41;
     grid.columns[3].width = 82;
     grid.columns[4].width = 41;
-    //activoGrid.columns.add(count: 2);
-    //pasivoGrid.columns.add(count: 2);
-    //capitalGrid.columns.add(count: 2);
-//Add header to the grid
+
+    //Add header to the grid
     grid.headers.add(1);
-    // activoGrid.headers.add(1); Agregar un header
-    // pasivoGrid.headers.add(1);
-    // capitalGrid.headers.add(1);
-//Add values to header
+
+    //Add values to header
     grid.headers[0].cells[0].value = '';
     grid.headers[0].cells[1].value = 'Periodo';
     grid.headers[0].cells[2].value = '%';
     grid.headers[0].cells[3].value = 'Acumulado';
     grid.headers[0].cells[4].value = '%';
-    //pasivoGrid.headers[0].cells[0].value = 'PASIVO';
-    //capitalGrid.headers[0].cells[0].value = 'CAPITAL';
 
     PdfGridRow curRow1 = grid.rows.add();
     curRow1.cells[0].value = "Ingresos";
     //data.ingreso.length
     for (int i = 0; i < data.ingresos.length; i++) {
       PdfGridRow curRow = grid.rows.add();
-      //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
       curRow.cells[0].value = data.ingresos[i][0].toString();
-      curRow.cells[1].value = data.ingresos[i][1].toString();
-      curRow.cells[2].value = data.ingresos[i][2].toString();
-      curRow.cells[3].value = data.ingresos[i][3].toString();
-      curRow.cells[4].value = data.ingresos[i][4].toString();
+      curRow.cells[1].value = _stringFormatted(data.ingresos[i][1]);
+      curRow.cells[2].value = _stringFormatted(data.ingresos[i][2]);
+      curRow.cells[3].value = _stringFormatted(data.ingresos[i][3]);
+      curRow.cells[4].value = _stringFormatted(data.ingresos[i][4]);
+
+      for (int i = 1; i < 5; i++) {
+        curRow.cells[i].style.stringFormat =
+            PdfStringFormat(alignment: PdfTextAlignment.right);
+      }
     }
 
     PdfGridRow curRow2 = grid.rows.add();
     curRow2.cells[0].value = "Egresos";
+    
     for (int i = 0; i < data.egresos.length; i++) {
       PdfGridRow curRow = grid.rows.add();
-      //data.ingreso[i][0] data.ingreso[i][1] data.ingreso[i][2]
-      curRow.cells[0].value = data.egresos[i][0].toString();
-      curRow.cells[1].value = data.egresos[i][1].toString();
-      curRow.cells[2].value = data.egresos[i][2].toString();
-      curRow.cells[3].value = data.egresos[i][3].toString();
-      curRow.cells[4].value = data.egresos[i][4].toString();
-    }
+      curRow.cells[0].value = _stringFormatted(data.egresos[i][0]);
+      curRow.cells[1].value = _stringFormatted(data.egresos[i][1]);
+      curRow.cells[2].value = _stringFormatted(data.egresos[i][2]);
+      curRow.cells[3].value = _stringFormatted(data.egresos[i][3]);
+      curRow.cells[4].value = _stringFormatted(data.egresos[i][4]);
 
-//AQUI VUELVES A GUIARTE
+      for (int i = 1; i < 5; i++) {
+        curRow.cells[i].style.stringFormat =
+            PdfStringFormat(alignment: PdfTextAlignment.right);
+      }
+    }
 
     grid.style = PdfGridStyle(
         cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
@@ -166,11 +201,11 @@ class EstadoResultadosState extends State<MEstadoResultados> {
         textBrush: PdfBrushes.black,
         borderOverlapStyle: PdfBorderOverlapStyle.overlap,
         font: PdfStandardFont(PdfFontFamily.timesRoman, 10));
-//Draw the grid
+    //Draw the grid
     grid.draw(page: document.pages.add(), bounds: Rect.zero);
-//Save the document.
+    //Save the document.
     List<int> bytes = document.save();
-//Dispose the document.
+    //Dispose the document.
     document.dispose();
 
     AnchorElement(
@@ -220,13 +255,13 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(children: [
+                        Column(children: const [
                           Text('FinRep',
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 16))
                         ]),
                         Column(children: [Text(nombreEmpresa)]),
-                        Column(children: [Text('Fecha: 29/Abr/2022')])
+                        Column(children: [Text(DateTime.now().toString())])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
@@ -234,14 +269,6 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                         fit: BoxFit.scaleDown,
                         child: Expanded(
                           child: DataTable(columns: const <DataColumn>[
-                            /*DataColumn(
-                          label: Text(
-                            'Ingresos',
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),*/
                             DataColumn(
                               label: Text(
                                 '',
@@ -285,65 +312,12 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                               ),
                         )),
                     SizedBox(height: screenHeight * .05),
-                    /*Center(
-                        child: SimpleElevatedButton(
-                            child: const Text("Descargar estado de resultados"),
-                            color: Colors.blue,
-                            onPressed: () => gridPDF(snapshot.data)))*/
                   ]);
-                  /*return Column(children: [
-                    _contentFirstRow(snapshot.data),
-                    Expanded(child: _contentDataTable(datos))
-                  ]);*/
                 } else {
                   developer.log('${snapshot.error}', name: 'NoTieneData');
-                  return ProgressBar();
+                  return const ProgressBar();
                 }
               })),
-    );
-  }
-
-  Widget _contentFirstRow(data) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(children: const [
-          Text('FinRep',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 33, 212, 243), fontSize: 16))
-        ]),
-        Column(children: [Text('Empresa 1 S.C')]),
-        Column(children: [Text('Fecha: 29/Abr/2022')])
-      ],
-    );
-  }
-
-  Widget _contentDataTable(data) {
-    return DataTable(
-      columns: const <DataColumn>[
-        DataColumn(label: Text('')),
-        DataColumn(
-            label: Text(
-          'Periodo',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        )),
-        DataColumn(
-            label: Text(
-          '%',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        )),
-        DataColumn(
-            label: Text(
-          'Acumulado',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        )),
-        DataColumn(
-            label: Text(
-          '%',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ))
-      ],
-      rows: convertidor.createRowsEstadoGeneral(data),
     );
   }
 }
