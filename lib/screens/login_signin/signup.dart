@@ -6,6 +6,7 @@ import 'constants.dart';
 import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
+import '../asignar_empresas.dart';
 import 'package:get/get.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 
@@ -129,7 +130,7 @@ class _SignUpState extends State<SignUp> {
                                 _futureUser = registerUser(_controller.text,
                                     _controller2.text, _controller3.text);
                               });
-                              Get.to(BackgroundPage());
+                              Get.to(const AsignarEmpresa());
                             } else {
                               Get.defaultDialog(
                                   title: "Alerta",
@@ -234,7 +235,7 @@ Future<User> registerUser(
   );
   if (response.statusCode == 201) {
     developer.log("se armo");
-    Get.to(const ElegirEmpresa());
+    //Get.to(const AsignarEmpresa());
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
     return User.fromJson(jsonDecode(response.body));
