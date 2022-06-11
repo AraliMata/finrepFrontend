@@ -124,28 +124,29 @@ class _SignUpState extends State<SignUp> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          if (isEmailValid(_controller2.text)) {
-                            if (isPassValid(_controller3.text)) {
-                              setState(() {
-                                _futureUser = registerUser(_controller.text,
-                                    _controller2.text, _controller3.text);
-                              });
-                              Get.to(const AsignarEmpresa());
-                            } else {
-                              Get.defaultDialog(
-                                  title: "Alerta",
-                                  content: const Text(
-                                    "Contraseña inválida, asegurate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
-                                  ));
-                            }
-                          } else {
-                            Get.defaultDialog(
-                              title: "Alerta",
-                              content: const Text(
-                                "Correo Incorrecto, asegurate ingresar un correo válido",
-                              ),
-                            );
-                          }
+                          Get.to(MyApp());
+                          // if (isEmailValid(_controller2.text)) {
+                          //   if (isPassValid(_controller3.text)) {
+                          //     setState(() {
+                          //       _futureUser = registerUser(_controller.text,
+                          //           _controller2.text, _controller3.text);
+                          //     });
+                          //     Get.to(const AsignarEmpresa());
+                          //   } else {
+                          //     Get.defaultDialog(
+                          //         title: "Alerta",
+                          //         content: const Text(
+                          //           "Contraseña inválida, asegurate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
+                          //         ));
+                          //   }
+                          // } else {
+                          //   Get.defaultDialog(
+                          //     title: "Alerta",
+                          //     content: const Text(
+                          //       "Correo Incorrecto, asegurate ingresar un correo válido",
+                          //     ),
+                          //   );
+                          // }
 
                           // setState(() {
                           //   _futureUser = registerUser(_controller.text,
