@@ -88,7 +88,7 @@ class SubirArchivoState extends State<SubirArchivo>
         builder: (BuildContext context) => AlertDialog(
           title: Text(tipo[0].toUpperCase() + tipo.substring(1)),
           content: Text(
-              'El archivo con el nombre "' + filename + '" fue selccionado'),
+              'El archivo con el nombre "' + filename + '" fue seleccionado'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -191,8 +191,8 @@ class SubirArchivoState extends State<SubirArchivo>
             strokeCap: StrokeCap.round,
             color: Colors.blue.shade400,
             child: Container(
-              width: double.infinity,
-              height: 150,
+              width: 300,
+              height: 100,
               decoration: BoxDecoration(
                   color: Colors.blue.shade50.withOpacity(.3),
                   borderRadius: BorderRadius.circular(10)),
@@ -226,7 +226,7 @@ class SubirArchivoState extends State<SubirArchivo>
         child: Column(
           children: <Widget>[
             const SizedBox(
-              height: 100,
+              height: 10,
             ),
             Image.network(
               _image,
@@ -349,6 +349,9 @@ class SubirArchivoState extends State<SubirArchivo>
               color: Colors.blue,
               onPressed: subirArchivo,
             ),
+            const SizedBox(
+                    height: 30,
+            )
           ],
         ),
       ),
