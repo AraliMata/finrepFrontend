@@ -158,7 +158,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Text(
                             "¿Ya tienes cuenta?",
@@ -167,9 +167,7 @@ class _SignUpState extends State<SignUp> {
                               fontSize: 14,
                             ),
                           ),
-                          const SizedBox(
-                            width: 8,
-                          ),
+                          //const SizedBox( width: 8,), 
                           GestureDetector(
                             onTap: () {
                               widget.onLogInSelected();
@@ -184,9 +182,7 @@ class _SignUpState extends State<SignUp> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
+                                //const SizedBox( width: 8, ),
                                 Icon(
                                   Icons.arrow_forward,
                                   color: kPrimaryColor,

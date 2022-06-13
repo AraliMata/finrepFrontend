@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/relaciones_analiticas.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
@@ -13,10 +14,12 @@ import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
-import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../model/widgets/general_app_bar.dart'; //Para PDF
+import 'package:flutter_frontend_test/model/tools/normal_lib.dart'  // Stub implementation
+    if (dart.library.html) 'package:flutter_frontend_test/model/tools/web_libs.dart'
+    if (dart.library.io) 'package:flutter_frontend_test/model/tools/mobile_libs.dart' ;
 
 class MRelacionesAnaliticas extends StatefulWidget {
   const MRelacionesAnaliticas({Key? key}) : super(key: key);
@@ -30,6 +33,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   late String nombreEmpresa;
   late ConvertidorDataTable convertidor;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
+  
 
   @override
   void initState() {
@@ -139,7 +143,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     return renglon;
   }
 
-  gridsillo(data) {
+  Future<void> gridsillo(data) async{
     //Create a new PDF document
     PdfDocument document = PdfDocument();
 //Create a PdfGrid class
@@ -214,12 +218,10 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     List<int> bytes = document.save();
 //Dispose the document.
     document.dispose();
-
-    AnchorElement(
-        href:
-            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "RelacionesAnaliticas.pdf")
-      ..click();
+    
+    await WebFuncts.downloadPdf(bytes, "RelacionesAnalíticas-"+DateTime.now().toString());
+   
+    
   }
 
   @override
@@ -254,31 +256,35 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                       children: [
                             SizedBox(height: screenHeight * .05),
                             Center(
-                                child: Text(
+                                child: AutoSizeText(
                               "Relaciones Analiticas",
                               style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey.shade800,
                                   decoration: TextDecoration.none),
-                            )),
+                                  maxLines: 1
+                            ), 
+                            ),
                             SizedBox(height: screenHeight * .05),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Column(children: const [
-                                  Text('FinRep',
+                                  AutoSizeText('FinRep',
                                       style: TextStyle(
-                                          color: Colors.blue, fontSize: 16))
+                                          color: Colors.blue, fontSize: 16), maxLines: 1,)
                                 ]),
-                                Column(children: [Text(nombreEmpresa)]),
-                                Column(children: const [
-                                  Text('Fecha: 29/Abr/2022')
+                                Column(children: [AutoSizeText(nombreEmpresa, maxLines: 1,)]),
+                                Column(children: [
+                                  AutoSizeText(DateTime.now().toString(), maxLines: 1,)
                                 ]),
                               ],
                             ),
                             SizedBox(height: screenHeight * .12),
                             Expanded(
+                              child:FittedBox(
+                              fit: BoxFit.scaleDown,
                               child: DataTable(
                                   columns: const <DataColumn>[
                                     DataColumn(
@@ -335,27 +341,11 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                                       datos.totalCuentas, datos.sumasIguales)
                                   //rows: createRows(snapshot.data?.ingresos),
                                   ),
-                            )
+                              ))
                           ] +
                           [
-                            const SizedBox(height: 25),
-                            /*Center(
-                                child: SimpleElevatedButton(
-                              child:
-                                  const Text("Descargar relaciones analiticas"),
-                              color: Colors.blue,
-                              onPressed: () => gridsillo(snapshot.data),
-                              //getPDF(screenHeight, snapshot),
-                            )),
-                            const SizedBox(height: 25),
-                            Center(
-                                child: SimpleElevatedButton(
-                              child: const Text("Volver"),
-                              color: Colors.green,
-                              onPressed: () => Get.back(),
-                              //getPDF(screenHeight, snapshot),
-                            )),
-                            const SizedBox(height: 25),*/
+                            SizedBox(height:screenHeight* 0.05)
+                          
                           ]);
                 } else {
                   // developer.log('${snapshot.error}', name: 'NoTieneData55');

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
@@ -9,10 +10,14 @@ import '../../env.sample.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
-import 'dart:html'; //Para PDF
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../model/widgets/simple_elevated_button.dart';
 import '../model/widgets/general_app_bar.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+// ignore: avoid_web_libraries_in_flutter
+import 'package:flutter_frontend_test/model/tools/normal_lib.dart'  // Stub implementation
+    if (dart.library.js) 'package:flutter_frontend_test/model/tools/web_libs.dart'
+    if (dart.library.io) 'package:flutter_frontend_test/model/tools/mobile_libs.dart';
 
 class MEstadoResultados extends StatefulWidget {
   const MEstadoResultados({Key? key}) : super(key: key);
@@ -44,8 +49,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     var periodo = await elegirPeriodoData.getMonth();
 
     final response = await http.get(Uri.parse(
-    "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
-
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/$periodo/estado-resultados"));
 
     developer.log(jsonDecode(response.body).toString(),
         name: "EstadoResultados");
@@ -60,8 +64,6 @@ class EstadoResultadosState extends State<MEstadoResultados> {
   }
 
   DataCell _cellDataFormatted(data) {
-    developer.log((data.runtimeType is String).toString(), name: 'Entré');
-    developer.log(data.runtimeType.toString(), name: 'Entré');
 
     var f = NumberFormat("#,##0.00", "en_US");
     var n = NumberFormat("-#,##0.00", "en_US");
@@ -137,7 +139,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return renglon;
   }
 
-  gridPDF(data) {
+  Future<void> gridPDF(data) async{
+    developer.log("Estoy en crear pdf", name:"gridPDF");
     //Create a new PDF document
     PdfDocument document = PdfDocument();
     //Create a PdfGrid class
@@ -180,7 +183,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
 
     PdfGridRow curRow2 = grid.rows.add();
     curRow2.cells[0].value = "Egresos";
-    
+
     for (int i = 0; i < data.egresos.length; i++) {
       PdfGridRow curRow = grid.rows.add();
       curRow.cells[0].value = _stringFormatted(data.egresos[i][0]);
@@ -207,12 +210,9 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     List<int> bytes = document.save();
     //Dispose the document.
     document.dispose();
-
-    AnchorElement(
-        href:
-            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "Estado-de-resultados.pdf")
-      ..click();
+    
+    await WebFuncts.downloadPdf(bytes, "EstadoDeResultados-"+DateTime.now().toString());
+    
   }
 
   @override
@@ -243,25 +243,26 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                   return ListView(children: [
                     SizedBox(height: screenHeight * .05),
                     Center(
-                        child: Text(
+                        child: AutoSizeText(
                       "Estado de resultados",
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey.shade800,
                           decoration: TextDecoration.none),
+                          maxLines: 1,
                     )),
                     SizedBox(height: screenHeight * .05),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(children: const [
-                          Text('FinRep',
+                          AutoSizeText('FinRep',
                               style:
-                                  TextStyle(color: Colors.blue, fontSize: 16))
+                                  TextStyle(color: Colors.blue, fontSize: 16),maxLines: 1)
                         ]),
-                        Column(children: [Text(nombreEmpresa)]),
-                        Column(children: [Text(DateTime.now().toString())])
+                        Column(children: [AutoSizeText(nombreEmpresa,maxLines: 1)]),
+                        Column(children: [AutoSizeText(DateTime.now().toString(),maxLines: 1)])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),

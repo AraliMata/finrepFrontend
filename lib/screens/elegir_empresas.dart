@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
@@ -15,7 +16,7 @@ import '../model/widgets/simple_elevated_button.dart';
 import 'login_signin/login.dart';
 import '../env.sample.dart';
 import 'dart:developer' as developer;
-import 'package:universal_html/html.dart';
+
 
 class ElegirEmpresa extends StatefulWidget {
   const ElegirEmpresa({Key? key}) : super(key: key);
@@ -24,8 +25,7 @@ class ElegirEmpresa extends StatefulWidget {
 }
 
 class ElegirEmpresaState extends State<ElegirEmpresa> {
-  final Storage localStorage = window.localStorage;
-
+ 
   // late Future<List<dynamic>> empresas;
   late Future<List<String>> empresas;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
@@ -120,21 +120,24 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              AutoSizeText(
                 '¡Bienvenido a FinRep!',
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.grey.shade800,
                     fontWeight: FontWeight.bold),
+                maxLines: 1,
               ),
               SizedBox(height: screenHeight * .01),
-              Text(
+              AutoSizeText(
                 "Elige la empresa de la cual vas a ver reportes o subir archivos",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey.shade500,
                     fontWeight: FontWeight.w100,
                     decoration: TextDecoration.none),
+                maxLines: 2,
               ),
               SizedBox(height: screenHeight * 0.12),
               FutureBuilder<List<String>>(
