@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import '../env.sample.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
 import 'dart:developer' as developer;
-
 import '../model/widgets/general_app_bar.dart';
 
 class MEstadoResultados extends StatefulWidget {

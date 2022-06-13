@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'login.dart';
 import 'signup.dart';
+import 'package:bordered_text/bordered_text.dart';
 
 class BackgroundPage extends StatefulWidget {
   @override
@@ -37,16 +38,18 @@ class _BackgroundPageState extends State<BackgroundPage> {
                     color: Colors.white),
               ],
             ),
-            const Align(
+          
+            Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.all(32),
+                padding: const EdgeInsets.all(32),
                 child: Text(
                   "Bienvenido a FinRep",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.grey[700],
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    
                   ),
                 ),
               ),
@@ -157,4 +160,7 @@ class _BackgroundPageState extends State<BackgroundPage> {
       ),
     );
   }
+}
+
+class BorderedText {
 }

@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -122,44 +123,49 @@ class LogInState extends State<LogIn> {
                         height: 32,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Text(
+                          const AutoSizeText(
                             "¿No tienes cuenta?",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
                             ),
+                            maxLines: 1,
+                            maxFontSize: 14,
                           ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          GestureDetector(
+                          //const SizedBox(width: 8,),
+                          Flexible(
+                            flex: 5,
+                            child: GestureDetector(
                             onTap: () {
                               widget.onSignUpSelected();
                             },
                             child: Row(
                               children: [
-                                Text(
+                                Expanded(
+                                  flex: 1,
+                                  child: AutoSizeText(
                                   "Registrarse",
                                   style: TextStyle(
                                     color: kPrimaryColor,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
+                                    
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
+                                  maxLines: 1,
+                                 
+                                )),
+                                //const SizedBox(width: 8,),
                                 Icon(
                                   Icons.arrow_forward,
                                   color: kPrimaryColor,
                                 ),
                               ],
                             ),
-                          ),
+                          )),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),

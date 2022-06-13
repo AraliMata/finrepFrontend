@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
-import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
-import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
-import 'package:flutter_frontend_test/screens/prueba_mostrar_estado_resultados.dart';
-import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
 import 'package:flutter_frontend_test/screens/elegirPeriodoBG.dart';
 import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
 import '../model/widgets/init_app_bar.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'subirArchivo.dart';
-import 'dart:convert';
-import 'dart:html';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'mostrar_balance_general.dart';
 import 'package:get/get.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -23,30 +16,12 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  Future<void> _createPDF() async {
-    //Create a PDF document.
-    PdfDocument document = PdfDocument();
-    //Add a page and draw text
-    document.pages.add().graphics.drawString(
-        'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
-        brush: PdfSolidBrush(PdfColor(0, 0, 0)),
-        bounds: Rect.fromLTWH(20, 60, 150, 30));
-    //Save the document
-    List<int> bytes = document.save();
-    //Dispose the document
-    document.dispose();
-
-    //Download the output file
-    AnchorElement(
-        href:
-            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "output.pdf")
-      ..click();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: InitAppBar(),
@@ -56,23 +31,25 @@ class HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: screenHeight * .01),
-          Text(
+          AutoSizeText(
             "Elegir acción",
             style: TextStyle(
-                fontSize: 28,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade800,
                 decoration: TextDecoration.none),
           ),
           SizedBox(height: screenHeight * .01),
-          Text(
+          Center(child: AutoSizeText(
             "Elige la acción deseada",
+            textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w100,
                 decoration: TextDecoration.none),
-          ),
+            maxLines: 2,
+          )),
           SizedBox(height: screenHeight * .12),
           Column(
             children: [

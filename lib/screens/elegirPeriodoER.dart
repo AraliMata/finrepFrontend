@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 import 'package:flutter_frontend_test/screens/prueba_mostrar_estado_resultados.dart';
 // import 'package:flutter_session/flutter_session.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/widgets/general_app_bar.dart';
@@ -18,7 +18,6 @@ import '../model/widgets/simple_elevated_button.dart';
 import 'login_signin/login.dart';
 import '../env.sample.dart';
 import 'dart:developer' as developer;
-import 'package:universal_html/html.dart';
 
 class ElegirPeriodo extends StatefulWidget {
   const ElegirPeriodo({Key? key}) : super(key: key);
@@ -27,7 +26,6 @@ class ElegirPeriodo extends StatefulWidget {
 }
 
 class ElegirPeriodoState extends State<ElegirPeriodo> {
-  final Storage localStorage = window.localStorage;
 
   // late Future<List<dynamic>> empresas;
   late Future<List<String>> empresas;
@@ -55,7 +53,7 @@ class ElegirPeriodoState extends State<ElegirPeriodo> {
     "Septiembre": 9,
     "Octubre": 10,
     "Noviembre": 11,
-    "Diciembre": 12, 
+    "Diciembre": 12,
   };
 
   Future<List<String>> getMeses() async {
@@ -76,18 +74,18 @@ class ElegirPeriodoState extends State<ElegirPeriodo> {
 
     final meses = Meses.fromJson(jsonDecode(response.body));
 
-    return  meses.months;
+    return meses.months;
   }
 
   Future<int> getMonth() async {
+  
     final prefs = await SharedPreferences.getInstance();
-    // developer.log('entro', name: 'entro');
-    // developer.log(prefs.getInt('idEmpresa').toString(), name: 'getIdEmpresa');
     return prefs.getInt('mes') ?? 0;
   }
 
   //Incrementing counter after click
   Future<void> saveMonth(mes) async {
+
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       developer.log(monthInt[mes].toString(), name: 'save month');
@@ -111,22 +109,25 @@ class ElegirPeriodoState extends State<ElegirPeriodo> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              AutoSizeText(
                 'Estado de Resultados',
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.grey.shade800,
                     fontWeight: FontWeight.bold),
+                    maxLines: 1,
               ),
               SizedBox(height: screenHeight * .01),
-              Text(
+              Center(child: AutoSizeText(
                 "Elige el periodo del cual deseas ver el estado de resultados",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey.shade500,
                     fontWeight: FontWeight.w100,
                     decoration: TextDecoration.none),
-              ),
+                    maxLines: 2,
+              )),
               SizedBox(height: screenHeight * 0.12),
               FutureBuilder<List<String>>(
                 future: empresas,
@@ -192,7 +193,8 @@ class ElegirPeriodoState extends State<ElegirPeriodo> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MEstadoResultados()),
+                                builder: (context) =>
+                                    const MEstadoResultados()),
                           );
                         }
                         return null;

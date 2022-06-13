@@ -32,6 +32,9 @@ dependencies:
   syncfusion_flutter_pdf: ^20.1.57-beta
   syncfusion_flutter_datagrid_export: ^20.1.57-beta
   screenshot: ^1.2.3
+  auto_size_text: ^3.0.0
+  bordered_text: ^2.0.0
+  open_file: ^3.2.1
 
   #flutter_bloc: ^6.1.1 #EEEEE
   #meta: ^1.1.8 

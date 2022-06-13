@@ -1,4 +1,5 @@
 // import 'testop.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:http/http.dart' as http;
@@ -235,19 +236,21 @@ class SubirArchivoState extends State<SubirArchivo>
             const SizedBox(
               height: 50,
             ),
-            Text(
+            AutoSizeText(
               'Selecciona los archivos a subir',
               style: TextStyle(
                   fontSize: 25,
                   color: Colors.grey.shade800,
                   fontWeight: FontWeight.bold),
+              maxLines: 1
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(
+            AutoSizeText(
               'La extensión de los archivos debe ser xlsx',
               style: TextStyle(fontSize: 15, color: Colors.grey.shade500),
+              maxLines: 2,
             ),
             const SizedBox(
               height: 20,

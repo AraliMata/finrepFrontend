@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 // import 'package:flutter_session/flutter_session.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/widgets/general_app_bar.dart';
@@ -18,7 +18,6 @@ import '../model/widgets/simple_elevated_button.dart';
 import 'login_signin/login.dart';
 import '../env.sample.dart';
 import 'dart:developer' as developer;
-import 'package:universal_html/html.dart';
 
 class ElegirPeriodoBG extends StatefulWidget {
   const ElegirPeriodoBG({Key? key}) : super(key: key);
@@ -27,8 +26,6 @@ class ElegirPeriodoBG extends StatefulWidget {
 }
 
 class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
-  final Storage localStorage = window.localStorage;
-
   // late Future<List<dynamic>> empresas;
   late Future<List<String>> empresas;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
@@ -55,7 +52,7 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
     "Septiembre": 9,
     "Octubre": 10,
     "Noviembre": 11,
-    "Diciembre": 12, 
+    "Diciembre": 12,
     "Periodo acumulado": 13,
   };
 
@@ -64,8 +61,9 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
 
     // developer.log(idUsuario.toString(), name: 'idUsuarioPruebaSuprema');
 
-    final response = await http.get(Uri.parse("${Env.URL_PREFIX}/contabilidad/empresas/$idEmpresa/meses-disponibles"));
-  
+    final response = await http.get(Uri.parse(
+        "${Env.URL_PREFIX}/contabilidad/empresas/$idEmpresa/meses-disponibles"));
+
     developer.log(jsonDecode(response.body).toString(), name: 'response');
     developer.log(jsonDecode(response.body).runtimeType.toString(),
         name: 'response');
@@ -118,22 +116,26 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              AutoSizeText(
                 'Balance General',
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.grey.shade800,
                     fontWeight: FontWeight.bold),
+                maxLines: 1,
               ),
               SizedBox(height: screenHeight * .01),
-              Text(
+              Center(
+                  child: AutoSizeText(
                 "Elige el periodo del cual deseas ver el balance general",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey.shade500,
                     fontWeight: FontWeight.w100,
                     decoration: TextDecoration.none),
-              ),
+                maxLines: 2,
+              )),
               SizedBox(height: screenHeight * 0.12),
               FutureBuilder<List<String>>(
                 future: empresas,
