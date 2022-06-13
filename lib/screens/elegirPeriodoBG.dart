@@ -8,6 +8,7 @@ import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/model/value_objects/meses.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
+import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 // import 'package:flutter_session/flutter_session.dart';
@@ -63,6 +64,26 @@ class ElegirPeriodoBGState extends State<ElegirPeriodoBG> {
 
     final response = await http.get(Uri.parse(
         "${Env.URL_PREFIX}/contabilidad/empresas/$idEmpresa/meses-disponibles"));
+
+    if (response.statusCode == 204) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('No hay datos'),
+          content: Text('Aún no se suben datos para esta empresa'),
+          actions: <Widget>[
+            TextButton(
+              // onPressed: () => Navigator.pop(context, 'OK'),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Home()),
+              ),
+              child: const Text('Aceptar'),
+            ),
+          ],
+        ),
+      );
+    }
 
     developer.log(jsonDecode(response.body).toString(), name: 'response');
     developer.log(jsonDecode(response.body).runtimeType.toString(),

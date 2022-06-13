@@ -136,34 +136,32 @@ class LogInState extends State<LogIn> {
                           ),
                           //const SizedBox(width: 8,),
                           Flexible(
-                            flex: 5,
-                            child: GestureDetector(
-                            onTap: () {
-                              widget.onSignUpSelected();
-                            },
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                  "Registrarse",
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    
-                                  ),
-                                  maxLines: 1,
-                                 
-                                )),
-                                //const SizedBox(width: 8,),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: kPrimaryColor,
+                              flex: 5,
+                              child: GestureDetector(
+                                onTap: () {
+                                  widget.onSignUpSelected();
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          "Registrarse",
+                                          style: TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          maxLines: 1,
+                                        )),
+                                    //const SizedBox(width: 8,),
+                                    Icon(
+                                      Icons.arrow_forward,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          )),
+                              )),
                         ],
                       )
                     ],
@@ -226,10 +224,13 @@ class LogInState extends State<LogIn> {
     developer.log(response.statusCode.toString(),
         name: 'response.statusCode fuera');
     developer.log(response.body.toString(), name: 'response de Id fuera');
-    if (response.statusCode == 202) {
+    if (response.statusCode == 200) {
       developer.log("se armo");
       developer.log(response.body.toString(), name: 'response de Id');
-      saveIdUsuario(int.parse(response.body));
+      Map<String, dynamic> dictionary = jsonDecode(response.body);
+      developer.log(dictionary['id'].toString(), name: 'id de dictionary');
+      saveIdUsuario(dictionary['id']);
+      // saveIdUsuario(int.parse(dictionary['id']));
       Get.to(const ElegirEmpresa());
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
