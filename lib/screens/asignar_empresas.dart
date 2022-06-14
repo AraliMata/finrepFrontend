@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
 //import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 import 'package:flutter_frontend_test/screens/login_signin/signup.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
 import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
 import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
@@ -59,21 +60,19 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
   Future<List<String>> getEmpresas() async {
     // developer.log(idUsuario.toString(), name: 'idUsuarioPruebaSuprema');
 
-    final response = await http.get(Uri.parse(
-        "${Env.URL_PREFIX}/contabilidad/empresas")); //BUSCA LAS EMPRESAS ASIGNADAS AL IDUSUARIO
+    final response =
+        await http.get(Uri.parse("${Env.URL_PREFIX}/contabilidad/empresas"));
 
-    developer.log(jsonDecode(response.body).toString(),
-        name: 'response'); //IMPRESION--------------
+    developer.log(jsonDecode(response.body).toString(), name: 'response');
 
     final items = json.decode(response.body).cast<Map<String, dynamic>>();
 
     List<Empresa> empresas = items.map<Empresa>((json) {
       return Empresa.fromJson(json);
-    }).toList(); //LA RESPUESTA LA HACE UNA LISTA
+    }).toList();
 
     empresasTodo = empresas;
-    developer.log(empresas.toString(),
-        name: 'list<empresa>'); //IMPRESION-----------------
+    developer.log(empresas.toString(), name: 'list<empresa>');
 
     List<String> nombresEmpresas = [];
     List<int> idEmpresas = [];
@@ -82,10 +81,26 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
       nombresEmpresas.add(empresas[i].empresa);
       idEmpresas.add(empresas[i].id);
     }
-    developer.log(nombresEmpresas.toString(),
-        name: 'empresas'); //IMPRESION----------------
+    developer.log(nombresEmpresas.toString(), name: 'empresas');
     developer.log(idEmpresas.toString(), name: 'id');
-    //developer.log(idEmpresas.toString());
+
+    int usuario = await getUsuario();
+    final Controller controller = Get.find();
+    var numero = controller.selectedCategories.length;
+    developer.log(numero.toString(), name: "numero de cosas seleccionadas");
+    for (var i = 0; i <= numero; i++) {
+      var cosa = controller.selectedCategories[i].name;
+      var nombre = empresas[i].empresa;
+      var id = empresas[i].id;
+      developer.log(cosa.toString(), name: "cosa en for");
+      developer.log(nombre.toString(), name: "nombre en for");
+      developer.log(id.toString(), name: "id en for");
+      if (cosa == nombre) {
+        registrarUsuarioEmpresa(id, usuario);
+      }
+
+      //developer.log(cosa.toString(), name: "cosa(s) seleccionada(s)");
+    }
 
     return nombresEmpresas;
   }
@@ -110,10 +125,8 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
 
             SimpleElevatedButton(
               onPressed: () async {
-                //empresas;
-                int usuario = await getUsuario();
-                developer.log(usuario.toString(), name: "Usario");
-                //registerUser(3, 33);
+                getEmpresas();
+                Get.to(const ElegirEmpresa());
               },
               color: Colors.blue,
               child: const Text('Confirmar selección'),
@@ -189,7 +202,7 @@ class Category {
   Category(this.name, this.color);
 }
 
-Future<Empresa> registerUser(int IdEmpresa, int IdUsuario) async {
+Future<Empresa> registrarUsuarioEmpresa(int IdEmpresa, int IdUsuario) async {
   final response = await http.post(
     Uri.parse("${Env.URL_PREFIX}/ver-empresas/$IdEmpresa/$IdUsuario"),
     headers: <String, String>{
@@ -214,22 +227,24 @@ Future<Empresa> registerUser(int IdEmpresa, int IdUsuario) async {
   }
 }
 
-////////////////////////
+//////////////////////
 
 // class SelectedCategories extends StatelessWidget {
-//   final Controller controller = Get.find();
+//   final Controller controller = Get.find(); //get para conseguir los valores
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Flexible(
 //       child: Obx(
 //         () => ListView.builder(
-//           itemCount: controller.selectedCategories.length,
+//           itemCount: controller.selectedCategories
+//               .length, //Largo de las categorias, esto es util pal for
 //           itemBuilder: (BuildContext context, int index) {
 //             return Padding(
 //               padding: const EdgeInsets.all(8.0),
 //               child: CategoryWidget(
-//                 category: controller.selectedCategories[index],
+//                 category: controller.selectedCategories[
+//                     index], //creo esto es para ya tener los items como tal
 //               ),
 //             );
 //           },
