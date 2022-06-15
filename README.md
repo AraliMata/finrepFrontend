@@ -2,6 +2,13 @@
 
 Aplicación móvil y web para subir y consultar reportes financieros, desarrollada por estudiantes de 6to semestre de Ingeniería en Tecnologías Computacionales en el Tecnológico de Monterrey campus Chihuahua.
 
+# Desarrolladores
+- Angel Corrales
+- Laurie Diego
+- Santiago Arzaga
+- Isaac García
+- Aralí Mata
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
