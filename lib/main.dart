@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
-import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
-import 'package:flutter_frontend_test/screens/subirArchivo.dart';
+//import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
+import 'package:flutter_frontend_test/screens/subir_archivo.dart';
+import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_signin/constants.dart';
-import 'screens/login_signin/BackgroundPage.dart';
+import 'screens/login_signin/background_page.dart';
 import 'package:get/get.dart';
 
 void main() {

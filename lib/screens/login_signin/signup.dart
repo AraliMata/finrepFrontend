@@ -1,13 +1,15 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
+import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
 import 'dart:convert';
 import 'constants.dart';
 import '/model/value_objects/user.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
+import '../asignar_empresas.dart';
 import 'package:get/get.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
@@ -15,10 +17,10 @@ class SignUp extends StatefulWidget {
   const SignUp({required this.onLogInSelected});
 
   @override
-  _SignUpState createState() => _SignUpState();
+  SignUpState createState() => SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class SignUpState extends State<SignUp> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
   final TextEditingController _controller3 = TextEditingController();
@@ -123,18 +125,21 @@ class _SignUpState extends State<SignUp> {
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          //Get.to(const AsignarEmpresa());
                           if (isEmailValid(_controller2.text)) {
                             if (isPassValid(_controller3.text)) {
                               setState(() {
                                 _futureUser = registerUser(_controller.text,
                                     _controller2.text, _controller3.text);
                               });
-                              Get.to(BackgroundPage());
+                              // _futureUser = loginUser(_controller.text,
+                              //     _controller2.text, _controller3.text);
+                              //Get.to(const AsignarEmpresa());
                             } else {
                               Get.defaultDialog(
                                   title: "Alerta",
                                   content: const Text(
-                                    "Contraseña inválida, asegurate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
+                                    "Contraseña inválida, asegúrate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
                                   ));
                             }
                           } else {
@@ -167,7 +172,7 @@ class _SignUpState extends State<SignUp> {
                               fontSize: 14,
                             ),
                           ),
-                          //const SizedBox( width: 8,), 
+                          //const SizedBox( width: 8,),
                           GestureDetector(
                             onTap: () {
                               widget.onLogInSelected();
@@ -217,31 +222,84 @@ class _SignUpState extends State<SignUp> {
       },
     );
   }
-}
 
-Future<User> registerUser(
-    String username, String email, String password) async {
-  final response = await http.post(
-    Uri.parse("${Env.URL_PREFIX}/register"),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'username': username,
-      'email': email,
-      'password': password
-    }),
-  );
-  if (response.statusCode == 201) {
-    developer.log("se armo");
-    Get.to(const ElegirEmpresa());
-    // If the server did return a 201 CREATED response,
-    // then parse the JSON.
-    return User.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    throw Exception('Failed to register employee.');
+  Future<int> getIdUsuarioSignup() async {
+    final prefs = await SharedPreferences.getInstance();
+    developer.log('entro a getIdUsuario', name: 'entro');
+    developer.log(prefs.getInt('idUsuario').toString(), name: 'getIdUsuario');
+    return prefs.getInt('idUsuario') ?? 1;
+  }
+
+  Future<void> saveIdUsuario(idUsuario) async {
+    final prefs = await SharedPreferences.getInstance();
+    developer.log('si entre paps', name: 'entre paps');
+    setState(() {
+      prefs.setInt('idUsuario', idUsuario);
+      developer.log(prefs.getInt('idUsuario').toString(),
+          name: 'idUsuario en set');
+    });
+  }
+
+  Future<User> registerUser(
+      String username, String email, String password) async {
+    final response = await http.post(
+      Uri.parse("${Env.URL_PREFIX}/register"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email,
+        'password': password
+      }),
+    );
+    if (response.statusCode == 201) {
+      developer.log("se armo el 201 register mataperros");
+      _futureUser = loginUser(username, email, password);
+      //Get.to(const AsignarEmpresa());
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to register employee.');
+    }
+  }
+
+  Future<User> loginUser(String username, String email, String password) async {
+    final response = await http.post(
+      Uri.parse("${Env.URL_PREFIX}/login"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'email': email,
+        'password': password
+      }),
+    );
+
+    developer.log(response.statusCode.toString(),
+        name: 'response.statusCode fuera');
+    developer.log(response.body.toString(), name: 'response de Id fuera');
+    if (response.statusCode == 202) {
+      developer.log("se armo");
+      developer.log(response.body.toString(), name: 'response de Id');
+      saveIdUsuario(int.parse(response.body));
+      Get.to(const AsignarEmpresa());
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      Get.defaultDialog(
+        title: "Alerta",
+        content: const Text(
+          "Credenciales incorrectas",
+        ),
+      );
+      throw Exception('Failed to login.');
+    }
   }
 }
 
