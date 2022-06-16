@@ -285,10 +285,13 @@ class SignUpState extends State<SignUp> {
     developer.log(response.statusCode.toString(),
         name: 'response.statusCode fuera');
     developer.log(response.body.toString(), name: 'response de Id fuera');
-    if (response.statusCode == 202) {
+    if (response.statusCode == 200) {
       developer.log("se armo");
       developer.log(response.body.toString(), name: 'response de Id');
-      saveIdUsuario(int.parse(response.body));
+      Map<String, dynamic> dictionary = jsonDecode(response.body);
+      developer.log(dictionary['id'].toString(), name: 'id de dictionary');
+      saveIdUsuario(dictionary['id']);
+      // saveIdUsuario(int.parse(dictionary['id']));
       Get.to(const AsignarEmpresa());
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
