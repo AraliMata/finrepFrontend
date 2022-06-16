@@ -37,11 +37,12 @@ class _GeneralAppBarState extends State<GeneralAppBar> {
         Padding(
             padding: EdgeInsets.only(right: 20),
             child: GestureDetector(
+              //child: const Text("Cerrar Sesión"),
               child: const Icon(Icons.exit_to_app, color: Colors.red),
               onTap: () => Get.to(BackgroundPage()),
             )),
       ],
-      title: const Text(''),
+      title: const Text(' '),
     );
   }
 }
