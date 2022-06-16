@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -18,7 +19,7 @@ class AsignarEmpresa extends StatefulWidget {
 }
 
 class AsignarEmpresaState extends State<AsignarEmpresa> {
-
+  var empezo = false;
   // late Future<List<dynamic>> empresas;
   late Future<List<String>> empresas;
   //ConvertidorDataTable convertidor = ConvertidorDataTable();
@@ -70,23 +71,25 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
     int usuario = await getUsuario();
     final Controller controller = Get.find();
     var numero = controller.selectedCategories.length;
-    developer.log(numero.toString(), name: "numero de cosas seleccionadas");
-    for (var i = 0; i <= numero; i++) {
-      var cosa = controller.selectedCategories[i].name;
+    var numerodb = empresas.length;
+    developer.log(numero.toString(),
+        name: "numero de seleccionados seleccionadas");
+    var contador = 0;
+    for (var i = 0; i <= numerodb; i++) {
+      var seleccionado = controller.selectedCategories[contador].name;
+      developer.log(seleccionado.toString(), name: "seleccionado en for");
       var nombre = empresas[i].empresa;
       var id = empresas[i].id;
-      developer.log(cosa.toString(), name: "cosa en for");
       developer.log(nombre.toString(), name: "nombre en for");
       developer.log(id.toString(), name: "id en for");
-      if (cosa == nombre) {
+      if (seleccionado == nombre) {
         await Future.delayed(const Duration(milliseconds: 250), () {
+          developer.log("cosas iguales, se guardo");
+          contador += 1;
           registrarUsuarioEmpresa(id, usuario);
         });
       }
-
-      //developer.log(cosa.toString(), name: "cosa(s) seleccionada(s)");
     }
-
     return nombresEmpresas;
   }
 
@@ -111,7 +114,9 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
             SimpleElevatedButton(
               onPressed: () async {
                 getEmpresas();
-                Get.to(const Home());
+                await Future.delayed(const Duration(seconds: 1), () {
+                  Get.to(const ElegirEmpresa());
+                });
               },
               color: Colors.blue,
               child: const Text('Confirmar selección'),
@@ -162,7 +167,6 @@ class CategoryWidget extends StatelessWidget {
 }
 
 class Controller extends GetxController {
-  // ignore: prefer_final_fields
   var _categories = {
     Category("Lecar", Colors.blue): false,
     Category("Walmart", Colors.blue): false,

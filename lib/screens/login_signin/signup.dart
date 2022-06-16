@@ -297,12 +297,6 @@ class SignUpState extends State<SignUp> {
       // then parse the JSON.
       return User.fromJson(jsonDecode(response.body));
     } else {
-      Get.defaultDialog(
-        title: "Alerta",
-        content: const Text(
-          "Credenciales incorrectas",
-        ),
-      );
       throw Exception('Failed to login.');
     }
   }

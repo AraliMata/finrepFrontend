@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_test/screens/asignar_empresas.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -232,6 +233,7 @@ class LogInState extends State<LogIn> {
       saveIdUsuario(dictionary['id']);
       // saveIdUsuario(int.parse(dictionary['id']));
       Get.to(const ElegirEmpresa());
+      //Get.to(const AsignarEmpresa());
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       return User.fromJson(jsonDecode(response.body));
