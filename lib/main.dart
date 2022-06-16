@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
 import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
+import 'package:flutter_frontend_test/screens/subirArchivo.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_signin/constants.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Finrep',
       home: ResponsiveSizer(builder: (context, orientation, screenType) {
-        return BackgroundPage();
+        return const SubirArchivo();
       }),
       theme: ThemeData(
         primaryColor: kPrimaryColor,

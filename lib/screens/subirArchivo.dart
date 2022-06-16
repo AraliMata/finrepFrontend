@@ -24,6 +24,8 @@ class SubirArchivo extends StatefulWidget {
 class SubirArchivoState extends State<SubirArchivo>
     with SingleTickerProviderStateMixin {
   // late Future<List<String>> empresas;
+  var estadoArchivoC = 'Seleccionar archivo de catálogo', estadoArchivoM = 'Seleccionar archivo de movimientos';
+  bool singleTapM = true, singleTapC = true;
 
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
   var request;
@@ -91,7 +93,17 @@ class SubirArchivoState extends State<SubirArchivo>
               'El archivo con el nombre "' + filename + '" fue seleccionado'),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
+              onPressed: () { Navigator.pop(context, 'OK');
+              setState(() { 
+               if(tipo == "Catálogo"){
+                singleTapC = false;
+                estadoArchivoC = filename;
+              }else{
+                singleTapM = false;
+                estadoArchivoM = filename;
+              }});
+              },
+
               child: const Text('Aceptar'),
             ),
           ],
@@ -173,15 +185,13 @@ class SubirArchivoState extends State<SubirArchivo>
   /// https://afgprogrammer.com
   //////////////////////////////////
   ///
-  Widget _getGestureDetector(String key) {
-    if (key == "catalogo") {
-      key = "catalogo";
-    } else {
-      key = "movimientos";
-    }
-
+  Widget _getGestureDetectorM(String key) {
     return GestureDetector(
-      onTap: () => selectFile(key),
+      onTap: () { 
+        if(singleTapM){
+          selectFile(key);
+        }
+        },
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           child: DottedBorder(
@@ -191,7 +201,7 @@ class SubirArchivoState extends State<SubirArchivo>
             strokeCap: StrokeCap.round,
             color: Colors.blue.shade400,
             child: Container(
-              width: 300,
+              width: 350,
               height: 100,
               decoration: BoxDecoration(
                   color: Colors.blue.shade50.withOpacity(.3),
@@ -208,7 +218,50 @@ class SubirArchivoState extends State<SubirArchivo>
                     height: 15,
                   ),
                   Text(
-                    'Seleccionar archivo ' + key,
+                    estadoArchivoM,
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget _getGestureDetectorC(String key){
+    return GestureDetector(
+      onTap: () { 
+        if(singleTapC){
+          selectFile(key);
+        }
+        },
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+          child: DottedBorder(
+            borderType: BorderType.RRect,
+            radius: const Radius.circular(10),
+            dashPattern: const [10, 4],
+            strokeCap: StrokeCap.round,
+            color: Colors.blue.shade400,
+            child: Container(
+              width: 350,
+              height: 100,
+              decoration: BoxDecoration(
+                  color: Colors.blue.shade50.withOpacity(.3),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Iconsax.folder_open,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    estadoArchivoC,
                     style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
                   ),
                 ],
@@ -252,8 +305,8 @@ class SubirArchivoState extends State<SubirArchivo>
             const SizedBox(
               height: 20,
             ),
-            _getGestureDetector('movimientos'),
-            _getGestureDetector('catalogo'),
+            _getGestureDetectorM('movimientos'),
+            _getGestureDetectorC('catalogo'),
             _platformFile != null
                 ? Container(
                     padding: const EdgeInsets.all(20),
