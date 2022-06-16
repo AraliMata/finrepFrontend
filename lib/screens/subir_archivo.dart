@@ -25,7 +25,8 @@ class SubirArchivo extends StatefulWidget {
 class SubirArchivoState extends State<SubirArchivo>
     with SingleTickerProviderStateMixin {
   // late Future<List<String>> empresas;
-  var estadoArchivoC = 'Seleccionar archivo de catálogo', estadoArchivoM = 'Seleccionar archivo de movimientos';
+  var estadoArchivoC = 'Seleccionar archivo de catálogo',
+      estadoArchivoM = 'Seleccionar archivo de movimientos';
   bool singleTapM = true, singleTapC = true;
 
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
@@ -39,7 +40,45 @@ class SubirArchivoState extends State<SubirArchivo>
             "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/subir-archivos"));
   }
 
+  void handleSubirArchivoButton() {
+    developer.log(request.files.length.toString(), name: 'request.get');
+    if (request.files.length == 2) {
+      subirArchivo();
+      initRequest();
+    } else {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Archivos faltantes'),
+          content: Text('Carga ambos archivos antes de intentar subirlos'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('Aceptar'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   Future<String> subirArchivo() async {
+    var dialogContext = context;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          dialogContext = context;
+          return Dialog(
+            child: new Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                new CircularProgressIndicator(),
+                new Text("Subiendo archivos"),
+              ],
+            ),
+          );
+        });
     //var request = http.MultipartRequest('POST', Uri.parse(url));
     developer.log('HOLA MAMAAA', name: 'Entre SubirArchivo');
     developer.log(request.files.first.filename!, name: 'request1');
@@ -47,6 +86,50 @@ class SubirArchivoState extends State<SubirArchivo>
 
     var res = await request.send();
     developer.log(res.reasonPhrase! + "es el res", name: 'my.app.category');
+
+    if (res.statusCode == 201) {
+      Navigator.pop(dialogContext);
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Archivos subidos exitosamente'),
+          content: Text(
+              'Ya es posible acceder a esta información mediante los reportes financieros del menú principal'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Home(),
+                ),
+              ),
+              child: const Text('Aceptar'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      Navigator.pop(dialogContext);
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('No se pudieron subir los archivos'),
+          content: Text(
+              'Verifica haber subido los archivos correspondientes y que los formatos sean los correctos'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Home(),
+                ),
+              ),
+              child: const Text('Aceptar'),
+            ),
+          ],
+        ),
+      );
+    }
 
     return res.reasonPhrase!;
   }
@@ -79,7 +162,7 @@ class SubirArchivoState extends State<SubirArchivo>
   PlatformFile? _platformFile;
 
   bool validFile(fileExtension, String filename, String tipo) {
-    if (tipo == "catálogo") {
+    if (tipo == "catalogo") {
       tipo = "Catálogo";
     } else {
       tipo = "Movimientos";
@@ -94,17 +177,18 @@ class SubirArchivoState extends State<SubirArchivo>
               'El archivo con el nombre "' + filename + '" fue seleccionado'),
           actions: <Widget>[
             TextButton(
-              onPressed: () { Navigator.pop(context, 'OK');
-              setState(() { 
-               if(tipo == "Catálogo"){
-                singleTapC = false;
-                estadoArchivoC = filename;
-              }else{
-                singleTapM = false;
-                estadoArchivoM = filename;
-              }});
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+                setState(() {
+                  if (tipo == "Catálogo") {
+                    singleTapC = false;
+                    estadoArchivoC = filename;
+                  } else {
+                    singleTapM = false;
+                    estadoArchivoM = filename;
+                  }
+                });
               },
-
               child: const Text('Aceptar'),
             ),
           ],
@@ -188,11 +272,11 @@ class SubirArchivoState extends State<SubirArchivo>
   ///
   Widget _getGestureDetectorM(String key) {
     return GestureDetector(
-      onTap: () { 
-        if(singleTapM){
+      onTap: () {
+        if (singleTapM) {
           selectFile(key);
         }
-        },
+      },
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           child: DottedBorder(
@@ -229,13 +313,13 @@ class SubirArchivoState extends State<SubirArchivo>
     );
   }
 
-  Widget _getGestureDetectorC(String key){
+  Widget _getGestureDetectorC(String key) {
     return GestureDetector(
-      onTap: () { 
-        if(singleTapC){
+      onTap: () {
+        if (singleTapC) {
           selectFile(key);
         }
-        },
+      },
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           child: DottedBorder(
@@ -401,10 +485,10 @@ class SubirArchivoState extends State<SubirArchivo>
             SimpleElevatedButton(
               child: const Text("Subir archivos"),
               color: Colors.blue,
-              onPressed: subirArchivo,
+              onPressed: handleSubirArchivoButton,
             ),
             const SizedBox(
-                    height: 30,
+              height: 30,
             )
           ],
         ),
