@@ -10,6 +10,8 @@ import '../asignar_empresas.dart';
 import 'package:get/get.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
@@ -132,8 +134,8 @@ class SignUpState extends State<SignUp> {
                                 _futureUser = registerUser(_controller.text,
                                     _controller2.text, _controller3.text);
                               });
-                              // _futureUser = loginUser(_controller.text,
-                              //     _controller2.text, _controller3.text);
+                              _futureUser = loginUser(_controller.text,
+                                  _controller2.text, _controller3.text);
                               //Get.to(const AsignarEmpresa());
                             } else {
                               Get.defaultDialog(
