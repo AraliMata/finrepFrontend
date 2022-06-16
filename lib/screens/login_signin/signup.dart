@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
+import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
 import 'dart:convert';
 import 'constants.dart';
 import '/model/value_objects/user.dart';
@@ -139,7 +139,7 @@ class SignUpState extends State<SignUp> {
                               Get.defaultDialog(
                                   title: "Alerta",
                                   content: const Text(
-                                    "Contraseña inválida, asegurate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
+                                    "Contraseña inválida, asegúrate que contenga por lo menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial",
                                   ));
                             }
                           } else {
@@ -172,7 +172,7 @@ class SignUpState extends State<SignUp> {
                               fontSize: 14,
                             ),
                           ),
-                          //const SizedBox( width: 8,), 
+                          //const SizedBox( width: 8,),
                           GestureDetector(
                             onTap: () {
                               widget.onLogInSelected();

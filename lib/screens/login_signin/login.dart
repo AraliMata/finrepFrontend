@@ -83,8 +83,8 @@ class LogInState extends State<LogIn> {
                       TextField(
                         controller: _controller,
                         decoration: const InputDecoration(
-                          hintText: 'Username',
-                          labelText: 'Username',
+                          hintText: 'Nombre de usuario',
+                          labelText: 'Nombre de usuario',
                           suffixIcon: Icon(
                             Icons.mail_outline,
                           ),

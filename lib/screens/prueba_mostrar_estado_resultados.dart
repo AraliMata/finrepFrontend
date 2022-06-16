@@ -3,7 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/estado_resultados.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
-import 'package:flutter_frontend_test/screens/elegirPeriodoER.dart';
+import 'package:flutter_frontend_test/screens/elegir_periodo_er.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../../env.sample.dart';
@@ -15,7 +15,7 @@ import '../../model/widgets/simple_elevated_button.dart';
 import '../model/widgets/general_app_bar.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 // ignore: avoid_web_libraries_in_flutter
-import 'package:flutter_frontend_test/model/tools/normal_lib.dart'  // Stub implementation
+import 'package:flutter_frontend_test/model/tools/normal_lib.dart' // Stub implementation
     if (dart.library.js) 'package:flutter_frontend_test/model/tools/web_libs.dart'
     if (dart.library.io) 'package:flutter_frontend_test/model/tools/mobile_libs.dart';
 
@@ -64,7 +64,6 @@ class EstadoResultadosState extends State<MEstadoResultados> {
   }
 
   DataCell _cellDataFormatted(data) {
-
     var f = NumberFormat("#,##0.00", "en_US");
     var n = NumberFormat("-#,##0.00", "en_US");
     if (data.runtimeType.toString() == 'String') {
@@ -139,8 +138,8 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     return renglon;
   }
 
-  Future<void> gridPDF(data) async{
-    developer.log("Estoy en crear pdf", name:"gridPDF");
+  Future<void> gridPDF(data) async {
+    developer.log("Estoy en crear pdf", name: "gridPDF");
     //Create a new PDF document
     PdfDocument document = PdfDocument();
     //Create a PdfGrid class
@@ -210,9 +209,9 @@ class EstadoResultadosState extends State<MEstadoResultados> {
     List<int> bytes = document.save();
     //Dispose the document.
     document.dispose();
-    
-    await WebFuncts.downloadPdf(bytes, "EstadoDeResultados-"+DateTime.now().toString());
-    
+
+    await WebFuncts.downloadPdf(
+        bytes, "EstadoDeResultados-" + DateTime.now().toString());
   }
 
   @override
@@ -250,7 +249,7 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                           fontWeight: FontWeight.bold,
                           color: Colors.grey.shade800,
                           decoration: TextDecoration.none),
-                          maxLines: 1,
+                      maxLines: 1,
                     )),
                     SizedBox(height: screenHeight * .05),
                     Row(
@@ -259,10 +258,15 @@ class EstadoResultadosState extends State<MEstadoResultados> {
                         Column(children: const [
                           AutoSizeText('FinRep',
                               style:
-                                  TextStyle(color: Colors.blue, fontSize: 16),maxLines: 1)
+                                  TextStyle(color: Colors.blue, fontSize: 16),
+                              maxLines: 1)
                         ]),
-                        Column(children: [AutoSizeText(nombreEmpresa,maxLines: 1)]),
-                        Column(children: [AutoSizeText(DateTime.now().toString(),maxLines: 1)])
+                        Column(children: [
+                          AutoSizeText(nombreEmpresa, maxLines: 1)
+                        ]),
+                        Column(children: [
+                          AutoSizeText(DateTime.now().toString(), maxLines: 1)
+                        ])
                       ],
                     ),
                     SizedBox(height: screenHeight * .12),
