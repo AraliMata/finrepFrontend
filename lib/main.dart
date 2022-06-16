@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Finrep',
       home: ResponsiveSizer(builder: (context, orientation, screenType) {
-        return const SubirArchivo();
+        return BackgroundPage();
       }),
       theme: ThemeData(
         primaryColor: kPrimaryColor,

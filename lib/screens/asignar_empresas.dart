@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'dart:convert';
-import 'dart:html';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
@@ -9,22 +8,7 @@ import 'package:get/get.dart';
 import 'package:flutter_frontend_test/model/value_objects/empresa.dart';
 //import 'package:flutter_frontend_test/screens/login_signin/login.dart';
 import 'package:flutter_frontend_test/screens/login_signin/signup.dart';
-import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
-import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
-import 'package:flutter_frontend_test/screens/mostrar_balance_general.dart';
-import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
-import 'package:flutter_frontend_test/screens/prueba_mostrar_estado_resultados.dart';
-import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
-import 'package:flutter_frontend_test/screens/mostrar_relaciones_analiticas.dart';
-import 'package:flutter_frontend_test/screens/elegir_periodo_bg.dart';
-import 'package:flutter_frontend_test/screens/elegir_periodo_er.dart';
-import '../model/widgets/init_app_bar.dart';
-import 'subir_archivo.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universal_html/html.dart';
+
 import 'package:flutter_frontend_test/screens/home.dart';
 
 class AsignarEmpresa extends StatefulWidget {
@@ -34,7 +18,6 @@ class AsignarEmpresa extends StatefulWidget {
 }
 
 class AsignarEmpresaState extends State<AsignarEmpresa> {
-  final Storage localStorage = window.localStorage;
 
   // late Future<List<dynamic>> empresas;
   late Future<List<String>> empresas;
