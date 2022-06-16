@@ -6,7 +6,7 @@ import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/widgets/simple_elevated_button.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:flutter_frontend_test/screens/home.dart';
-import 'package:flutter_frontend_test/screens/login_signin/BackgroundPage.dart';
+import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
@@ -17,9 +17,9 @@ import 'dart:developer' as developer;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../model/widgets/general_app_bar.dart'; //Para PDF
-import 'package:flutter_frontend_test/model/tools/normal_lib.dart'  // Stub implementation
+import 'package:flutter_frontend_test/model/tools/normal_lib.dart' // Stub implementation
     if (dart.library.html) 'package:flutter_frontend_test/model/tools/web_libs.dart'
-    if (dart.library.io) 'package:flutter_frontend_test/model/tools/mobile_libs.dart' ;
+    if (dart.library.io) 'package:flutter_frontend_test/model/tools/mobile_libs.dart';
 
 class MRelacionesAnaliticas extends StatefulWidget {
   const MRelacionesAnaliticas({Key? key}) : super(key: key);
@@ -33,7 +33,6 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
   late String nombreEmpresa;
   late ConvertidorDataTable convertidor;
   ElegirEmpresaState elegirEmpresaData = ElegirEmpresaState();
-  
 
   @override
   void initState() {
@@ -48,8 +47,9 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
 
   Future<RelacionesAnaliticas> getRelacionesAnaliticas() async {
     var idEmpresa = await elegirEmpresaData.getIdEmpresa();
-    final response = await http.get(Uri.parse("${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/relaciones-analiticas"));
-   
+    final response = await http.get(Uri.parse(
+        "${Env.URL_PREFIX}/contabilidad/reportes/empresas/$idEmpresa/relaciones-analiticas"));
+
     developer.log(jsonDecode(response.body).toString(),
         name: "RelacionesAnaliticas");
 
@@ -143,7 +143,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     return renglon;
   }
 
-  Future<void> gridsillo(data) async{
+  Future<void> gridsillo(data) async {
     //Create a new PDF document
     PdfDocument document = PdfDocument();
 //Create a PdfGrid class
@@ -159,7 +159,6 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     grid.columns[3].width = 76;
     grid.columns[4].width = 76;
     grid.columns[5].width = 84;
-
 
 //Add values to header
     PdfGridRow header = grid.headers.add(1)[0];
@@ -194,7 +193,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
         curRow.cells[i].style.stringFormat =
             PdfStringFormat(alignment: PdfTextAlignment.right);
       }
-        
+
       //Set de padding de lineas de saldos
       curRow.cells[2].style.cellPadding = PdfPaddings(right: 10);
       curRow.cells[5].style.cellPadding = PdfPaddings(right: 10);
@@ -204,7 +203,6 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
         curRow.cells[5].style.cellPadding = PdfPaddings(right: 20);
       }
     }
-   
 
     grid.style = PdfGridStyle(
         cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 0),
@@ -218,10 +216,9 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     List<int> bytes = document.save();
 //Dispose the document.
     document.dispose();
-    
-    await WebFuncts.downloadPdf(bytes, "RelacionesAnalíticas-"+DateTime.now().toString());
-   
-    
+
+    await WebFuncts.downloadPdf(
+        bytes, "RelacionesAnalíticas-" + DateTime.now().toString());
   }
 
   @override
@@ -256,34 +253,43 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                       children: [
                             SizedBox(height: screenHeight * .05),
                             Center(
-                                child: AutoSizeText(
-                              "Relaciones Analiticas",
-                              style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade800,
-                                  decoration: TextDecoration.none),
-                                  maxLines: 1
-                            ), 
+                              child: AutoSizeText("Relaciones Analíticas",
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade800,
+                                      decoration: TextDecoration.none),
+                                  maxLines: 1),
                             ),
                             SizedBox(height: screenHeight * .05),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Column(children: const [
-                                  AutoSizeText('FinRep',
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 16), maxLines: 1,)
+                                  AutoSizeText(
+                                    'FinRep',
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 16),
+                                    maxLines: 1,
+                                  )
                                 ]),
-                                Column(children: [AutoSizeText(nombreEmpresa, maxLines: 1,)]),
                                 Column(children: [
-                                  AutoSizeText(DateTime.now().toString(), maxLines: 1,)
+                                  AutoSizeText(
+                                    nombreEmpresa,
+                                    maxLines: 1,
+                                  )
+                                ]),
+                                Column(children: [
+                                  AutoSizeText(
+                                    DateTime.now().toString(),
+                                    maxLines: 1,
+                                  )
                                 ]),
                               ],
                             ),
                             SizedBox(height: screenHeight * .12),
                             Expanded(
-                              child:FittedBox(
+                                child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: DataTable(
                                   columns: const <DataColumn>[
@@ -341,12 +347,9 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
                                       datos.totalCuentas, datos.sumasIguales)
                                   //rows: createRows(snapshot.data?.ingresos),
                                   ),
-                              ))
+                            ))
                           ] +
-                          [
-                            SizedBox(height:screenHeight* 0.05)
-                          
-                          ]);
+                          [SizedBox(height: screenHeight * 0.05)]);
                 } else {
                   // developer.log('${snapshot.error}', name: 'NoTieneData55');
                   return const ProgressBar();

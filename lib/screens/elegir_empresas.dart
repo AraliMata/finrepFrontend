@@ -17,7 +17,6 @@ import 'login_signin/login.dart';
 import '../env.sample.dart';
 import 'dart:developer' as developer;
 
-
 class ElegirEmpresa extends StatefulWidget {
   const ElegirEmpresa({Key? key}) : super(key: key);
   @override
@@ -25,7 +24,6 @@ class ElegirEmpresa extends StatefulWidget {
 }
 
 class ElegirEmpresaState extends State<ElegirEmpresa> {
- 
   // late Future<List<dynamic>> empresas;
   late Future<List<String>> empresas;
   ConvertidorDataTable convertidor = ConvertidorDataTable();
@@ -164,6 +162,7 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                         //Add more decoration as you want here
                         //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
                       ),
+                      buttonWidth: 200,
                       isExpanded: true,
                       hint: const Text(
                         'Selecciona empresa',
@@ -234,7 +233,6 @@ class ElegirEmpresaState extends State<ElegirEmpresa> {
                 color: Colors.blue,
                 child: const Text('Confirmar selección'),
               ),
-              
             ],
           ),
         ),

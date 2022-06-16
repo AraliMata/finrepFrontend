@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/model/value_objects/balance_general.dart';
 import 'package:flutter_frontend_test/model/tools/convertidor_data_table.dart';
 import 'package:flutter_frontend_test/model/widgets/progress_bar.dart';
-import 'package:flutter_frontend_test/screens/elegirPeriodoBG.dart';
+import 'package:flutter_frontend_test/screens/elegir_periodo_bg.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
 import 'package:http/http.dart' as http;
 import '../env.sample.dart';
@@ -20,7 +20,7 @@ import 'package:syncfusion_flutter_pdf/pdf.dart'; //Para PDF
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:archive/archive.dart';
-import 'package:flutter_frontend_test/model/tools/normal_lib.dart'  // Stub implementation
+import 'package:flutter_frontend_test/model/tools/normal_lib.dart' // Stub implementation
     if (dart.library.js) 'package:flutter_frontend_test/model/tools/web_libs.dart'
     if (dart.library.io) 'package:flutter_frontend_test/model/tools/mobile_libs.dart';
 
@@ -381,7 +381,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     document.dispose();
 
     developer.log("hi", name: "llamarAldescargarpdf");
-    await WebFuncts.downloadPdf(bytes, "BalanceGeneral-"+DateTime.now().toString());
+    await WebFuncts.downloadPdf(
+        bytes, "BalanceGeneral-" + DateTime.now().toString());
 
     developer.log("hi", name: "terminó");
   }

@@ -79,7 +79,7 @@ class SubirArchivoState extends State<SubirArchivo>
   PlatformFile? _platformFile;
 
   bool validFile(fileExtension, String filename, String tipo) {
-    if (tipo == "catalogo") {
+    if (tipo == "catálogo") {
       tipo = "Catálogo";
     } else {
       tipo = "Movimientos";
@@ -289,14 +289,12 @@ class SubirArchivoState extends State<SubirArchivo>
             const SizedBox(
               height: 50,
             ),
-            AutoSizeText(
-              'Selecciona los archivos a subir',
-              style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.grey.shade800,
-                  fontWeight: FontWeight.bold),
-              maxLines: 1
-            ),
+            AutoSizeText('Selecciona los archivos a subir',
+                style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.grey.shade800,
+                    fontWeight: FontWeight.bold),
+                maxLines: 1),
             const SizedBox(
               height: 10,
             ),
