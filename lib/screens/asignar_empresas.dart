@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_test/screens/elegir_empresas.dart';
+import 'package:flutter_frontend_test/screens/login_signin/background_page.dart';
 import '../model/widgets/simple_elevated_button.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -96,6 +97,7 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -115,7 +117,7 @@ class AsignarEmpresaState extends State<AsignarEmpresa> {
               onPressed: () async {
                 getEmpresas();
                 await Future.delayed(const Duration(seconds: 1), () {
-                  Get.to(const ElegirEmpresa());
+                  Get.to(BackgroundPage());
                 });
               },
               color: Colors.blue,
@@ -198,8 +200,9 @@ Future<Empresa> registrarUsuarioEmpresa(int IdEmpresa, int IdUsuario) async {
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
+  developer.log("se armod");
   if (response.statusCode == 201) {
-    developer.log("se armo");
+    developer.log("se armod");
     //Get.to(const AsignarEmpresa());
     return Empresa.fromJson(jsonDecode(response.body));
   } else {
