@@ -423,7 +423,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
         Row(children: [
           SizedBox(
               width: screenWidth / 2,
-              child: FittedBox(
+              child: 
+              FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.topCenter,
                   child: DataTable(
@@ -443,11 +444,14 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                         ),
                       ),
                     ],
-                    rows: createRows(snapshot.data!.activo),
-                  ))),
+                    //rows: createRows(snapshot.data!.activo),
+                    rows: createRows(snapshot.data!.activo)
+                  ))
+                  ),
           SizedBox(
               width: screenWidth / 2,
-              child: FittedBox(
+              child: 
+              FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.topCenter,
                   child: DataTable(
@@ -468,7 +472,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                       ),
                     ],
                     rows: createRows(snapshot.data!.pasivo),
-                  )))
+                  ))
+                  )
         ]),
         Row(children: [
           SizedBox(
@@ -509,7 +514,8 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
                 )),
           )
         ])
-      ])),
+      ]
+      )),
       SizedBox(height: screenHeight * 0.05)
     ];
   }
@@ -519,6 +525,7 @@ class BalanceGeneralState extends State<MBalanceGeneral> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'FinRep',
       home: Scaffold(
           appBar: GeneralAppBar(),

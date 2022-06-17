@@ -226,6 +226,7 @@ class RelacionesAnaliticasState extends State<MRelacionesAnaliticas> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'FinRep',
       home: Scaffold(
           appBar: GeneralAppBar(),
