@@ -24,7 +24,7 @@ RUN flutter config --enable-web
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
-RUN flutter build web -debug
+RUN flutter build web --profile --dart-define=Dart2jsOptimization=O0
 
 # Stage 2 - Create the run-time image
 FROM nginx:1.21.1-alpine
